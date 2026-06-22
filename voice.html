@@ -1,0 +1,1085 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>People's Voice — Prajakeeya Karnataka</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .voice-tabs {
+        display: flex;
+        gap: 0;
+        border-bottom: 2px solid var(--border2);
+        margin-bottom: 24px;
+      }
+
+      .vtab {
+        padding: 12px 20px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text3);
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        margin-bottom: -2px;
+        transition: all 0.15s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .vtab.active {
+        color: var(--saffron);
+        border-bottom-color: var(--saffron);
+      }
+
+      .vtab:hover {
+        color: var(--text);
+      }
+
+      .poll-card {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-lg);
+        padding: 24px;
+        margin-bottom: 16px;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .poll-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .poll-q {
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.3;
+      }
+
+      .poll-meta {
+        font-size: 11px;
+        color: var(--text3);
+        margin-bottom: 14px;
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      .poll-option {
+        margin-bottom: 12px;
+        cursor: pointer;
+      }
+
+      .poll-option-label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        margin-bottom: 5px;
+      }
+
+      .poll-bar-track {
+        height: 8px;
+        background: var(--mist);
+        border-radius: 4px;
+        overflow: hidden;
+        cursor: pointer;
+      }
+
+      .poll-bar-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.6s;
+      }
+
+      .poll-voted .poll-bar-fill {
+        background: var(--saffron);
+      }
+
+      .poll-voted .poll-bar-fill.winner {
+        background: var(--green-mid);
+      }
+
+      .vote-btn-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+
+      .vote-opt-btn {
+        padding: 8px 14px;
+        border: 2px solid var(--border);
+        border-radius: var(--r-sm);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.15s;
+        background: #fff;
+        font-family: "Inter", sans-serif;
+      }
+
+      .vote-opt-btn:hover,
+      .vote-opt-btn.selected {
+        border-color: var(--saffron);
+        background: var(--saffron-light);
+        color: var(--saffron);
+      }
+
+      .vote-submit {
+        padding: 8px 20px;
+        background: var(--saffron);
+        color: #fff;
+        border: none;
+        border-radius: var(--r-sm);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        transition: all 0.2s;
+      }
+
+      .vote-submit:hover {
+        background: #d04010;
+      }
+
+      .forum-item {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-lg);
+        padding: 20px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .forum-item:hover {
+        box-shadow: var(--shadow-md);
+      }
+
+      .fi-header {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        margin-bottom: 10px;
+      }
+
+      .fi-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .fi-name {
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .fi-time {
+        font-size: 11px;
+        color: var(--text3);
+      }
+
+      .fi-title {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .fi-preview {
+        font-size: 13px;
+        color: var(--text2);
+        line-height: 1.6;
+        margin-bottom: 12px;
+      }
+
+      .fi-footer {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .fi-stat {
+        font-size: 12px;
+        color: var(--text3);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .suggestion-card {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-lg);
+        padding: 20px;
+        margin-bottom: 12px;
+      }
+
+      .sugg-title {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+
+      .sugg-desc {
+        font-size: 13px;
+        color: var(--text2);
+        line-height: 1.6;
+        margin-bottom: 12px;
+      }
+
+      .sugg-vote-bar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .sugg-upvote,
+      .sugg-downvote {
+        padding: 6px 14px;
+        border-radius: var(--r-sm);
+        border: none;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        transition: all 0.15s;
+      }
+
+      .sugg-upvote {
+        background: var(--green-light);
+        color: var(--green);
+      }
+
+      .sugg-upvote:hover {
+        background: var(--green);
+        color: #fff;
+      }
+
+      .sugg-downvote {
+        background: var(--saffron-light);
+        color: var(--saffron);
+      }
+
+      .sugg-downvote:hover {
+        background: var(--saffron);
+        color: #fff;
+      }
+
+      .voice-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .vside-card {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-md);
+        padding: 16px;
+      }
+
+      .trending-item {
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border2);
+        font-size: 12px;
+      }
+
+      .trending-item:last-child {
+        border-bottom: none;
+      }
+
+      .trending-num {
+        color: var(--saffron);
+        font-weight: 700;
+        margin-right: 8px;
+      }
+
+      .voice-layout {
+        display: grid;
+        grid-template-columns: 1fr 260px;
+        gap: 20px;
+        align-items: start;
+      }
+
+      @media (max-width: 900px) {
+        .voice-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page-wrap">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-mark">ಪ್ರ</div>
+          <div class="logo-text">
+            <div class="en">Prajakeeya</div>
+            <div class="kn">ಪ್ರಜಾಕೀಯ ಕರ್ನಾಟಕ</div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <a class="nav-item" href="dashboard.html"
+            ><span class="nav-icon">🏠</span> Dashboard</a
+          >
+          <a class="nav-item" href="report.html"
+            ><span class="nav-icon">🚧</span> Report issue</a
+          >
+          <a class="nav-item active" href="voice.html"
+            ><span class="nav-icon">🗳️</span> People's voice</a
+          >
+          <a class="nav-item" href="circulars.html"
+            ><span class="nav-icon">📢</span> Circulars</a
+          >
+          <a class="nav-item" href="praja-sabha.html"
+            ><span class="nav-icon">🏛️</span> Praja Sabha</a
+          >
+          <a class="nav-item" href="heatmap.html"
+            ><span class="nav-icon">🗺️</span> Heatmap</a
+          >
+          <div class="nav-section-label">My account</div>
+          <a class="nav-item" href="membership.html"
+            ><span class="nav-icon">🆔</span> My membership</a
+          >
+          <a class="nav-item" href="volunteer.html"
+            ><span class="nav-icon">🤝</span> Volunteer</a
+          >
+          <div class="nav-section-label">Governance</div>
+          <a class="nav-item" href="transparency.html"
+            ><span class="nav-icon">📊</span> Transparency</a
+          >
+          <a class="nav-item" href="mla-tracker.html"
+            ><span class="nav-icon">⭐</span> MLA tracker</a
+          >
+          <a class="nav-item" href="manifesto.html"
+            ><span class="nav-icon">📜</span> Manifesto builder</a
+          >
+          <a class="nav-item" href="emergency.html"
+            ><span class="nav-icon">🚨</span> Emergency alerts</a
+          >
+          <a class="nav-item" href="admin.html"
+            ><span class="nav-icon">⚙️</span> Admin panel</a
+          >
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="user-avatar">RK</div>
+            <div>
+              <div class="user-name">Rajesh Kumar</div>
+              <div class="user-role">Active member</div>
+            </div>
+            <button
+              onclick="PK.logout()"
+              style="
+                margin-left: auto;
+                background: none;
+                border: none;
+                color: rgba(255, 255, 255, 0.3);
+                cursor: pointer;
+                font-size: 18px;
+              "
+            >
+              ⏻
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <div class="main-content">
+        <div class="page-header">
+          <div>
+            <div class="topbar-title">People's Voice</div>
+            <div class="topbar-sub">
+              Polls, surveys, forums, and suggestions — your opinion shapes
+              governance
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <div class="notif-btn">
+              🔔
+              <div class="notif-dot"></div>
+            </div>
+            <button
+              class="btn btn-primary btn-sm"
+              onclick="openModal('suggest-modal')"
+            >
+              + Add suggestion
+            </button>
+          </div>
+        </div>
+
+        <div class="page-body">
+          <div class="voice-tabs">
+            <div class="vtab active" onclick="switchVoiceTab(this, 'polls')">
+              🗳️ Polls & Surveys
+            </div>
+            <div class="vtab" onclick="switchVoiceTab(this, 'forum')">
+              💬 Community Forum
+            </div>
+            <div class="vtab" onclick="switchVoiceTab(this, 'suggestions')">
+              💡 Suggestions
+            </div>
+          </div>
+
+          <div class="voice-layout">
+            <div>
+              <!-- POLLS -->
+              <div id="tab-polls">
+                <div id="polls-list"></div>
+              </div>
+              <!-- FORUM -->
+              <div id="tab-forum" style="display: none">
+                <button
+                  class="btn btn-primary mb-16"
+                  onclick="openModal('new-thread-modal')"
+                >
+                  + Start discussion
+                </button>
+                <div id="forum-list"></div>
+              </div>
+              <!-- SUGGESTIONS -->
+              <div id="tab-suggestions" style="display: none">
+                <div id="suggestions-list"></div>
+              </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="voice-sidebar">
+              <div class="vside-card">
+                <h4
+                  style="font-size: 13px; font-weight: 700; margin-bottom: 12px"
+                >
+                  📊 Your participation
+                </h4>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 10px;
+                  "
+                >
+                  <div
+                    style="
+                      text-align: center;
+                      padding: 12px;
+                      background: var(--mist);
+                      border-radius: var(--r-sm);
+                    "
+                  >
+                    <div
+                      style="
+                        font-size: 22px;
+                        font-weight: 700;
+                        color: var(--saffron);
+                      "
+                    >
+                      14
+                    </div>
+                    <div style="font-size: 10px; color: var(--text3)">
+                      Polls voted
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      text-align: center;
+                      padding: 12px;
+                      background: var(--mist);
+                      border-radius: var(--r-sm);
+                    "
+                  >
+                    <div
+                      style="
+                        font-size: 22px;
+                        font-weight: 700;
+                        color: var(--green);
+                      "
+                    >
+                      6
+                    </div>
+                    <div style="font-size: 10px; color: var(--text3)">
+                      Suggestions
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      text-align: center;
+                      padding: 12px;
+                      background: var(--mist);
+                      border-radius: var(--r-sm);
+                    "
+                  >
+                    <div
+                      style="
+                        font-size: 22px;
+                        font-weight: 700;
+                        color: var(--gold);
+                      "
+                    >
+                      23
+                    </div>
+                    <div style="font-size: 10px; color: var(--text3)">
+                      Forum posts
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      text-align: center;
+                      padding: 12px;
+                      background: var(--mist);
+                      border-radius: var(--r-sm);
+                    "
+                  >
+                    <div
+                      style="font-size: 22px; font-weight: 700; color: #7c3aed"
+                    >
+                      4
+                    </div>
+                    <div style="font-size: 10px; color: var(--text3)">
+                      Surveys done
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="vside-card">
+                <h4
+                  style="font-size: 13px; font-weight: 700; margin-bottom: 12px"
+                >
+                  🔥 Trending topics
+                </h4>
+                <div id="trending-list"></div>
+              </div>
+              <div class="vside-card">
+                <h4
+                  style="font-size: 13px; font-weight: 700; margin-bottom: 10px"
+                >
+                  🎯 Active surveys
+                </h4>
+                <div
+                  style="
+                    font-size: 12px;
+                    color: var(--text2);
+                    margin-bottom: 8px;
+                  "
+                >
+                  Water supply satisfaction survey — 8 questions
+                </div>
+                <div class="progress-wrap mb-8">
+                  <div class="progress-fill saffron" style="width: 60%"></div>
+                </div>
+                <div
+                  style="
+                    font-size: 11px;
+                    color: var(--text3);
+                    margin-bottom: 12px;
+                  "
+                >
+                  3,420 of 5,000 target responses
+                </div>
+                <button
+                  class="btn btn-primary btn-sm w-full"
+                  onclick="toast('Opening survey…', 'info')"
+                >
+                  Take survey →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suggestion Modal -->
+    <div class="modal-overlay" id="suggest-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">Add a suggestion</div>
+          <button class="modal-close" onclick="closeModal('suggest-modal')">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Suggestion title *</label
+            ><input
+              type="text"
+              class="form-control"
+              id="sugg-title-input"
+              placeholder="e.g. Free vocational training in all taluks"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label
+            ><select class="form-control form-select">
+              <option>Governance</option>
+              <option>Infrastructure</option>
+              <option>Education</option>
+              <option>Agriculture</option>
+              <option>Employment</option>
+              <option>Healthcare</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description *</label
+            ><textarea
+              class="form-control"
+              rows="4"
+              id="sugg-desc-input"
+              placeholder="Explain your suggestion and why it would help citizens…"
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" onclick="closeModal('suggest-modal')">
+            Cancel</button
+          ><button class="btn btn-primary" onclick="addSuggestion()">
+            Submit suggestion
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- New thread Modal -->
+    <div class="modal-overlay" id="new-thread-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">Start a discussion</div>
+          <button class="modal-close" onclick="closeModal('new-thread-modal')">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Discussion title *</label
+            ><input
+              type="text"
+              class="form-control"
+              placeholder="What would you like to discuss?"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label
+            ><select class="form-control form-select">
+              <option>General</option>
+              <option>Infrastructure</option>
+              <option>Policy</option>
+              <option>Success story</option>
+              <option>Question</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your message *</label
+            ><textarea
+              class="form-control"
+              rows="5"
+              placeholder="Share your thoughts, questions, or experiences…"
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-ghost"
+            onclick="closeModal('new-thread-modal')"
+          >
+            Cancel</button
+          ><button
+            class="btn btn-primary"
+            onclick="
+              toast('Discussion posted!', 'success');
+              closeModal('new-thread-modal');
+            "
+          >
+            Post discussion
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+      const polls = [
+        {
+          id: 1,
+          q: "Where should Bengaluru's next ₹200 crore infrastructure budget go?",
+          votes: 14832,
+          closes: "3 days",
+          district: "Bengaluru Urban",
+          live: true,
+          options: [
+            {
+              label: "Metro extension to Whitefield",
+              votes: 5636,
+              pct: 38,
+            },
+            {
+              label: "Pothole repair across BBMP limits",
+              votes: 4598,
+              pct: 31,
+            },
+            {
+              label: "Lake rejuvenation (Bellandur, Varthur)",
+              votes: 3560,
+              pct: 24,
+            },
+            {
+              label: "New flyovers for traffic decongestion",
+              votes: 1038,
+              pct: 7,
+            },
+          ],
+        },
+        {
+          id: 2,
+          q: "Should primary school education in Karnataka be fully in Kannada medium?",
+          votes: 22100,
+          closes: "7 days",
+          district: "State-wide",
+          live: true,
+          options: [
+            {
+              label: "Yes, preserve Kannada identity",
+              votes: 12155,
+              pct: 55,
+            },
+            {
+              label: "Bilingual Kannada + English",
+              votes: 7735,
+              pct: 35,
+            },
+            {
+              label: "Parent's choice",
+              votes: 2210,
+              pct: 10,
+            },
+          ],
+        },
+        {
+          id: 3,
+          q: "Rate the current state of healthcare in your district",
+          votes: 8340,
+          closes: "Closed",
+          district: "State-wide",
+          live: false,
+          options: [
+            {
+              label: "Excellent",
+              votes: 500,
+              pct: 6,
+            },
+            {
+              label: "Good",
+              votes: 1668,
+              pct: 20,
+            },
+            {
+              label: "Average",
+              votes: 3336,
+              pct: 40,
+            },
+            {
+              label: "Poor",
+              votes: 2836,
+              pct: 34,
+            },
+          ],
+        },
+      ];
+
+      const forums = [
+        {
+          id: 1,
+          avatar: "RK",
+          bg: "#E8501A",
+          name: "Raghavendra K.",
+          dist: "Dharwad",
+          time: "2h ago",
+          title:
+            "Farmer debt waiver — who qualifies? (eligibility details inside)",
+          preview:
+            "The new scheme has confusing eligibility criteria. I called the helpline 4 times and got different answers. After researching, here's what I found…",
+          replies: 47,
+          views: 1240,
+          likes: 89,
+          tags: ["Agriculture", "Policy"],
+        },
+        {
+          id: 2,
+          avatar: "PM",
+          bg: "#1A6B3A",
+          name: "Priya M.",
+          dist: "Mysuru",
+          time: "5h ago",
+          title:
+            "Road repair success! BTM Layout Main Road fixed after Prajakeeya report",
+          preview:
+            "Wanted to share a win. After submitting complaint KA-2024-07231 with photos 3 weeks ago, BBMP finally fixed the entire stretch. Before and after photos attached!",
+          replies: 82,
+          views: 3400,
+          likes: 214,
+          tags: ["Success story", "Roads"],
+        },
+        {
+          id: 3,
+          avatar: "SK",
+          bg: "#C8962A",
+          name: "Suresh K.",
+          dist: "Kalaburagi",
+          time: "1d ago",
+          title:
+            "Proposal: Free vocational training centres in all taluk headquarters",
+          preview:
+            "Karnataka has 176 taluks, most without any skill development facility. My proposal for the Digital Manifesto: government-funded vocational centres in each…",
+          replies: 103,
+          views: 5600,
+          likes: 347,
+          tags: ["Employment", "Policy"],
+        },
+        {
+          id: 4,
+          avatar: "AN",
+          bg: "#534AB7",
+          name: "Anitha N.",
+          dist: "Bengaluru Urban",
+          time: "2d ago",
+          title:
+            "Tip: How to use RTI effectively with your Prajakeeya complaint",
+          preview:
+            "I filed an RTI alongside my Prajakeeya complaint about BBMP garbage collection. Here's how to use both together for faster resolution…",
+          replies: 65,
+          views: 2100,
+          likes: 128,
+          tags: ["Tips", "Governance"],
+        },
+      ];
+
+      const suggestions = [
+        {
+          id: 1,
+          title: "Free WiFi at all government hospitals waiting areas",
+          desc: "Patients and relatives often wait hours at government hospitals. Free WiFi would help them stay connected and access health information.",
+          cat: "Healthcare",
+          upvotes: 1240,
+          downvotes: 89,
+          myVote: null,
+        },
+        {
+          id: 2,
+          title: "Solar streetlights in every gram panchayat",
+          desc: "Rural Karnataka faces severe power cuts. Solar streetlights would reduce dependence on ESCOM and provide 24/7 lighting in villages.",
+          cat: "Infrastructure",
+          upvotes: 3402,
+          downvotes: 120,
+          myVote: null,
+        },
+        {
+          id: 3,
+          title: "Digital crop insurance claim filing via Prajakeeya app",
+          desc: "Farmers currently travel to taluks to file insurance claims. Allow online filing via Prajakeeya with photo evidence of crop damage.",
+          cat: "Agriculture",
+          upvotes: 5810,
+          downvotes: 210,
+          myVote: null,
+        },
+      ];
+
+      const trendings = [
+        "Karnataka monsoon preparedness",
+        "BBMP pothole repair fund",
+        "MLA performance tracker",
+        "Free health camps Kalaburagi",
+        "Digital manifesto suggestions",
+      ];
+
+      function switchVoiceTab(btn, tab) {
+        document
+          .querySelectorAll(".vtab")
+          .forEach((t) => t.classList.remove("active"));
+        btn.classList.add("active");
+        ["polls", "forum", "suggestions"].forEach((t) => {
+          document.getElementById("tab-" + t).style.display =
+            t === tab ? "block" : "none";
+        });
+      }
+
+      function renderPolls() {
+        document.getElementById("polls-list").innerHTML = polls
+          .map(
+            (p) => `
+    <div class="poll-card" id="poll-${p.id}">
+      <div class="poll-header">
+        <div class="poll-q">${p.q}</div>
+        ${p.live ? '<span class="tag tag-red">🔴 Live</span>' : '<span class="tag tag-gray">Closed</span>'}
+      </div>
+      <div class="poll-meta">
+        <span>🗳️ ${p.votes.toLocaleString()} votes</span>
+        <span>⏱ ${p.closes}</span>
+        <span>📍 ${p.district}</span>
+      </div>
+      ${p.options
+        .map(
+          (o, i) => `
+        <div class="poll-option" onclick="${p.live ? "voteOption(" + p.id + "," + i + ")" : ""}">
+          <div class="poll-option-label"><span>${o.label}</span><span class="font-600">${o.pct}%</span></div>
+          <div class="poll-bar-track"><div class="poll-bar-fill" style="width:${o.pct}%;background:${i === 0 ? "var(--saffron)" : i === 1 ? "var(--green-mid)" : i === 2 ? "var(--gold)" : "#7C3AED"}"></div></div>
+        </div>`,
+        )
+        .join("")}
+      ${
+        p.live
+          ? `<div class="vote-btn-row" id="vote-btns-${p.id}">
+        ${p.options.map((o, i) => `<button class="vote-opt-btn" onclick="voteOption(${p.id},${i})">${o.label.split("(")[0].trim().slice(0, 30)}</button>`).join("")}
+        <button class="vote-submit" onclick="submitVote(${p.id})">Cast vote →</button>
+      </div>`
+          : ""
+      }
+    </div>`,
+          )
+          .join("");
+      }
+
+      let votes = {};
+      function voteOption(pollId, optIdx) {
+        votes[pollId] = optIdx;
+        document
+          .querySelectorAll(`#vote-btns-${pollId} .vote-opt-btn`)
+          .forEach((b, i) => {
+            b.classList.toggle("selected", i === optIdx);
+          });
+      }
+      function submitVote(pollId) {
+        if (votes[pollId] === undefined) {
+          toast("Please select an option first", "error");
+          return;
+        }
+        toast("Vote cast! Thank you for participating.", "success");
+        const btns = document.getElementById(`vote-btns-${pollId}`);
+        if (btns) btns.style.display = "none";
+      }
+
+      function renderForum() {
+        const colors = ["#E8501A", "#1A6B3A", "#C8962A", "#534AB7", "#185FA5"];
+        document.getElementById("forum-list").innerHTML = forums
+          .map(
+            (f) => `
+    <div class="forum-item" onclick="openThread(${f.id})">
+      <div class="fi-header">
+        <div class="fi-avatar" style="background:${f.bg}">${f.avatar}</div>
+        <div><div class="fi-name">${f.name} · ${f.dist}</div><div class="fi-time">${f.time}</div></div>
+        <div style="margin-left:auto;display:flex;gap:6px">${f.tags.map((t) => `<span class="tag tag-gray">${t}</span>`).join("")}</div>
+      </div>
+      <div class="fi-title">${f.title}</div>
+      <div class="fi-preview">${f.preview.slice(0, 160)}…</div>
+      <div class="fi-footer">
+        <span class="fi-stat">💬 ${f.replies} replies</span>
+        <span class="fi-stat">👁 ${f.views.toLocaleString()} views</span>
+        <span class="fi-stat">❤️ ${f.likes} likes</span>
+        <button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();toast('Liked!','success')">👍 Like</button>
+        <button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();openThread(${f.id})">Reply →</button>
+      </div>
+    </div>`,
+          )
+          .join("");
+      }
+
+      function openThread(id) {
+        const f = forums.find((x) => x.id === id);
+        const m = document.createElement("div");
+        m.className = "modal-overlay open";
+        m.innerHTML = `<div class="modal" style="max-width:680px">
+    <div class="modal-header"><div class="modal-title" style="font-size:16px">${f.title}</div><button class="modal-close" onclick="this.closest('.modal-overlay').remove()">✕</button></div>
+    <div class="modal-body">
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px">
+        <div style="width:36px;height:36px;border-radius:50%;background:${f.bg};display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700">${f.avatar}</div>
+        <div><div style="font-size:13px;font-weight:600">${f.name}</div><div style="font-size:11px;color:var(--text3)">${f.dist} · ${f.time}</div></div>
+      </div>
+      <p style="font-size:14px;line-height:1.75;color:var(--text2);margin-bottom:20px">${f.preview}</p>
+      <div class="divider"></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:12px">💬 ${f.replies} replies</div>
+      <div style="display:flex;gap:10px">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--saffron);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex-shrink:0">RK</div>
+        <div style="flex:1"><textarea class="form-control" rows="3" placeholder="Write your reply…"></textarea><button class="btn btn-primary btn-sm mt-8" onclick="toast('Reply posted!','success')">Post reply</button></div>
+      </div>
+    </div>
+  </div>`;
+        document.body.appendChild(m);
+      }
+
+      function renderSuggestions() {
+        document.getElementById("suggestions-list").innerHTML = suggestions
+          .map(
+            (s) => `
+    <div class="suggestion-card">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px">
+        <div class="sugg-title">${s.title}</div>
+        <span class="tag tag-blue">${s.cat}</span>
+      </div>
+      <div class="sugg-desc">${s.desc}</div>
+      <div class="sugg-vote-bar">
+        <button class="sugg-upvote" onclick="voteSupport(${s.id},1)">👍 ${s.upvotes.toLocaleString()}</button>
+        <button class="sugg-downvote" onclick="voteSupport(${s.id},-1)">👎 ${s.downvotes}</button>
+        <div class="progress-wrap" style="flex:1"><div class="progress-fill green" style="width:${Math.round((s.upvotes / (s.upvotes + s.downvotes)) * 100)}%"></div></div>
+        <span style="font-size:11px;color:var(--text3)">${Math.round((s.upvotes / (s.upvotes + s.downvotes)) * 100)}% support</span>
+      </div>
+    </div>`,
+          )
+          .join("");
+      }
+
+      function voteSupport(id, dir) {
+        const s = suggestions.find((x) => x.id === id);
+        if (s.myVote === dir) return;
+        if (dir === 1) s.upvotes++;
+        else s.downvotes++;
+        s.myVote = dir;
+        renderSuggestions();
+        toast(dir === 1 ? "Upvoted! 👍" : "Downvoted.", "success");
+      }
+
+      function addSuggestion() {
+        const title = document.getElementById("sugg-title-input").value;
+        const desc = document.getElementById("sugg-desc-input").value;
+        if (!title || !desc) {
+          toast("Please fill all fields", "error");
+          return;
+        }
+        suggestions.unshift({
+          id: Date.now(),
+          title,
+          desc,
+          cat: "Governance",
+          upvotes: 1,
+          downvotes: 0,
+          myVote: 1,
+        });
+        renderSuggestions();
+        closeModal("suggest-modal");
+        toast("Suggestion submitted!", "success");
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        renderPolls();
+        renderForum();
+        renderSuggestions();
+        document.getElementById("trending-list").innerHTML = trendings
+          .map(
+            (t, i) =>
+              `<div class="trending-item"><span class="trending-num">#${i + 1}</span>${t}</div>`,
+          )
+          .join("");
+      });
+    </script>
+  </body>
+</html>

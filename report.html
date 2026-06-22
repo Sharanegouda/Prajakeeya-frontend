@@ -1,0 +1,927 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Report Issue — Prajakeeya Karnataka</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .report-layout {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 24px;
+        align-items: start;
+      }
+
+      .cat-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin: 16px 0;
+      }
+
+      .cat-btn {
+        background: var(--mist);
+        border: 2px solid var(--border2);
+        border-radius: var(--r-md);
+        padding: 16px 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .cat-btn:hover {
+        border-color: var(--saffron);
+        background: var(--saffron-light);
+      }
+
+      .cat-btn.selected {
+        border-color: var(--saffron);
+        background: var(--saffron-light);
+        box-shadow: 0 0 0 3px rgba(232, 80, 26, 0.12);
+      }
+
+      .cat-emoji {
+        font-size: 26px;
+      }
+
+      .cat-name {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text2);
+      }
+
+      .upload-zone {
+        border: 2px dashed var(--border);
+        border-radius: var(--r-md);
+        padding: 32px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: var(--mist);
+      }
+
+      .upload-zone:hover {
+        border-color: var(--saffron);
+        background: var(--saffron-light);
+      }
+
+      .upload-zone input {
+        display: none;
+      }
+
+      .preview-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .preview-img {
+        aspect-ratio: 1;
+        background: var(--mist);
+        border-radius: var(--r-sm);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .preview-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .preview-rm {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        border: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 10px;
+      }
+
+      .gps-row {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+      }
+
+      .gps-row .form-control {
+        flex: 1;
+      }
+
+      .priority-options {
+        display: flex;
+        gap: 10px;
+        margin: 8px 0;
+      }
+
+      .priority-opt {
+        flex: 1;
+        padding: 10px;
+        border: 2px solid var(--border2);
+        border-radius: var(--r-sm);
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.15s;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .priority-opt:hover {
+        border-color: var(--saffron);
+      }
+
+      .priority-opt.sel {
+        border-color: var(--saffron);
+        background: var(--saffron-light);
+      }
+
+      .priority-opt.sel.high {
+        border-color: #dc2626;
+        background: #fcebeb;
+        color: #a32d2d;
+      }
+
+      .priority-opt.sel.medium {
+        border-color: var(--gold);
+        background: var(--gold-light);
+        color: var(--gold);
+      }
+
+      .priority-opt.sel.low {
+        border-color: var(--green);
+        background: var(--green-light);
+        color: var(--green);
+      }
+
+      .tracking-card {
+        background: var(--midnight);
+        border-radius: var(--r-lg);
+        padding: 24px;
+        color: #fff;
+      }
+
+      .track-step {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        padding: 12px 0;
+        position: relative;
+      }
+
+      .track-step:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        left: 16px;
+        top: 44px;
+        width: 2px;
+        height: calc(100% - 12px);
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .track-dot {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .track-dot.done {
+        background: var(--green-mid);
+      }
+
+      .track-dot.active {
+        background: var(--saffron);
+      }
+
+      .track-dot.pending {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .track-info h5 {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+
+      .track-info p {
+        font-size: 11px;
+        opacity: 0.5;
+      }
+
+      .recent-reports-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .report-item {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-md);
+        padding: 16px;
+        display: flex;
+        gap: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .report-item:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateX(2px);
+      }
+
+      .report-cat-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: var(--r-sm);
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+      }
+
+      .report-info h5 {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+
+      .report-info p {
+        font-size: 11px;
+        color: var(--text3);
+      }
+
+      .report-meta {
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .success-state {
+        text-align: center;
+        padding: 40px;
+      }
+
+      .success-icon {
+        font-size: 64px;
+        margin-bottom: 16px;
+      }
+
+      .success-ticket {
+        background: var(--mist);
+        border-radius: var(--r-md);
+        padding: 16px;
+        margin: 16px 0;
+        font-family: monospace;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--saffron);
+        letter-spacing: 2px;
+      }
+
+      @media (max-width: 900px) {
+        .report-layout {
+          grid-template-columns: 1fr;
+        }
+        .cat-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+
+      @media (max-width: 500px) {
+        .cat-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page-wrap">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-mark">ಪ್ರ</div>
+          <div class="logo-text">
+            <div class="en">Prajakeeya</div>
+            <div class="kn">ಪ್ರಜಾಕೀಯ ಕರ್ನಾಟಕ</div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <a class="nav-item" href="dashboard.html"
+            ><span class="nav-icon">🏠</span> Dashboard</a
+          >
+          <a class="nav-item active" href="report.html"
+            ><span class="nav-icon">🚧</span> Report issue</a
+          >
+          <a class="nav-item" href="voice.html"
+            ><span class="nav-icon">🗳️</span> People's voice</a
+          >
+          <a class="nav-item" href="circulars.html"
+            ><span class="nav-icon">📢</span> Circulars</a
+          >
+          <a class="nav-item" href="praja-sabha.html"
+            ><span class="nav-icon">🏛️</span> Praja Sabha</a
+          >
+          <a class="nav-item" href="heatmap.html"
+            ><span class="nav-icon">🗺️</span> Heatmap</a
+          >
+          <div class="nav-section-label">My account</div>
+          <a class="nav-item" href="membership.html"
+            ><span class="nav-icon">🆔</span> My membership</a
+          >
+          <a class="nav-item" href="volunteer.html"
+            ><span class="nav-icon">🤝</span> Volunteer</a
+          >
+          <div class="nav-section-label">Governance</div>
+          <a class="nav-item" href="transparency.html"
+            ><span class="nav-icon">📊</span> Transparency</a
+          >
+          <a class="nav-item" href="mla-tracker.html"
+            ><span class="nav-icon">⭐</span> MLA tracker</a
+          >
+          <a class="nav-item" href="manifesto.html"
+            ><span class="nav-icon">📜</span> Manifesto builder</a
+          >
+          <a class="nav-item" href="emergency.html"
+            ><span class="nav-icon">🚨</span> Emergency alerts</a
+          >
+          <a class="nav-item" href="admin.html"
+            ><span class="nav-icon">⚙️</span> Admin panel</a
+          >
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="user-avatar">RK</div>
+            <div>
+              <div class="user-name">Rajesh Kumar</div>
+              <div class="user-role">Active member</div>
+            </div>
+            <button
+              onclick="PK.logout()"
+              style="
+                margin-left: auto;
+                background: none;
+                border: none;
+                color: rgba(255, 255, 255, 0.3);
+                cursor: pointer;
+                font-size: 18px;
+              "
+            >
+              ⏻
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <div class="main-content">
+        <div class="page-header">
+          <div>
+            <div class="topbar-title">Report an issue</div>
+            <div class="topbar-sub">
+              File a complaint — we'll track it until it's resolved
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <div class="notif-btn">
+              🔔
+              <div class="notif-dot"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="page-body">
+          <div class="report-layout">
+            <!-- Form -->
+            <div>
+              <!-- Form view -->
+              <div id="form-view">
+                <div class="card mb-16">
+                  <div
+                    style="
+                      font-size: 15px;
+                      font-weight: 700;
+                      margin-bottom: 4px;
+                    "
+                  >
+                    📍 Step 1 — Select category
+                  </div>
+                  <div
+                    style="
+                      font-size: 12px;
+                      color: var(--text3);
+                      margin-bottom: 0;
+                    "
+                  >
+                    What type of issue are you reporting?
+                  </div>
+                  <div class="cat-grid" id="cat-grid">
+                    <div class="cat-btn" onclick="selectCat(this, 'Roads')">
+                      <div class="cat-emoji">🛣️</div>
+                      <div class="cat-name">Roads</div>
+                    </div>
+                    <div class="cat-btn" onclick="selectCat(this, 'Water')">
+                      <div class="cat-emoji">💧</div>
+                      <div class="cat-name">Water</div>
+                    </div>
+                    <div
+                      class="cat-btn"
+                      onclick="selectCat(this, 'Electricity')"
+                    >
+                      <div class="cat-emoji">⚡</div>
+                      <div class="cat-name">Electricity</div>
+                    </div>
+                    <div
+                      class="cat-btn"
+                      onclick="selectCat(this, 'Healthcare')"
+                    >
+                      <div class="cat-emoji">🏥</div>
+                      <div class="cat-name">Healthcare</div>
+                    </div>
+                    <div class="cat-btn" onclick="selectCat(this, 'Education')">
+                      <div class="cat-emoji">🎓</div>
+                      <div class="cat-name">Education</div>
+                    </div>
+                    <div
+                      class="cat-btn"
+                      onclick="selectCat(this, 'Corruption')"
+                    >
+                      <div class="cat-emoji">⚠️</div>
+                      <div class="cat-name">Corruption</div>
+                    </div>
+                    <div
+                      class="cat-btn"
+                      onclick="selectCat(this, 'Agriculture')"
+                    >
+                      <div class="cat-emoji">🌾</div>
+                      <div class="cat-name">Agriculture</div>
+                    </div>
+                    <div
+                      class="cat-btn"
+                      onclick="selectCat(this, 'Employment')"
+                    >
+                      <div class="cat-emoji">💼</div>
+                      <div class="cat-name">Employment</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card mb-16">
+                  <div
+                    style="
+                      font-size: 15px;
+                      font-weight: 700;
+                      margin-bottom: 16px;
+                    "
+                  >
+                    📝 Step 2 — Describe the issue
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Issue title *</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="issue-title"
+                      placeholder="e.g. Large potholes blocking traffic on Main Road"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Detailed description *</label>
+                    <textarea
+                      class="form-control"
+                      id="issue-desc"
+                      rows="4"
+                      placeholder="Describe the problem in detail — size, impact on residents, how long it's been happening…"
+                    ></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Priority level</label>
+                    <div class="priority-options">
+                      <div
+                        class="priority-opt sel low"
+                        onclick="selectPriority(this, 'low')"
+                      >
+                        🟢 Low
+                      </div>
+                      <div
+                        class="priority-opt medium"
+                        onclick="selectPriority(this, 'medium')"
+                      >
+                        🟡 Medium
+                      </div>
+                      <div
+                        class="priority-opt high"
+                        onclick="selectPriority(this, 'high')"
+                      >
+                        🔴 High
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card mb-16">
+                  <div
+                    style="
+                      font-size: 15px;
+                      font-weight: 700;
+                      margin-bottom: 16px;
+                    "
+                  >
+                    📸 Step 3 — Add photos / video
+                  </div>
+                  <div
+                    class="upload-zone"
+                    onclick="document.getElementById('file-input').click()"
+                  >
+                    <input
+                      type="file"
+                      id="file-input"
+                      multiple
+                      accept="image/*,video/*"
+                      onchange="handleFiles(this.files)"
+                    />
+                    <div style="font-size: 36px; margin-bottom: 8px">📷</div>
+                    <div
+                      style="
+                        font-size: 14px;
+                        font-weight: 600;
+                        margin-bottom: 4px;
+                      "
+                    >
+                      Click to upload photos or video
+                    </div>
+                    <div style="font-size: 12px; color: var(--text3)">
+                      Max 5 photos or 1 video · Supports JPG, PNG, MP4
+                    </div>
+                  </div>
+                  <div class="preview-grid" id="preview-grid"></div>
+                </div>
+
+                <div class="card mb-20">
+                  <div
+                    style="
+                      font-size: 15px;
+                      font-weight: 700;
+                      margin-bottom: 16px;
+                    "
+                  >
+                    📍 Step 4 — Location
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">District *</label>
+                    <select
+                      class="form-control form-select district-select"
+                      id="issue-district"
+                    ></select>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">Taluk</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="issue-taluk"
+                        placeholder="Taluk name"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Ward / Village</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="issue-ward"
+                        placeholder="Ward or village name"
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Address / Landmark</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="issue-address"
+                      placeholder="Near landmark or street address"
+                    />
+                  </div>
+                  <div class="gps-row">
+                    <div class="form-group" style="flex: 1; margin-bottom: 0">
+                      <label class="form-label">GPS coordinates</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="issue-gps"
+                        placeholder="Tap button to auto-detect"
+                        readonly
+                      />
+                    </div>
+                    <button
+                      class="btn btn-ghost btn-sm"
+                      onclick="detectGPS()"
+                      style="margin-bottom: 0"
+                    >
+                      📡 Auto-detect
+                    </button>
+                  </div>
+                </div>
+
+                <button
+                  class="btn btn-primary w-full"
+                  style="padding: 15px"
+                  onclick="submitReport()"
+                >
+                  Submit complaint →
+                </button>
+              </div>
+
+              <!-- Success view -->
+              <div id="success-view" style="display: none">
+                <div class="card">
+                  <div class="success-state">
+                    <div class="success-icon">✅</div>
+                    <h2
+                      style="
+                        font-size: 22px;
+                        font-weight: 700;
+                        margin-bottom: 8px;
+                      "
+                    >
+                      Complaint filed successfully!
+                    </h2>
+                    <p
+                      style="
+                        color: var(--text2);
+                        font-size: 14px;
+                        margin-bottom: 16px;
+                      "
+                    >
+                      Your issue has been registered and assigned to the
+                      relevant authority.
+                    </p>
+                    <div class="success-ticket" id="ticket-id">
+                      KA-2024-00000
+                    </div>
+                    <div
+                      class="alert alert-info"
+                      style="text-align: left; margin-bottom: 16px"
+                    >
+                      <span>ℹ️</span>
+                      <div>
+                        <strong>What happens next?</strong><br />The
+                        BBMP/concerned authority will review your complaint
+                        within 24–48 hours. You'll get SMS and app notifications
+                        at each step.
+                      </div>
+                    </div>
+                    <div
+                      style="
+                        display: flex;
+                        gap: 10px;
+                        justify-content: center;
+                        flex-wrap: wrap;
+                      "
+                    >
+                      <button class="btn btn-primary" onclick="newReport()">
+                        + Report another issue
+                      </button>
+                      <a href="dashboard.html" class="btn btn-ghost"
+                        >View my complaints</a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right panel: tracking + recent -->
+            <div>
+              <div class="tracking-card mb-16">
+                <div
+                  style="
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: #fff;
+                    margin-bottom: 16px;
+                  "
+                >
+                  How complaint tracking works
+                </div>
+                <div class="track-step">
+                  <div class="track-dot done">✓</div>
+                  <div class="track-info">
+                    <h5>Submitted</h5>
+                    <p>Citizen files complaint with evidence</p>
+                  </div>
+                </div>
+                <div class="track-step">
+                  <div class="track-dot done">✓</div>
+                  <div class="track-info">
+                    <h5>AI categorisation</h5>
+                    <p>Auto-tagged and assigned to department</p>
+                  </div>
+                </div>
+                <div class="track-step">
+                  <div class="track-dot active">►</div>
+                  <div class="track-info">
+                    <h5>Under review</h5>
+                    <p>Authority acknowledges within 24–48h</p>
+                  </div>
+                </div>
+                <div class="track-step">
+                  <div class="track-dot pending">4</div>
+                  <div class="track-info">
+                    <h5>Action taken</h5>
+                    <p>Work assigned to field team</p>
+                  </div>
+                </div>
+                <div class="track-step">
+                  <div class="track-dot pending">5</div>
+                  <div class="track-info">
+                    <h5>Resolved</h5>
+                    <p>Citizen confirms fix and gives feedback</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div
+                  style="font-size: 15px; font-weight: 700; margin-bottom: 16px"
+                >
+                  Recent reports in your area
+                </div>
+                <div class="recent-reports-list" id="recent-reports"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+      let selectedCat = "",
+        selectedPriority = "low",
+        uploadedFiles = [];
+
+      function selectCat(el, cat) {
+        document
+          .querySelectorAll(".cat-btn")
+          .forEach((b) => b.classList.remove("selected"));
+        el.classList.add("selected");
+        selectedCat = cat;
+      }
+
+      function selectPriority(el, p) {
+        document
+          .querySelectorAll(".priority-opt")
+          .forEach((o) => o.classList.remove("sel"));
+        el.classList.add("sel");
+        selectedPriority = p;
+      }
+
+      function handleFiles(files) {
+        const grid = document.getElementById("preview-grid");
+        [...files].slice(0, 5).forEach((file) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const div = document.createElement("div");
+            div.className = "preview-img";
+            div.innerHTML = `<img src="${e.target.result}"><button class="preview-rm" onclick="this.parentNode.remove()">✕</button>`;
+            grid.appendChild(div);
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      async function detectGPS() {
+        const btn = event.target;
+        btn.textContent = "📡 Detecting…";
+        btn.disabled = true;
+        const loc = await getLocation();
+        document.getElementById("issue-gps").value =
+          `${loc.lat.toFixed(4)}°N, ${loc.lng.toFixed(4)}°E`;
+        btn.textContent = "📡 Auto-detect";
+        btn.disabled = false;
+        toast("GPS location detected!", "success");
+      }
+
+      function submitReport() {
+        const title = document.getElementById("issue-title").value;
+        const desc = document.getElementById("issue-desc").value;
+        const district = document.getElementById("issue-district").value;
+        if (!selectedCat) {
+          toast("Please select a category", "error");
+          return;
+        }
+        if (!title.trim()) {
+          toast("Please enter an issue title", "error");
+          return;
+        }
+        if (!desc.trim()) {
+          toast("Please describe the issue", "error");
+          return;
+        }
+        if (!district) {
+          toast("Please select a district", "error");
+          return;
+        }
+
+        const btn = event.target;
+        btn.textContent = "Submitting…";
+        btn.disabled = true;
+        setTimeout(() => {
+          const ticketId =
+            "KA-2024-" + String(Math.floor(Math.random() * 90000 + 10000));
+          document.getElementById("ticket-id").textContent = ticketId;
+          document.getElementById("form-view").style.display = "none";
+          document.getElementById("success-view").style.display = "block";
+          btn.textContent = "Submit complaint →";
+          btn.disabled = false;
+        }, 1500);
+      }
+
+      function newReport() {
+        document.getElementById("form-view").style.display = "block";
+        document.getElementById("success-view").style.display = "none";
+        document.getElementById("issue-title").value = "";
+        document.getElementById("issue-desc").value = "";
+        document.getElementById("preview-grid").innerHTML = "";
+        document
+          .querySelectorAll(".cat-btn")
+          .forEach((b) => b.classList.remove("selected"));
+        selectedCat = "";
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        populateDistrictSelects();
+        const recent = [
+          {
+            cat: "🛣️",
+            bg: "var(--saffron-light)",
+            title: "Pothole on MG Road",
+            area: "Bengaluru Urban",
+            status: "progress",
+            time: "2h ago",
+          },
+          {
+            cat: "💧",
+            bg: "#DBEAFE",
+            title: "Water supply disruption",
+            area: "BTM Layout",
+            status: "pending",
+            time: "5h ago",
+          },
+          {
+            cat: "⚡",
+            bg: "var(--gold-light)",
+            title: "Street light not working",
+            area: "Jayanagar 4th Block",
+            status: "resolved",
+            time: "1d ago",
+          },
+          {
+            cat: "🌾",
+            bg: "var(--green-light)",
+            title: "Irrigation canal blocked",
+            area: "Kanakapura Road",
+            status: "resolved",
+            time: "2d ago",
+          },
+        ];
+        document.getElementById("recent-reports").innerHTML = recent
+          .map(
+            (r) => `
+    <div class="report-item">
+      <div class="report-cat-icon" style="background:${r.bg}">${r.cat}</div>
+      <div class="report-info" style="flex:1">
+        <h5>${r.title}</h5>
+        <p>📍 ${r.area} · ${r.time}</p>
+        <div class="report-meta">
+          <span class="status ${r.status}"><span class="status-dot"></span>${r.status.charAt(0).toUpperCase() + r.status.slice(1)}</span>
+        </div>
+      </div>
+    </div>`,
+          )
+          .join("");
+      });
+    </script>
+  </body>
+</html>

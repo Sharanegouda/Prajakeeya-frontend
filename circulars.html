@@ -1,0 +1,775 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Circulars — Prajakeeya Karnataka</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .filter-bar {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+
+      .filter-btn {
+        padding: 7px 16px;
+        border-radius: 20px;
+        border: 1.5px solid var(--border);
+        background: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.15s;
+        color: var(--text2);
+        font-family: "Inter", sans-serif;
+      }
+
+      .filter-btn.active,
+      .filter-btn:hover {
+        background: var(--saffron);
+        color: #fff;
+        border-color: var(--saffron);
+      }
+
+      .circular-card {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-lg);
+        padding: 24px;
+        margin-bottom: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .circular-card:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateX(4px);
+      }
+
+      .circ-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: var(--r-md);
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+      }
+
+      .circ-body {
+        flex: 1;
+      }
+
+      .circ-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 6px;
+      }
+
+      .circ-title {
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.3;
+      }
+
+      .circ-meta {
+        font-size: 12px;
+        color: var(--text3);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .circ-excerpt {
+        font-size: 13px;
+        color: var(--text2);
+        line-height: 1.6;
+        margin-bottom: 12px;
+      }
+
+      .circ-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .priority-banner {
+        background: linear-gradient(135deg, #dc2626, #9b1c1c);
+        border-radius: var(--r-md);
+        padding: 16px 20px;
+        color: #fff;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .pb-icon {
+        font-size: 28px;
+      }
+
+      .pb-text h4 {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 2px;
+      }
+
+      .pb-text p {
+        font-size: 12px;
+        opacity: 0.8;
+      }
+
+      .announce-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .side-card {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-md);
+        padding: 16px;
+      }
+
+      .side-card h4 {
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+
+      .side-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .side-item {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+      }
+
+      .side-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--saffron);
+        flex-shrink: 0;
+        margin-top: 5px;
+      }
+
+      .side-text {
+        font-size: 12px;
+        color: var(--text2);
+        line-height: 1.4;
+      }
+
+      .side-date {
+        font-size: 10px;
+        color: var(--text3);
+        margin-top: 2px;
+      }
+
+      .circ-layout {
+        display: grid;
+        grid-template-columns: 1fr 280px;
+        gap: 20px;
+        align-items: start;
+      }
+
+      .unread-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--saffron);
+        flex-shrink: 0;
+        margin-top: 6px;
+      }
+
+      @media (max-width: 900px) {
+        .circ-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page-wrap">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-mark">ಪ್ರ</div>
+          <div class="logo-text">
+            <div class="en">Prajakeeya</div>
+            <div class="kn">ಪ್ರಜಾಕೀಯ ಕರ್ನಾಟಕ</div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <a class="nav-item" href="dashboard.html"
+            ><span class="nav-icon">🏠</span> Dashboard</a
+          >
+          <a class="nav-item" href="report.html"
+            ><span class="nav-icon">🚧</span> Report issue</a
+          >
+          <a class="nav-item" href="voice.html"
+            ><span class="nav-icon">🗳️</span> People's voice</a
+          >
+          <a class="nav-item active" href="circulars.html"
+            ><span class="nav-icon">📢</span> Circulars
+            <span class="nav-badge">3</span></a
+          >
+          <a class="nav-item" href="praja-sabha.html"
+            ><span class="nav-icon">🏛️</span> Praja Sabha</a
+          >
+          <a class="nav-item" href="heatmap.html"
+            ><span class="nav-icon">🗺️</span> Heatmap</a
+          >
+          <div class="nav-section-label">My account</div>
+          <a class="nav-item" href="membership.html"
+            ><span class="nav-icon">🆔</span> My membership</a
+          >
+          <a class="nav-item" href="volunteer.html"
+            ><span class="nav-icon">🤝</span> Volunteer</a
+          >
+          <div class="nav-section-label">Governance</div>
+          <a class="nav-item" href="transparency.html"
+            ><span class="nav-icon">📊</span> Transparency</a
+          >
+          <a class="nav-item" href="mla-tracker.html"
+            ><span class="nav-icon">⭐</span> MLA tracker</a
+          >
+          <a class="nav-item" href="manifesto.html"
+            ><span class="nav-icon">📜</span> Manifesto builder</a
+          >
+          <a class="nav-item" href="emergency.html"
+            ><span class="nav-icon">🚨</span> Emergency alerts</a
+          >
+          <a class="nav-item" href="admin.html"
+            ><span class="nav-icon">⚙️</span> Admin panel</a
+          >
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="user-avatar">RK</div>
+            <div>
+              <div class="user-name">Rajesh Kumar</div>
+              <div class="user-role">Active member</div>
+            </div>
+            <button
+              onclick="PK.logout()"
+              style="
+                margin-left: auto;
+                background: none;
+                border: none;
+                color: rgba(255, 255, 255, 0.3);
+                cursor: pointer;
+                font-size: 18px;
+              "
+            >
+              ⏻
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <div class="main-content">
+        <div class="page-header">
+          <div>
+            <div class="topbar-title">Circulars & Announcements</div>
+            <div class="topbar-sub">
+              Official communications from Prajakeeya Karnataka leadership
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <div class="notif-btn">
+              🔔
+              <div class="notif-dot"></div>
+            </div>
+            <button
+              class="btn btn-primary btn-sm"
+              onclick="openModal('compose-modal')"
+            >
+              + Publish circular
+            </button>
+          </div>
+        </div>
+
+        <div class="page-body">
+          <!-- Alert banner -->
+          <div class="priority-banner">
+            <div class="pb-icon">🚨</div>
+            <div class="pb-text" style="flex: 1">
+              <h4>Important alert: Karnataka Monsoon Season — Be prepared</h4>
+              <p>
+                Issued by State Administrator · June 20, 2024 · Affects all 30
+                districts
+              </p>
+            </div>
+            <button
+              class="btn btn-sm"
+              style="
+                background: rgba(255, 255, 255, 0.2);
+                color: #fff;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+              "
+            >
+              Read alert →
+            </button>
+          </div>
+
+          <!-- Filter bar -->
+          <div class="filter-bar">
+            <button
+              class="filter-btn active"
+              onclick="filterCirculars(this, 'all')"
+            >
+              All <span id="cnt-all">(18)</span>
+            </button>
+            <button class="filter-btn" onclick="filterCirculars(this, 'state')">
+              State-wide
+            </button>
+            <button
+              class="filter-btn"
+              onclick="filterCirculars(this, 'district')"
+            >
+              District
+            </button>
+            <button class="filter-btn" onclick="filterCirculars(this, 'alert')">
+              🚨 Alerts
+            </button>
+            <button class="filter-btn" onclick="filterCirculars(this, 'event')">
+              Events
+            </button>
+            <button
+              class="filter-btn"
+              onclick="filterCirculars(this, 'policy')"
+            >
+              Policy
+            </button>
+            <div style="margin-left: auto">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="🔍 Search circulars…"
+                style="width: 220px"
+                oninput="searchCirculars(this.value)"
+              />
+            </div>
+          </div>
+
+          <div class="circ-layout">
+            <div>
+              <div id="circulars-list"></div>
+              <div class="pagination" id="pagination"></div>
+            </div>
+            <div class="announce-sidebar">
+              <div class="side-card">
+                <h4>📌 Pinned notices</h4>
+                <div class="side-list">
+                  <div class="side-item">
+                    <div class="unread-dot"></div>
+                    <div>
+                      <div class="side-text font-600">
+                        Volunteer task assignment — July campaign
+                      </div>
+                      <div class="side-date">
+                        Pinned by State Admin · Jun 18
+                      </div>
+                    </div>
+                  </div>
+                  <div class="side-item">
+                    <div class="unread-dot"></div>
+                    <div>
+                      <div class="side-text font-600">
+                        Praja Sabha registration open — Jun 28
+                      </div>
+                      <div class="side-date">
+                        Pinned by District Coord · Jun 15
+                      </div>
+                    </div>
+                  </div>
+                  <div class="side-item">
+                    <div class="side-dot"></div>
+                    <div>
+                      <div class="side-text">
+                        Annual membership renewal reminder
+                      </div>
+                      <div class="side-date">Pinned · Jun 10</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="side-card">
+                <h4>📊 Circular stats</h4>
+                <div style="display: flex; flex-direction: column; gap: 12px">
+                  <div>
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: 12px;
+                        margin-bottom: 4px;
+                      "
+                    >
+                      <span>State-wide</span><span class="font-600">6</span>
+                    </div>
+                    <div class="progress-wrap">
+                      <div
+                        class="progress-fill saffron"
+                        style="width: 33%"
+                      ></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: 12px;
+                        margin-bottom: 4px;
+                      "
+                    >
+                      <span>District-level</span><span class="font-600">8</span>
+                    </div>
+                    <div class="progress-wrap">
+                      <div class="progress-fill green" style="width: 44%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: 12px;
+                        margin-bottom: 4px;
+                      "
+                    >
+                      <span>Alerts</span><span class="font-600">2</span>
+                    </div>
+                    <div class="progress-wrap">
+                      <div
+                        class="progress-fill"
+                        style="width: 11%; background: #dc2626"
+                      ></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: 12px;
+                        margin-bottom: 4px;
+                      "
+                    >
+                      <span>Events</span><span class="font-600">2</span>
+                    </div>
+                    <div class="progress-wrap">
+                      <div class="progress-fill gold" style="width: 11%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="side-card">
+                <h4>📅 Upcoming deadlines</h4>
+                <div class="side-list">
+                  <div class="side-item">
+                    <div
+                      class="side-dot"
+                      style="background: var(--saffron)"
+                    ></div>
+                    <div>
+                      <div class="side-text font-600">
+                        Volunteer registration — Jun 25
+                      </div>
+                      <div class="side-date">3 days left</div>
+                    </div>
+                  </div>
+                  <div class="side-item">
+                    <div class="side-dot" style="background: var(--gold)"></div>
+                    <div>
+                      <div class="side-text">
+                        Praja Sabha registration — Jun 27
+                      </div>
+                      <div class="side-date">5 days left</div>
+                    </div>
+                  </div>
+                  <div class="side-item">
+                    <div class="side-dot"></div>
+                    <div>
+                      <div class="side-text">
+                        Feedback survey closes — Jul 1
+                      </div>
+                      <div class="side-date">9 days left</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Compose Modal -->
+    <div class="modal-overlay" id="compose-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">Publish a circular</div>
+          <button class="modal-close" onclick="closeModal('compose-modal')">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Circular title *</label
+            ><input
+              type="text"
+              class="form-control"
+              placeholder="Enter title"
+            />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Type</label
+              ><select class="form-control form-select">
+                <option>State-wide</option>
+                <option>District-level</option>
+                <option>Alert</option>
+                <option>Event</option>
+                <option>Policy</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Priority</label
+              ><select class="form-control form-select">
+                <option>Normal</option>
+                <option>High</option>
+                <option>Critical</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Target district</label
+            ><select class="form-control form-select district-select">
+              <option value="">All districts</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Content *</label
+            ><textarea
+              class="form-control"
+              rows="5"
+              placeholder="Circular content…"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Attach PDF (optional)</label
+            ><input type="file" class="form-control" accept=".pdf" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" onclick="closeModal('compose-modal')">
+            Cancel</button
+          ><button class="btn btn-primary" onclick="publishCircular()">
+            Publish →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+      const circulars = [
+        {
+          id: 1,
+          icon: "🌧️",
+          bg: "#DBEAFE",
+          title:
+            "Karnataka Monsoon Season 2024 — Preparation & Safety Guidelines",
+          type: "alert",
+          scope: "State-wide",
+          date: "Jun 20, 2024",
+          author: "State Administrator",
+          excerpt:
+            "All district coordinators and members are advised to prepare for the monsoon season. Emergency helplines are activated. Citizens are requested to report flooding, landslides, and road damage immediately via the app.",
+          hasAttachment: true,
+          unread: true,
+        },
+        {
+          id: 2,
+          icon: "🏛️",
+          bg: "var(--saffron-light)",
+          title:
+            "Praja Sabha — Bengaluru Urban Infrastructure Discussion: Jun 28",
+          type: "event",
+          scope: "Bengaluru Urban",
+          date: "Jun 18, 2024",
+          author: "District Coordinator",
+          excerpt:
+            "Citizens of Bengaluru Urban are invited to the digital and in-person Praja Sabha on June 28, 2024 at MLA Hall, Jayanagar. Topics: metro extension, lake restoration, BBMP road repair fund allocation.",
+          hasAttachment: false,
+          unread: true,
+        },
+        {
+          id: 3,
+          icon: "🤝",
+          bg: "var(--green-light)",
+          title:
+            "July 2024 Volunteer Drive — District-level campaign assignments",
+          type: "event",
+          scope: "State-wide",
+          date: "Jun 17, 2024",
+          author: "Volunteer Head",
+          excerpt:
+            "Volunteers across all 30 districts are being assigned tasks for the July outreach campaign. Please log in to your volunteer dashboard to view and accept your assignment by June 25.",
+          hasAttachment: true,
+          unread: true,
+        },
+        {
+          id: 4,
+          icon: "📊",
+          bg: "var(--gold-light)",
+          title:
+            "Q2 2024 Fund Utilisation Report now available for public review",
+          type: "policy",
+          scope: "State-wide",
+          date: "Jun 15, 2024",
+          author: "Finance Committee",
+          excerpt:
+            "The Q2 2024 fund utilisation report has been published. Total funds received: ₹2.41 crore. Total spent: ₹2.28 crore (94.6%). Download the full audit report from the Transparency Dashboard.",
+          hasAttachment: true,
+          unread: false,
+        },
+        {
+          id: 5,
+          icon: "📜",
+          bg: "#EEEDFE",
+          title:
+            "Digital Manifesto Builder — new policy category: Rural Employment",
+          type: "policy",
+          scope: "State-wide",
+          date: "Jun 12, 2024",
+          author: "Policy Team",
+          excerpt:
+            "A new category — Rural Employment — has been added to the Digital Manifesto Builder. Citizens from agricultural districts are encouraged to submit policy suggestions on skill development, MGNREGS reform, and local industry creation.",
+          hasAttachment: false,
+          unread: false,
+        },
+        {
+          id: 6,
+          icon: "🏥",
+          bg: "#FEF3C7",
+          title: "Free health camps in Kalaburagi district — June 22–25",
+          type: "event",
+          scope: "Kalaburagi",
+          date: "Jun 10, 2024",
+          author: "Kalaburagi Coordinator",
+          excerpt:
+            "Prajakeeya Karnataka is organising free health camps across Kalaburagi district from June 22–25. Services: blood pressure, sugar, eye check, general consultation. Location: all major taluk headquarters.",
+          hasAttachment: true,
+          unread: false,
+        },
+      ];
+
+      let filteredCirculars = [...circulars];
+
+      function renderCirculars(list) {
+        document.getElementById("circulars-list").innerHTML = list
+          .map(
+            (c) => `
+    <div class="circular-card" data-type="${c.type}" onclick="openCircular(${c.id})">
+      ${c.unread ? '<div class="unread-dot" style="position:absolute;left:0;top:50%;transform:translateY(-50%)"></div>' : ""}
+      <div class="circ-icon" style="background:${c.bg}">${c.icon}</div>
+      <div class="circ-body">
+        <div class="circ-header">
+          <div class="circ-title">${c.unread ? "<strong>" : ""}${c.title}${c.unread ? "</strong>" : ""}</div>
+          <span class="tag ${c.type === "alert" ? "tag-red" : c.type === "event" ? "tag-gold" : c.type === "policy" ? "tag-purple" : "tag-blue"}">${c.type}</span>
+        </div>
+        <div class="circ-meta">
+          <span>📅 ${c.date}</span>
+          <span>👤 ${c.author}</span>
+          <span>📍 ${c.scope}</span>
+        </div>
+        <div class="circ-excerpt">${c.excerpt.slice(0, 180)}…</div>
+        <div class="circ-actions">
+          <button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();openCircular(${c.id})">Read more</button>
+          ${c.hasAttachment ? `<button class="btn btn-secondary btn-xs" onclick="event.stopPropagation();toast('Downloading PDF…','info')">↓ Download PDF</button>` : ""}
+        </div>
+      </div>
+    </div>`,
+          )
+          .join("");
+      }
+
+      function filterCirculars(btn, type) {
+        document
+          .querySelectorAll(".filter-btn")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        filteredCirculars =
+          type === "all"
+            ? [...circulars]
+            : circulars.filter(
+                (c) => c.type === type || c.scope.toLowerCase().includes(type),
+              );
+        renderCirculars(filteredCirculars);
+      }
+
+      function searchCirculars(q) {
+        filteredCirculars = circulars.filter(
+          (c) =>
+            c.title.toLowerCase().includes(q.toLowerCase()) ||
+            c.excerpt.toLowerCase().includes(q.toLowerCase()),
+        );
+        renderCirculars(filteredCirculars);
+      }
+
+      function openCircular(id) {
+        const c = circulars.find((x) => x.id === id);
+        if (!c) return;
+        // mark as read
+        c.unread = false;
+        const modal = document.createElement("div");
+        modal.className = "modal-overlay open";
+        modal.innerHTML = `<div class="modal" style="max-width:640px">
+    <div class="modal-header"><div class="modal-title">${c.title}</div><button class="modal-close" onclick="this.closest('.modal-overlay').remove()">✕</button></div>
+    <div class="modal-body">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+        <span class="tag ${c.type === "alert" ? "tag-red" : c.type === "event" ? "tag-gold" : "tag-purple"}">${c.type}</span>
+        <span class="tag tag-gray">📅 ${c.date}</span>
+        <span class="tag tag-gray">👤 ${c.author}</span>
+        <span class="tag tag-blue">📍 ${c.scope}</span>
+      </div>
+      <p style="font-size:14px;line-height:1.75;color:var(--text2)">${c.excerpt}</p>
+      ${c.hasAttachment ? `<div class="alert alert-info mt-16"><span>📄</span><div>A PDF attachment is available for this circular.<br><a href="#" onclick="toast('Downloading PDF…','info')" style="color:var(--saffron);font-weight:600">Download PDF →</a></div></div>` : ""}
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="this.closest('.modal-overlay').remove()">Close</button>${c.hasAttachment ? "<button class=\"btn btn-primary\" onclick=\"toast('Downloading…','info')\">↓ Download PDF</button>" : ""}</div>
+  </div>`;
+        document.body.appendChild(modal);
+      }
+
+      function publishCircular() {
+        toast("Circular published successfully!", "success");
+        closeModal("compose-modal");
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        populateDistrictSelects();
+        renderCirculars(circulars);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,924 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Heatmap — Prajakeeya Karnataka</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .heatmap-wrap {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 20px;
+        align-items: start;
+      }
+
+      .map-panel {
+        background: var(--midnight);
+        border-radius: var(--r-xl);
+        padding: 28px;
+        position: relative;
+      }
+
+      .map-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .map-legend {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .legend-box {
+        width: 14px;
+        height: 14px;
+        border-radius: 3px;
+      }
+
+      .district-map {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 6px;
+      }
+
+      .d-cell {
+        aspect-ratio: 1;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition:
+          transform 0.15s,
+          box-shadow 0.15s;
+        padding: 4px;
+        position: relative;
+      }
+
+      .d-cell:hover {
+        transform: scale(1.12);
+        z-index: 10;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      }
+
+      .d-cell span {
+        font-size: 9px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.9);
+        text-align: center;
+        line-height: 1.2;
+      }
+
+      .d-cell .d-num {
+        font-size: 11px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 1px;
+      }
+
+      .sev-1 {
+        background: rgba(26, 107, 58, 0.8);
+      }
+
+      .sev-2 {
+        background: rgba(44, 155, 89, 0.7);
+      }
+
+      .sev-3 {
+        background: rgba(200, 150, 42, 0.75);
+      }
+
+      .sev-4 {
+        background: rgba(232, 80, 26, 0.75);
+      }
+
+      .sev-5 {
+        background: rgba(180, 30, 30, 0.85);
+      }
+
+      .map-stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .ms-box {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: var(--r-md);
+        padding: 14px;
+        text-align: center;
+      }
+
+      .ms-num {
+        font-size: 26px;
+        font-weight: 700;
+        color: #fff;
+        line-height: 1;
+      }
+
+      .ms-num em {
+        color: var(--saffron-mid);
+        font-style: normal;
+      }
+
+      .ms-label {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.4);
+        margin-top: 3px;
+      }
+
+      .district-detail {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-xl);
+        padding: 24px;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .dd-header {
+        text-align: center;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--border2);
+        margin-bottom: 20px;
+      }
+
+      .dd-name {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+
+      .dd-score {
+        font-size: 48px;
+        font-weight: 700;
+        line-height: 1;
+        margin: 12px 0;
+      }
+
+      .dd-grade {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .dd-metrics {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .dd-metric {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .dd-metric-label {
+        font-size: 12px;
+        color: var(--text2);
+        width: 120px;
+        flex-shrink: 0;
+      }
+
+      .dd-metric-bar {
+        flex: 1;
+      }
+
+      .dd-metric-val {
+        font-size: 12px;
+        font-weight: 600;
+        width: 36px;
+        text-align: right;
+      }
+
+      .category-breakdown {
+        margin-top: 20px;
+      }
+
+      .cat-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--border2);
+      }
+
+      .cat-row:last-child {
+        border-bottom: none;
+      }
+
+      .cat-emoji-sm {
+        font-size: 16px;
+        width: 24px;
+        text-align: center;
+      }
+
+      .cat-label {
+        font-size: 12px;
+        flex: 1;
+      }
+
+      .cat-count {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text2);
+      }
+
+      .cat-mini-bar {
+        width: 60px;
+        height: 5px;
+        background: var(--mist);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+
+      .cat-mini-fill {
+        height: 100%;
+        border-radius: 3px;
+      }
+
+      .filter-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+
+      .analytics-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+
+      .an-card {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-md);
+        padding: 16px;
+        box-shadow: var(--shadow-sm);
+        text-align: center;
+      }
+
+      .an-num {
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1;
+        margin-bottom: 4px;
+      }
+
+      .an-label {
+        font-size: 11px;
+        color: var(--text3);
+      }
+
+      .tooltip {
+        position: fixed;
+        background: var(--midnight);
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: var(--r-md);
+        font-size: 12px;
+        pointer-events: none;
+        z-index: 999;
+        box-shadow: var(--shadow-lg);
+        display: none;
+        min-width: 160px;
+      }
+
+      @media (max-width: 900px) {
+        .heatmap-wrap {
+          grid-template-columns: 1fr;
+        }
+        .analytics-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .district-map {
+          grid-template-columns: repeat(5, 1fr);
+        }
+      }
+
+      @media (max-width: 500px) {
+        .district-map {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page-wrap">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-mark">ಪ್ರ</div>
+          <div class="logo-text">
+            <div class="en">Prajakeeya</div>
+            <div class="kn">ಪ್ರಜಾಕೀಯ ಕರ್ನಾಟಕ</div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <a class="nav-item" href="dashboard.html"
+            ><span class="nav-icon">🏠</span> Dashboard</a
+          >
+          <a class="nav-item" href="report.html"
+            ><span class="nav-icon">🚧</span> Report issue</a
+          >
+          <a class="nav-item" href="voice.html"
+            ><span class="nav-icon">🗳️</span> People's voice</a
+          >
+          <a class="nav-item" href="circulars.html"
+            ><span class="nav-icon">📢</span> Circulars</a
+          >
+          <a class="nav-item" href="praja-sabha.html"
+            ><span class="nav-icon">🏛️</span> Praja Sabha</a
+          >
+          <a class="nav-item active" href="heatmap.html"
+            ><span class="nav-icon">🗺️</span> Heatmap</a
+          >
+          <div class="nav-section-label">My account</div>
+          <a class="nav-item" href="membership.html"
+            ><span class="nav-icon">🆔</span> My membership</a
+          >
+          <a class="nav-item" href="volunteer.html"
+            ><span class="nav-icon">🤝</span> Volunteer</a
+          >
+          <div class="nav-section-label">Governance</div>
+          <a class="nav-item" href="transparency.html"
+            ><span class="nav-icon">📊</span> Transparency</a
+          >
+          <a class="nav-item" href="mla-tracker.html"
+            ><span class="nav-icon">⭐</span> MLA tracker</a
+          >
+          <a class="nav-item" href="manifesto.html"
+            ><span class="nav-icon">📜</span> Manifesto builder</a
+          >
+          <a class="nav-item" href="emergency.html"
+            ><span class="nav-icon">🚨</span> Emergency alerts</a
+          >
+          <a class="nav-item" href="admin.html"
+            ><span class="nav-icon">⚙️</span> Admin panel</a
+          >
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="user-avatar">RK</div>
+            <div>
+              <div class="user-name">Rajesh Kumar</div>
+              <div class="user-role">Active member</div>
+            </div>
+            <button
+              onclick="PK.logout()"
+              style="
+                margin-left: auto;
+                background: none;
+                border: none;
+                color: rgba(255, 255, 255, 0.3);
+                cursor: pointer;
+                font-size: 18px;
+              "
+            >
+              ⏻
+            </button>
+          </div>
+        </div>
+      </aside>
+      <div class="main-content">
+        <div class="page-header">
+          <div>
+            <div class="topbar-title">Karnataka Problem Heatmap</div>
+            <div class="topbar-sub">
+              Live district-wise issue severity — updated every hour
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <div class="notif-btn">
+              🔔
+              <div class="notif-dot"></div>
+            </div>
+            <select
+              class="form-control form-select"
+              style="width: 180px"
+              onchange="filterCategory(this.value)"
+            >
+              <option value="all">All categories</option>
+              <option value="roads">🛣️ Roads</option>
+              <option value="water">💧 Water</option>
+              <option value="power">⚡ Electricity</option>
+              <option value="health">🏥 Healthcare</option>
+              <option value="edu">🎓 Education</option>
+              <option value="agri">🌾 Agriculture</option>
+            </select>
+          </div>
+        </div>
+        <div class="page-body">
+          <!-- Analytics strip -->
+          <div class="analytics-grid">
+            <div class="an-card">
+              <div class="an-num" style="color: var(--saffron)">18,432</div>
+              <div class="an-label">Total issues reported</div>
+            </div>
+            <div class="an-card">
+              <div class="an-num" style="color: var(--green)">82%</div>
+              <div class="an-label">Resolution rate</div>
+            </div>
+            <div class="an-card">
+              <div class="an-num" style="color: var(--gold)">38h</div>
+              <div class="an-label">Avg resolution time</div>
+            </div>
+            <div class="an-card">
+              <div class="an-num" style="color: #185fa5">30</div>
+              <div class="an-label">Districts monitored</div>
+            </div>
+          </div>
+
+          <div class="heatmap-wrap">
+            <!-- Map -->
+            <div class="map-panel">
+              <div class="map-title">
+                <span>Karnataka Districts — Issue Severity Map</span>
+                <span style="font-size: 11px; color: rgba(255, 255, 255, 0.3)"
+                  >🔄 Updated 12 min ago</span
+                >
+              </div>
+              <div class="map-legend">
+                <div class="legend-item">
+                  <div class="legend-box sev-1"></div>
+                  Low (0–100)
+                </div>
+                <div class="legend-item">
+                  <div class="legend-box sev-2"></div>
+                  Moderate (101–250)
+                </div>
+                <div class="legend-item">
+                  <div class="legend-box sev-3"></div>
+                  Medium (251–500)
+                </div>
+                <div class="legend-item">
+                  <div class="legend-box sev-4"></div>
+                  High (501–900)
+                </div>
+                <div class="legend-item">
+                  <div class="legend-box sev-5"></div>
+                  Critical (900+)
+                </div>
+              </div>
+              <div class="district-map" id="district-map"></div>
+              <div class="map-stats">
+                <div class="ms-box">
+                  <div class="ms-num">Raichur</div>
+                  <div class="ms-label">Highest issues this month</div>
+                </div>
+                <div class="ms-box">
+                  <div class="ms-num" style="color: #4aca7a">Udupi</div>
+                  <div class="ms-label">Lowest issues this month</div>
+                </div>
+                <div class="ms-box">
+                  <div class="ms-num"><em>1,024</em></div>
+                  <div class="ms-label">New issues this week</div>
+                </div>
+                <div class="ms-box">
+                  <div class="ms-num"><em>847</em></div>
+                  <div class="ms-label">Resolved this week</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- District detail -->
+            <div class="district-detail" id="district-detail">
+              <div class="dd-header">
+                <div
+                  style="
+                    font-size: 12px;
+                    color: var(--text3);
+                    margin-bottom: 4px;
+                  "
+                >
+                  Click a district to explore
+                </div>
+                <div class="dd-name" id="dd-name">Karnataka Overview</div>
+                <div
+                  class="dd-score"
+                  id="dd-score"
+                  style="color: var(--saffron)"
+                >
+                  72
+                </div>
+                <div class="dd-grade" id="dd-grade" style="color: var(--green)">
+                  ★ Good Governance
+                </div>
+                <div
+                  style="font-size: 11px; color: var(--text3)"
+                  id="dd-issues"
+                >
+                  18,432 total issues · 82% resolved
+                </div>
+              </div>
+              <div class="dd-metrics">
+                <div class="dd-metric">
+                  <div class="dd-metric-label">Resolution rate</div>
+                  <div class="dd-metric-bar">
+                    <div class="progress-wrap">
+                      <div
+                        class="progress-fill green"
+                        id="dd-res"
+                        style="width: 82%"
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="dd-metric-val" id="dd-res-val">82%</div>
+                </div>
+                <div class="dd-metric">
+                  <div class="dd-metric-label">Response time</div>
+                  <div class="dd-metric-bar">
+                    <div class="progress-wrap">
+                      <div
+                        class="progress-fill gold"
+                        id="dd-resp"
+                        style="width: 60%"
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="dd-metric-val" id="dd-resp-val">38h</div>
+                </div>
+                <div class="dd-metric">
+                  <div class="dd-metric-label">Citizen rating</div>
+                  <div class="dd-metric-bar">
+                    <div class="progress-wrap">
+                      <div
+                        class="progress-fill saffron"
+                        id="dd-rat"
+                        style="width: 80%"
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="dd-metric-val" id="dd-rat-val">4.0★</div>
+                </div>
+              </div>
+              <div class="category-breakdown" id="dd-cats"></div>
+              <button
+                class="btn btn-primary btn-sm w-full mt-16"
+                onclick="location.href = 'report.html'"
+              >
+                + Report issue in this district
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script src="app.js"></script>
+    <script>
+      const districts = [
+        {
+          n: "Bagalkot",
+          s: 3,
+          issues: 412,
+          res: 79,
+        },
+        {
+          n: "Ballari",
+          s: 4,
+          issues: 720,
+          res: 74,
+        },
+        {
+          n: "Belagavi",
+          s: 3,
+          issues: 510,
+          res: 81,
+        },
+        {
+          n: "B.Rural",
+          s: 3,
+          issues: 290,
+          res: 83,
+        },
+        {
+          n: "B.Urban",
+          s: 5,
+          issues: 2840,
+          res: 85,
+        },
+        {
+          n: "Bidar",
+          s: 4,
+          issues: 630,
+          res: 72,
+        },
+        {
+          n: "Chamraj.",
+          s: 4,
+          issues: 380,
+          res: 70,
+        },
+        {
+          n: "Chikkabal.",
+          s: 2,
+          issues: 210,
+          res: 88,
+        },
+        {
+          n: "Chikkamag.",
+          s: 2,
+          issues: 180,
+          res: 86,
+        },
+        {
+          n: "Chitradurga",
+          s: 3,
+          issues: 340,
+          res: 78,
+        },
+        {
+          n: "DK",
+          s: 2,
+          issues: 160,
+          res: 91,
+        },
+        {
+          n: "Davanagere",
+          s: 3,
+          issues: 430,
+          res: 80,
+        },
+        {
+          n: "Dharwad",
+          s: 4,
+          issues: 580,
+          res: 76,
+        },
+        {
+          n: "Gadag",
+          s: 3,
+          issues: 260,
+          res: 82,
+        },
+        {
+          n: "Hassan",
+          s: 2,
+          issues: 195,
+          res: 89,
+        },
+        {
+          n: "Haveri",
+          s: 2,
+          issues: 220,
+          res: 87,
+        },
+        {
+          n: "Kalaburagi",
+          s: 5,
+          issues: 1240,
+          res: 68,
+        },
+        {
+          n: "Kodagu",
+          s: 1,
+          issues: 90,
+          res: 94,
+        },
+        {
+          n: "Kolar",
+          s: 3,
+          issues: 310,
+          res: 80,
+        },
+        {
+          n: "Koppal",
+          s: 4,
+          issues: 540,
+          res: 73,
+        },
+        {
+          n: "Mandya",
+          s: 3,
+          issues: 360,
+          res: 81,
+        },
+        {
+          n: "Mysuru",
+          s: 3,
+          issues: 490,
+          res: 84,
+        },
+        {
+          n: "Raichur",
+          s: 5,
+          issues: 1380,
+          res: 65,
+        },
+        {
+          n: "Ramanagara",
+          s: 2,
+          issues: 240,
+          res: 86,
+        },
+        {
+          n: "Shivamogga",
+          s: 2,
+          issues: 280,
+          res: 88,
+        },
+        {
+          n: "Tumakuru",
+          s: 3,
+          issues: 450,
+          res: 79,
+        },
+        {
+          n: "Udupi",
+          s: 1,
+          issues: 75,
+          res: 96,
+        },
+        {
+          n: "Uttara K.",
+          s: 2,
+          issues: 140,
+          res: 90,
+        },
+        {
+          n: "Vijayapura",
+          s: 3,
+          issues: 470,
+          res: 77,
+        },
+        {
+          n: "Yadgir",
+          s: 5,
+          issues: 980,
+          res: 66,
+        },
+      ];
+
+      const catData = [
+        {
+          e: "🛣️",
+          label: "Roads",
+          pct: 85,
+        },
+        {
+          e: "💧",
+          label: "Water",
+          pct: 68,
+        },
+        {
+          e: "⚡",
+          label: "Electricity",
+          pct: 55,
+        },
+        {
+          e: "🏥",
+          label: "Healthcare",
+          pct: 40,
+        },
+        {
+          e: "🎓",
+          label: "Education",
+          pct: 30,
+        },
+        {
+          e: "🌾",
+          label: "Agriculture",
+          pct: 25,
+        },
+        {
+          e: "💼",
+          label: "Employment",
+          pct: 18,
+        },
+      ];
+
+      const tooltip = document.getElementById("tooltip");
+
+      function renderMap() {
+        const map = document.getElementById("district-map");
+        map.innerHTML = districts
+          .map(
+            (d, i) => `
+    <div class="d-cell sev-${d.s}" data-idx="${i}"
+      onmouseenter="showTooltip(event,${i})"
+      onmouseleave="hideTooltip()"
+      onclick="showDistrict(${i})">
+      <div class="d-num">${d.issues}</div>
+      <span>${d.n}</span>
+    </div>`,
+          )
+          .join("");
+      }
+
+      function showTooltip(e, idx) {
+        const d = districts[idx];
+        tooltip.innerHTML = `<strong>${d.n}</strong><br>Issues: ${d.issues}<br>Resolved: ${d.res}%<br>Severity: ${"⚡".repeat(d.s)}`;
+        tooltip.style.display = "block";
+        tooltip.style.left = e.clientX + 12 + "px";
+        tooltip.style.top = e.clientY - 40 + "px";
+      }
+
+      function hideTooltip() {
+        tooltip.style.display = "none";
+      }
+
+      document.addEventListener("mousemove", (e) => {
+        if (tooltip.style.display === "block") {
+          tooltip.style.left = e.clientX + 12 + "px";
+          tooltip.style.top = e.clientY - 40 + "px";
+        }
+      });
+
+      function showDistrict(idx) {
+        const d = districts[idx];
+        const score = Math.max(40, 100 - d.s * 12 + Math.floor(d.res / 10));
+        const grades = [
+          "",
+          "Critical",
+          "Poor",
+          "Moderate",
+          "Good",
+          "Excellent",
+        ];
+        const gradeColors = [
+          "",
+          "#DC2626",
+          "#E8501A",
+          "#C8962A",
+          "#2D9B59",
+          "#185FA5",
+        ];
+        document.getElementById("dd-name").textContent = d.n + " District";
+        document.getElementById("dd-score").textContent = score;
+        document.getElementById("dd-score").style.color = gradeColors[6 - d.s];
+        document.getElementById("dd-grade").textContent =
+          "★ " +
+          (d.res > 85
+            ? "Excellent"
+            : d.res > 78
+              ? "Good"
+              : d.res > 70
+                ? "Moderate"
+                : "Needs attention");
+        document.getElementById("dd-grade").style.color = gradeColors[6 - d.s];
+        document.getElementById("dd-issues").textContent =
+          `${d.issues} issues this month · ${d.res}% resolved`;
+        document.getElementById("dd-res").style.width = d.res + "%";
+        document.getElementById("dd-res-val").textContent = d.res + "%";
+        const respTime = Math.floor(20 + (100 - d.res) * 0.8);
+        document.getElementById("dd-resp").style.width =
+          Math.max(10, 100 - d.s * 15) + "%";
+        document.getElementById("dd-resp-val").textContent = respTime + "h";
+        const rating = (d.res / 25).toFixed(1);
+        document.getElementById("dd-rat").style.width = d.res + "%";
+        document.getElementById("dd-rat-val").textContent = rating + "★";
+
+        document.getElementById("dd-cats").innerHTML = `
+    <div style="font-size:12px;font-weight:700;margin-bottom:10px;color:var(--text3)">ISSUES BY CATEGORY</div>
+    ${catData
+      .map((c) => {
+        const cnt = Math.floor(
+          ((d.issues * c.pct) / 100) * (0.8 + Math.random() * 0.4),
+        );
+        return `<div class="cat-row">
+        <div class="cat-emoji-sm">${c.e}</div>
+        <div class="cat-label">${c.label}</div>
+        <div class="cat-mini-bar"><div class="cat-mini-fill" style="width:${c.pct}%;background:var(--saffron)"></div></div>
+        <div class="cat-count">${cnt}</div>
+      </div>`;
+      })
+      .join("")}`;
+      }
+
+      function filterCategory(cat) {
+        toast(
+          `Filtering by: ${cat === "all" ? "All categories" : cat}`,
+          "info",
+        );
+      }
+
+      document.addEventListener("DOMContentLoaded", renderMap);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1386 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Admin Dashboard — Prajakeeya Karnataka</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .admin-header-card {
+        background: linear-gradient(135deg, var(--midnight) 0%, #1a2a40 100%);
+        border-radius: var(--r-xl);
+        padding: 28px 32px;
+        color: #fff;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: gap;
+      }
+
+      .admin-stats-row {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .as-card {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-md);
+        padding: 16px;
+        box-shadow: var(--shadow-sm);
+        text-align: center;
+      }
+
+      .as-num {
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1;
+        margin-bottom: 3px;
+      }
+
+      .as-label {
+        font-size: 10px;
+        color: var(--text3);
+        font-weight: 500;
+      }
+
+      .as-change {
+        font-size: 10px;
+        font-weight: 600;
+        margin-top: 4px;
+      }
+
+      .admin-tabs {
+        display: flex;
+        gap: 0;
+        border-bottom: 2px solid var(--border2);
+        margin-bottom: 20px;
+        overflow-x: auto;
+      }
+
+      .atab {
+        padding: 10px 18px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text3);
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        margin-bottom: -2px;
+        white-space: nowrap;
+        transition: all 0.15s;
+      }
+
+      .atab.active {
+        color: var(--saffron);
+        border-bottom-color: var(--saffron);
+      }
+
+      .admin-layout {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 20px;
+        align-items: start;
+      }
+
+      .user-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border2);
+      }
+
+      .user-row:last-child {
+        border-bottom: none;
+      }
+
+      .ur-av {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .ur-name {
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .ur-meta {
+        font-size: 11px;
+        color: var(--text3);
+      }
+
+      .ur-role {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .action-btn {
+        background: none;
+        border: 1px solid var(--border);
+        border-radius: var(--r-sm);
+        padding: 4px 10px;
+        font-size: 11px;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        transition: all 0.15s;
+      }
+
+      .action-btn:hover {
+        border-color: var(--saffron);
+        color: var(--saffron);
+      }
+
+      .district-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border2);
+      }
+
+      .district-row:last-child {
+        border-bottom: none;
+      }
+
+      .dr-name {
+        font-size: 13px;
+        font-weight: 600;
+        width: 140px;
+        flex-shrink: 0;
+      }
+
+      .dr-bar {
+        flex: 1;
+      }
+
+      .dr-num {
+        font-size: 12px;
+        font-weight: 600;
+        text-align: right;
+        width: 60px;
+      }
+
+      .complaint-table {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .quick-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .qa-card {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-md);
+        padding: 16px;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: center;
+      }
+
+      .qa-card:hover {
+        box-shadow: var(--shadow-md);
+        border-color: var(--saffron);
+        transform: translateY(-2px);
+      }
+
+      .qa-icon {
+        font-size: 28px;
+        margin-bottom: 6px;
+      }
+
+      .qa-label {
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .qa-sub {
+        font-size: 10px;
+        color: var(--text3);
+        margin-top: 2px;
+      }
+
+      .live-activity {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .la-item {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        padding: 10px;
+        background: var(--mist);
+        border-radius: var(--r-sm);
+      }
+
+      .la-icon {
+        font-size: 16px;
+        flex-shrink: 0;
+      }
+
+      .la-text {
+        font-size: 12px;
+        color: var(--text2);
+        flex: 1;
+        line-height: 1.4;
+      }
+
+      .la-time {
+        font-size: 10px;
+        color: var(--text3);
+        white-space: nowrap;
+      }
+
+      @media (max-width: 1100px) {
+        .admin-stats-row {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      @media (max-width: 900px) {
+        .admin-layout {
+          grid-template-columns: 1fr;
+        }
+        .admin-stats-row {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page-wrap">
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-mark">ಪ್ರ</div>
+          <div class="logo-text">
+            <div class="en">Prajakeeya</div>
+            <div class="kn">ಪ್ರಜಾಕೀಯ ಕರ್ನಾಟಕ</div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <a class="nav-item" href="dashboard.html"
+            ><span class="nav-icon">🏠</span> Dashboard</a
+          >
+          <a class="nav-item" href="report.html"
+            ><span class="nav-icon">🚧</span> Report issue</a
+          >
+          <a class="nav-item" href="voice.html"
+            ><span class="nav-icon">🗳️</span> People's voice</a
+          >
+          <a class="nav-item" href="circulars.html"
+            ><span class="nav-icon">📢</span> Circulars</a
+          >
+          <a class="nav-item" href="praja-sabha.html"
+            ><span class="nav-icon">🏛️</span> Praja Sabha</a
+          >
+          <a class="nav-item" href="heatmap.html"
+            ><span class="nav-icon">🗺️</span> Heatmap</a
+          >
+          <div class="nav-section-label">My account</div>
+          <a class="nav-item" href="membership.html"
+            ><span class="nav-icon">🆔</span> My membership</a
+          >
+          <a class="nav-item" href="volunteer.html"
+            ><span class="nav-icon">🤝</span> Volunteer</a
+          >
+          <div class="nav-section-label">Governance</div>
+          <a class="nav-item" href="transparency.html"
+            ><span class="nav-icon">📊</span> Transparency</a
+          >
+          <a class="nav-item" href="mla-tracker.html"
+            ><span class="nav-icon">⭐</span> MLA tracker</a
+          >
+          <a class="nav-item" href="manifesto.html"
+            ><span class="nav-icon">📜</span> Manifesto builder</a
+          >
+          <a class="nav-item" href="emergency.html"
+            ><span class="nav-icon">🚨</span> Emergency alerts</a
+          >
+          <a class="nav-item active" href="admin.html"
+            ><span class="nav-icon">⚙️</span> Admin panel</a
+          >
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="user-avatar" style="background: var(--saffron)">SA</div>
+            <div>
+              <div class="user-name">State Administrator</div>
+              <div class="user-role" style="color: var(--saffron-mid)">
+                Super Admin
+              </div>
+            </div>
+            <button
+              onclick="PK.logout()"
+              style="
+                margin-left: auto;
+                background: none;
+                border: none;
+                color: rgba(255, 255, 255, 0.3);
+                cursor: pointer;
+                font-size: 18px;
+              "
+            >
+              ⏻
+            </button>
+          </div>
+        </div>
+      </aside>
+      <div class="main-content">
+        <div class="page-header">
+          <div>
+            <div class="topbar-title">Admin — Leadership Dashboard</div>
+            <div class="topbar-sub">
+              State-wide overview · Total members, volunteers, analytics, and
+              management
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <div class="notif-btn">
+              🔔
+              <div class="notif-dot"></div>
+            </div>
+            <button
+              class="btn btn-primary btn-sm"
+              onclick="openModal('broadcast-modal')"
+            >
+              📢 Broadcast message
+            </button>
+          </div>
+        </div>
+        <div class="page-body">
+          <!-- Key metrics -->
+          <div class="admin-stats-row">
+            <div class="as-card">
+              <div class="as-num" style="color: var(--saffron)">2,41,832</div>
+              <div class="as-label">Total members</div>
+              <div class="as-change" style="color: var(--green)">
+                ↑ 8,420 this week
+              </div>
+            </div>
+            <div class="as-card">
+              <div class="as-num" style="color: var(--green)">42,184</div>
+              <div class="as-label">Active volunteers</div>
+              <div class="as-change" style="color: var(--green)">
+                ↑ 1,240 this month
+              </div>
+            </div>
+            <div class="as-card">
+              <div class="as-num" style="color: var(--gold)">18,432</div>
+              <div class="as-label">Issues reported</div>
+              <div class="as-change" style="color: var(--green)">
+                82% resolved
+              </div>
+            </div>
+            <div class="as-card">
+              <div class="as-num" style="color: #185fa5">2.1L+</div>
+              <div class="as-label">Poll votes cast</div>
+              <div class="as-change" style="color: var(--green)">
+                ↑ 41% engagement
+              </div>
+            </div>
+            <div class="as-card">
+              <div class="as-num" style="color: #7c3aed">47</div>
+              <div class="as-label">Praja Sabhas held</div>
+              <div class="as-change" style="color: var(--green)">
+                3.8L attendees
+              </div>
+            </div>
+            <div class="as-card">
+              <div class="as-num" style="color: var(--saffron)">₹4.82Cr</div>
+              <div class="as-label">Funds received</div>
+              <div class="as-change" style="color: var(--green)">
+                94% utilised
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick actions -->
+          <div class="quick-actions">
+            <div class="qa-card" onclick="openModal('circular-modal')">
+              <div class="qa-icon">📢</div>
+              <div class="qa-label">Publish circular</div>
+              <div class="qa-sub">Reach all members instantly</div>
+            </div>
+            <div class="qa-card" onclick="openModal('poll-modal')">
+              <div class="qa-icon">🗳️</div>
+              <div class="qa-label">Create poll</div>
+              <div class="qa-sub">State or district-level</div>
+            </div>
+            <div class="qa-card" onclick="openModal('alert-create-modal')">
+              <div class="qa-icon">🚨</div>
+              <div class="qa-label">Issue emergency alert</div>
+              <div class="qa-sub">Notify affected districts</div>
+            </div>
+            <div class="qa-card" onclick="location.href = 'heatmap.html'">
+              <div class="qa-icon">🗺️</div>
+              <div class="qa-label">View heatmap</div>
+              <div class="qa-sub">District-wise analytics</div>
+            </div>
+          </div>
+
+          <div class="admin-tabs">
+            <div class="atab active" onclick="switchAdminTab(this, 'overview')">
+              📊 Overview
+            </div>
+            <div class="atab" onclick="switchAdminTab(this, 'members')">
+              👥 Members
+            </div>
+            <div class="atab" onclick="switchAdminTab(this, 'complaints')">
+              🚧 Complaints
+            </div>
+            <div class="atab" onclick="switchAdminTab(this, 'districts')">
+              📍 Districts
+            </div>
+            <div class="atab" onclick="switchAdminTab(this, 'volunteers')">
+              🤝 Volunteers
+            </div>
+            <div class="atab" onclick="switchAdminTab(this, 'audit')">
+              🔍 Audit log
+            </div>
+          </div>
+
+          <div class="admin-layout">
+            <div>
+              <!-- OVERVIEW -->
+              <div id="tab-overview">
+                <div class="grid-2 mb-20">
+                  <div class="card">
+                    <div
+                      style="
+                        font-size: 14px;
+                        font-weight: 700;
+                        margin-bottom: 16px;
+                      "
+                    >
+                      📈 Member growth — 2024
+                    </div>
+                    <div
+                      id="growth-chart"
+                      style="
+                        height: 160px;
+                        background: var(--mist);
+                        border-radius: var(--r-md);
+                        display: flex;
+                        align-items: flex-end;
+                        gap: 6px;
+                        padding: 16px 12px 0;
+                        overflow: hidden;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-around;
+                        margin-top: 8px;
+                      "
+                    >
+                      <span style="font-size: 10px; color: var(--text3)"
+                        >Jan</span
+                      ><span style="font-size: 10px; color: var(--text3)"
+                        >Feb</span
+                      ><span style="font-size: 10px; color: var(--text3)"
+                        >Mar</span
+                      >
+                      <span style="font-size: 10px; color: var(--text3)"
+                        >Apr</span
+                      ><span style="font-size: 10px; color: var(--text3)"
+                        >May</span
+                      ><span style="font-size: 10px; color: var(--text3)"
+                        >Jun</span
+                      >
+                    </div>
+                  </div>
+                  <div class="card">
+                    <div
+                      style="
+                        font-size: 14px;
+                        font-weight: 700;
+                        margin-bottom: 16px;
+                      "
+                    >
+                      🗺️ Top districts by membership
+                    </div>
+                    <div id="district-growth"></div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div
+                    style="
+                      font-size: 14px;
+                      font-weight: 700;
+                      margin-bottom: 16px;
+                    "
+                  >
+                    🔴 Live activity feed
+                  </div>
+                  <div class="live-activity" id="live-feed"></div>
+                </div>
+              </div>
+
+              <!-- MEMBERS -->
+              <div id="tab-members" style="display: none">
+                <div
+                  style="
+                    display: flex;
+                    gap: 10px;
+                    margin-bottom: 16px;
+                    flex-wrap: wrap;
+                  "
+                >
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="🔍 Search members…"
+                    style="max-width: 260px"
+                    oninput="searchMembers(this.value)"
+                  />
+                  <select class="form-control form-select" style="width: 180px">
+                    <option>All districts</option>
+                  </select>
+                  <select class="form-control form-select" style="width: 160px">
+                    <option>All roles</option>
+                    <option>Citizen</option>
+                    <option>Volunteer</option>
+                    <option>Coordinator</option>
+                  </select>
+                  <button
+                    class="btn btn-ghost btn-sm"
+                    onclick="toast('Exporting member list…', 'info')"
+                  >
+                    ↓ Export CSV
+                  </button>
+                </div>
+                <div class="card">
+                  <div class="table-wrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Member</th>
+                          <th>District</th>
+                          <th>Role</th>
+                          <th>Joined</th>
+                          <th>Status</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody id="members-tbody"></tbody>
+                    </table>
+                  </div>
+                  <div class="pagination mt-16">
+                    <button class="page-btn">‹</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <span
+                      style="
+                        padding: 0 8px;
+                        font-size: 12px;
+                        color: var(--text3);
+                      "
+                      >… 241</span
+                    >
+                    <button class="page-btn">›</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- COMPLAINTS -->
+              <div id="tab-complaints" style="display: none">
+                <div
+                  style="
+                    display: flex;
+                    gap: 10px;
+                    margin-bottom: 16px;
+                    flex-wrap: wrap;
+                  "
+                >
+                  <select
+                    class="form-control form-select"
+                    style="width: 160px"
+                    onchange="filterComplaints(this.value)"
+                  >
+                    <option value="all">All statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="progress">In progress</option>
+                    <option value="resolved">Resolved</option>
+                  </select>
+                  <select
+                    class="form-control form-select district-select"
+                    style="width: 200px"
+                  ></select>
+                  <button
+                    class="btn btn-ghost btn-sm"
+                    onclick="toast('Exporting complaints…', 'info')"
+                  >
+                    ↓ Export
+                  </button>
+                </div>
+                <div class="complaint-table">
+                  <div class="table-wrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Ticket ID</th>
+                          <th>Issue</th>
+                          <th>Category</th>
+                          <th>District</th>
+                          <th>Status</th>
+                          <th>Assigned to</th>
+                          <th>Days</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody id="complaints-admin-tbody"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- DISTRICTS -->
+              <div id="tab-districts" style="display: none">
+                <div class="card">
+                  <div
+                    style="
+                      font-size: 14px;
+                      font-weight: 700;
+                      margin-bottom: 16px;
+                    "
+                  >
+                    District-wise performance scorecard
+                  </div>
+                  <div class="table-wrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>District</th>
+                          <th>Members</th>
+                          <th>Issues</th>
+                          <th>Resolution %</th>
+                          <th>Score</th>
+                          <th>Coordinator</th>
+                        </tr>
+                      </thead>
+                      <tbody id="district-admin-tbody"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- VOLUNTEERS -->
+              <div id="tab-volunteers" style="display: none">
+                <div class="card">
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      margin-bottom: 16px;
+                    "
+                  >
+                    <div style="font-size: 14px; font-weight: 700">
+                      Volunteer management
+                    </div>
+                    <button
+                      class="btn btn-primary btn-sm"
+                      onclick="openModal('assign-modal')"
+                    >
+                      + Assign task
+                    </button>
+                  </div>
+                  <div id="vol-admin-list"></div>
+                </div>
+              </div>
+
+              <!-- AUDIT -->
+              <div id="tab-audit" style="display: none">
+                <div class="card">
+                  <div
+                    style="
+                      font-size: 14px;
+                      font-weight: 700;
+                      margin-bottom: 16px;
+                    "
+                  >
+                    🔍 Audit log — Admin actions
+                  </div>
+                  <div id="audit-log"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right sidebar -->
+            <div>
+              <div class="card mb-12">
+                <div
+                  style="font-size: 13px; font-weight: 700; margin-bottom: 12px"
+                >
+                  ⚡ Pending actions
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px">
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      padding: 8px;
+                      background: var(--saffron-light);
+                      border-radius: var(--r-sm);
+                    "
+                  >
+                    <span style="font-size: 12px">Unassigned complaints</span
+                    ><span class="tag tag-saffron">24</span>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      padding: 8px;
+                      background: #dbeafe;
+                      border-radius: var(--r-sm);
+                    "
+                  >
+                    <span style="font-size: 12px"
+                      >Pending circular approvals</span
+                    ><span class="tag tag-blue">3</span>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      padding: 8px;
+                      background: var(--gold-light);
+                      border-radius: var(--r-sm);
+                    "
+                  >
+                    <span style="font-size: 12px">Sabha requests</span
+                    ><span class="tag tag-gold">7</span>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      padding: 8px;
+                      background: var(--green-light);
+                      border-radius: var(--r-sm);
+                    "
+                  >
+                    <span style="font-size: 12px">Policy review queue</span
+                    ><span class="tag tag-green">12</span>
+                  </div>
+                </div>
+              </div>
+              <div class="card mb-12">
+                <div
+                  style="font-size: 13px; font-weight: 700; margin-bottom: 12px"
+                >
+                  📊 Today's summary
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 6px;
+                    font-size: 12px;
+                  "
+                >
+                  <div style="display: flex; justify-content: space-between">
+                    <span>New members today</span
+                    ><span
+                      class="font-600 text-success"
+                      style="color: var(--green)"
+                      >+428</span
+                    >
+                  </div>
+                  <div style="display: flex; justify-content: space-between">
+                    <span>Issues filed today</span
+                    ><span class="font-600">142</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between">
+                    <span>Issues resolved today</span
+                    ><span class="font-600" style="color: var(--green)"
+                      >118</span
+                    >
+                  </div>
+                  <div style="display: flex; justify-content: space-between">
+                    <span>Circulars sent</span><span class="font-600">2</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between">
+                    <span>Poll votes today</span
+                    ><span class="font-600">3,240</span>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div
+                  style="font-size: 13px; font-weight: 700; margin-bottom: 12px"
+                >
+                  🔐 Role management
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    font-size: 12px;
+                  "
+                >
+                  <div style="display: flex; justify-content: space-between">
+                    <span>Super Admins</span><span class="font-600">2</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between">
+                    <span>State Admins</span><span class="font-600">5</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between">
+                    <span>District Coordinators</span
+                    ><span class="font-600">30</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between">
+                    <span>Volunteers</span><span class="font-600">42,184</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between">
+                    <span>Citizens</span><span class="font-600">1,99,611</span>
+                  </div>
+                </div>
+                <button
+                  class="btn btn-ghost btn-sm w-full mt-12"
+                  onclick="openModal('role-modal')"
+                >
+                  Manage roles →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Broadcast modal -->
+    <div class="modal-overlay" id="broadcast-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">📢 Broadcast message</div>
+          <button class="modal-close" onclick="closeModal('broadcast-modal')">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Message title</label
+            ><input
+              type="text"
+              class="form-control"
+              placeholder="Subject of the broadcast"
+            />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Target audience</label
+              ><select class="form-control form-select">
+                <option>All members</option>
+                <option>Volunteers only</option>
+                <option>District coordinators</option>
+                <option>Specific district</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Channel</label
+              ><select class="form-control form-select">
+                <option>App notification</option>
+                <option>SMS</option>
+                <option>Both</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message *</label
+            ><textarea
+              class="form-control"
+              rows="4"
+              placeholder="Your broadcast message…"
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" onclick="closeModal('broadcast-modal')">
+            Cancel</button
+          ><button class="btn btn-primary" onclick="sendBroadcast()">
+            Send broadcast →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Create poll modal -->
+    <div class="modal-overlay" id="poll-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">🗳️ Create a poll</div>
+          <button class="modal-close" onclick="closeModal('poll-modal')">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Poll question *</label
+            ><input
+              type="text"
+              class="form-control"
+              placeholder="What would you like citizens to vote on?"
+            />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Scope</label
+              ><select class="form-control form-select">
+                <option>State-wide</option>
+                <option>Specific district</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Closes after</label
+              ><select class="form-control form-select">
+                <option>3 days</option>
+                <option>7 days</option>
+                <option>14 days</option>
+                <option>30 days</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Options (one per line)</label
+            ><textarea
+              class="form-control"
+              rows="4"
+              placeholder="Option 1&#10;Option 2&#10;Option 3"
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" onclick="closeModal('poll-modal')">
+            Cancel</button
+          ><button class="btn btn-primary" onclick="createPoll()">
+            Publish poll →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Emergency alert modal -->
+    <div class="modal-overlay" id="alert-create-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">🚨 Issue emergency alert</div>
+          <button
+            class="modal-close"
+            onclick="closeModal('alert-create-modal')"
+          >
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger mb-12">
+            <span>⚠️</span
+            ><span
+              >Emergency alerts are immediately pushed to all members in
+              affected districts via SMS and app notification.</span
+            >
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Alert type</label
+              ><select class="form-control form-select">
+                <option>Flood</option>
+                <option>Drought</option>
+                <option>Earthquake</option>
+                <option>Fire</option>
+                <option>Health outbreak</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Severity</label
+              ><select class="form-control form-select">
+                <option>🔴 Critical</option>
+                <option>🟠 High</option>
+                <option>🔵 Medium</option>
+                <option>🟢 Advisory</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Affected districts</label
+            ><select
+              class="form-control form-select"
+              multiple
+              style="height: 100px"
+            >
+              <option>Dakshina Kannada</option>
+              <option>Udupi</option>
+              <option>Kodagu</option>
+              <option>All districts</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Alert message *</label
+            ><textarea
+              class="form-control"
+              rows="3"
+              placeholder="What should citizens know and do?"
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-ghost"
+            onclick="closeModal('alert-create-modal')"
+          >
+            Cancel</button
+          ><button class="btn btn-danger" onclick="issueAlert()">
+            Issue alert →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+          const members = [{
+              av: 'RK',
+              bg: '#E8501A',
+              name: 'Rajesh Kumar',
+              district: 'Bengaluru Urban',
+              role: 'citizen',
+              joined: 'Jun 10, 2024',
+              status: 'active'
+          }, {
+              av: 'PM',
+              bg: '#1A6B3A',
+              name: 'Priya M.',
+              district: 'Mysuru',
+              role: 'volunteer',
+              joined: 'May 28, 2024',
+              status: 'active'
+          }, {
+              av: 'SK',
+              bg: '#C8962A',
+              name: 'Suresh Kumar',
+              district: 'Dharwad',
+              role: 'coordinator',
+              joined: 'Mar 15, 2024',
+              status: 'active'
+          }, {
+              av: 'AN',
+              bg: '#534AB7',
+              name: 'Anita Naik',
+              district: 'Kalaburagi',
+              role: 'volunteer',
+              joined: 'Apr 20, 2024',
+              status: 'active'
+          }, {
+              av: 'MG',
+              bg: '#185FA5',
+              name: 'Mohan Gowda',
+              district: 'Belagavi',
+              role: 'citizen',
+              joined: 'Jun 18, 2024',
+              status: 'active'
+          }, {
+              av: 'DK',
+              bg: '#7C3AED',
+              name: 'Deepa K.',
+              district: 'Shivamogga',
+              role: 'volunteer',
+              joined: 'Jun 5, 2024',
+              status: 'suspended'
+          }, ];
+
+          const complaintsAdmin = [{
+              id: 'KA-10014',
+              issue: 'Pothole on NH-48',
+              cat: 'Roads',
+              district: 'Bengaluru Urban',
+              status: 'pending',
+              assigned: 'BBMP',
+              days: 0
+          }, {
+              id: 'KA-10013',
+              issue: 'Water supply cut — 5 days',
+              cat: 'Water',
+              district: 'Mysuru',
+              status: 'progress',
+              assigned: 'KUWS&DB',
+              days: 2
+          }, {
+              id: 'KA-10011',
+              issue: 'Corrupt official in taluk office',
+              cat: 'Corruption',
+              district: 'Dharwad',
+              status: 'pending',
+              assigned: 'Unassigned',
+              days: 3
+          }, {
+              id: 'KA-10008',
+              issue: 'School roof damaged',
+              cat: 'Education',
+              district: 'Raichur',
+              status: 'progress',
+              assigned: 'Edu Dept',
+              days: 5
+          }, {
+              id: 'KA-10001',
+              issue: 'Hospital no doctor',
+              cat: 'Healthcare',
+              district: 'Kalaburagi',
+              status: 'resolved',
+              assigned: 'Health Dept',
+              days: 8
+          }, ];
+
+          const districtData = [{
+              name: 'Bengaluru Urban',
+              members: 48420,
+              issues: 2840,
+              res: 85,
+              score: 88
+          }, {
+              name: 'Mysuru',
+              members: 18240,
+              issues: 490,
+              res: 84,
+              score: 82
+          }, {
+              name: 'Dharwad',
+              members: 14180,
+              issues: 580,
+              res: 76,
+              score: 74
+          }, {
+              name: 'Kalaburagi',
+              members: 12640,
+              issues: 1240,
+              res: 68,
+              score: 62
+          }, {
+              name: 'Belagavi',
+              members: 11820,
+              issues: 510,
+              res: 81,
+              score: 78
+          }, ];
+
+          const liveActivities = [{
+              icon: '👤',
+              text: 'New member: Kavitha R. joined from Belagavi',
+              time: '2m ago'
+          }, {
+              icon: '🚧',
+              text: 'Complaint KA-10014 filed — Pothole, Bengaluru',
+              time: '4m ago'
+          }, {
+              icon: '🗳️',
+              text: 'Poll "Infrastructure Budget" — 342 new votes',
+              time: '8m ago'
+          }, {
+              icon: '✅',
+              text: 'Complaint KA-10008 marked resolved by Edu Dept',
+              time: '12m ago'
+          }, {
+              icon: '📢',
+              text: 'Circular published: Monsoon preparedness',
+              time: '1h ago'
+          }, {
+              icon: '👤',
+              text: '520 new members today · Trending: Raichur district',
+              time: '2h ago'
+          }, ];
+
+          const auditLog = [{
+              user: 'State Admin',
+              action: 'Published emergency alert — Dakshina Kannada flood',
+              time: 'Jun 21 • 6:02 AM'
+          }, {
+              user: 'State Admin',
+              action: 'Sent broadcast to all 2.4L members',
+              time: 'Jun 20 • 4:30 PM'
+          }, {
+              user: 'Coord: Bengaluru',
+              action: 'Assigned complaint KA-10013 to KUWS&DB',
+              time: 'Jun 20 • 2:15 PM'
+          }, {
+              user: 'State Admin',
+              action: 'Created poll: Infrastructure Budget allocation',
+              time: 'Jun 19 • 11:00 AM'
+          }, {
+              user: 'State Admin',
+              action: 'Published Q2 transparency report',
+              time: 'Jun 15 • 10:00 AM'
+          }, ];
+
+          function switchAdminTab(btn, tab) {
+              document.querySelectorAll('.atab').forEach(t => t.classList.remove('active'));
+              btn.classList.add('active');
+              ['overview', 'members', 'complaints', 'districts', 'volunteers', 'audit'].forEach(t => {
+                  const el = document.getElementById('tab-' + t);
+                  if (el) el.style.display = t === tab ? 'block' : 'none';
+              });
+          }
+
+          document.addEventListener('DOMContentLoaded', () => {
+              populateDistrictSelects();
+
+              // Growth chart
+              const vals = [18000, 32000, 54000, 88000, 160000, 241832];
+              const max = Math.max(...vals);
+              document.getElementById('growth-chart').innerHTML = vals.map(v => `
+      <div style="flex:1;background:var(--saffron);border-radius:4px 4px 0 0;height:${Math.round(v/max*130)}px;position:relative;min-width:0">
+        <span style="position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:600;color:var(--text3);white-space:nowrap">${v>=1000?Math.round(v/1000)+'K':v}</span>
+      </div>`).join('');
+
+              // District growth
+              const top5 = [{
+                  name: 'Bengaluru',
+                  members: 48420,
+                  pct: 85
+              }, {
+                  name: 'Mysuru',
+                  members: 18240,
+                  pct: 38
+              }, {
+                  name: 'Dharwad',
+                  members: 14180,
+                  pct: 29
+              }, {
+                  name: 'Kalaburagi',
+                  members: 12640,
+                  pct: 26
+              }, {
+                  name: 'Belagavi',
+                  members: 11820,
+                  pct: 24
+              }];
+              document.getElementById('district-growth').innerHTML = top5.map(d => `
+      <div class="district-row">
+        <div class="dr-name">${d.name}</div>
+        <div class="dr-bar"><div class="progress-wrap"><div class="progress-fill saffron" style="width:${d.pct}%"></div></div></div>
+        <div class="dr-num">${(d.members/1000).toFixed(1)}K</div>
+      </div>`).join('');
+
+              // Live feed
+              document.getElementById('live-feed').innerHTML = liveActivities.map(a => `
+      <div class="la-item">
+        <div class="la-icon">${a.icon}</div>
+        <div class="la-text">${a.text}</div>
+        <div class="la-time">${a.time}</div>
+      </div>`).join('');
+
+              // Members table
+              document.getElementById('members-tbody').innerHTML = members.map(m => `
+      <tr>
+        <td style="display:flex;align-items:center;gap:8px"><div style="width:32px;height:32px;border-radius:50%;background:${m.bg};display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0">${m.av}</div><div><div style="font-size:13px;font-weight:600">${m.name}</div></div></td>
+        <td>${m.district}</td>
+        <td><span class="tag ${m.role==='coordinator'?'tag-saffron':m.role==='volunteer'?'tag-green':'tag-gray'}">${m.role}</span></td>
+        <td>${m.joined}</td>
+        <td><span class="status ${m.status==='active'?'resolved':'critical'}"><span class="status-dot"></span>${m.status}</span></td>
+        <td style="display:flex;gap:4px">
+          <button class="action-btn" onclick="toast('Viewing ${m.name} profile','info')">View</button>
+          <button class="action-btn" onclick="toast('Role updated for ${m.name}','success')">Edit role</button>
+          <button class="action-btn" style="color:#DC2626;border-color:#FCA5A5" onclick="toast('${m.name} suspended','info')">Suspend</button>
+        </td>
+      </tr>`).join('');
+
+              // Complaints admin
+              document.getElementById('complaints-admin-tbody').innerHTML = complaintsAdmin.map(c => `
+      <tr>
+        <td style="color:var(--saffron);font-weight:600">${c.id}</td>
+        <td>${c.issue}</td>
+        <td><span class="tag tag-gray">${c.cat}</span></td>
+        <td>${c.district}</td>
+        <td><span class="status ${c.status}"><span class="status-dot"></span>${c.status.charAt(0).toUpperCase()+c.status.slice(1)}</span></td>
+        <td style="font-size:12px">${c.assigned}</td>
+        <td style="font-size:12px">${c.days===0?'Today':c.days+'d'}</td>
+        <td><button class="action-btn" onclick="toast('Assigning complaint ${c.id}…','info')">Assign</button></td>
+      </tr>`).join('');
+
+              // Districts
+              document.getElementById('district-admin-tbody').innerHTML = districtData.map(d => `
+      <tr>
+        <td style="font-weight:600">${d.name}</td>
+        <td>${d.members.toLocaleString()}</td>
+        <td>${d.issues.toLocaleString()}</td>
+        <td><span style="color:${d.res>=80?'var(--green)':d.res>=70?'var(--gold)':'var(--saffron)';font-weight:600}">${d.res}%</span></td>
+        <td><span style="font-size:16px;font-weight:700;color:${d.score>=80?'var(--green)':d.score>=65?'var(--gold)':'var(--saffron)'}">${d.score}</span></td>
+        <td><button class="action-btn" onclick="toast('Contacting coordinator…','info')">Contact</button></td>
+      </tr>`).join('');
+
+              // Volunteers tab
+              document.getElementById('vol-admin-list').innerHTML = members.filter(m => m.role === 'volunteer' || m.role === 'coordinator').map(m => `
+      <div class="user-row">
+        <div class="ur-av" style="background:${m.bg}">${m.av}</div>
+        <div><div class="ur-name">${m.name}</div><div class="ur-meta">${m.district} · ${m.role}</div></div>
+        <div class="ur-role">
+          <span class="tag ${m.role==='coordinator'?'tag-saffron':'tag-green'}">${m.role}</span>
+          <button class="action-btn" onclick="toast('Assigning task to ${m.name}','info')">Assign task</button>
+        </div>
+      </div>`).join('');
+
+              // Audit log
+              document.getElementById('audit-log').innerHTML = auditLog.map(a => `
+      <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border2)">
+        <div style="font-size:11px;color:var(--saffron);font-weight:600;white-space:nowrap;min-width:120px">${a.user}</div>
+        <div style="font-size:12px;color:var(--text2);flex:1">${a.action}</div>
+        <div style="font-size:11px;color:var(--text3);white-space:nowrap">${a.time}</div>
+      </div>`).join('');
+          });
+
+          function searchMembers(q) {
+              toast(`Searching for "${q}"…`, 'info');
+          }
+
+          function filterComplaints(s) {
+              toast(`Filtering: ${s}`, 'info');
+          }
+
+          function sendBroadcast() {
+              toast('Broadcast sent to all 2.4L members!', 'success');
+              closeModal('broadcast-modal');
+          }
+
+          function createPoll() {
+              toast('Poll created and published!', 'success');
+              closeModal('poll-modal');
+          }
+
+          function issueAlert() {
+              toast('Emergency alert issued to affected districts!', 'success');
+              closeModal('alert-create-modal');
+          }
+    </script>
+  </body>
+</html>

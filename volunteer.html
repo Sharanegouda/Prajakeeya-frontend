@@ -1,0 +1,1020 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Volunteer — Prajakeeya Karnataka</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .vol-hero {
+        background: linear-gradient(135deg, var(--green) 0%, #0a4a24 100%);
+        border-radius: var(--r-xl);
+        padding: 32px;
+        color: #fff;
+        margin-bottom: 24px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .vol-hero::before {
+        content: "";
+        position: absolute;
+        right: -50px;
+        top: -50px;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      .badge-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .badge-card {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-md);
+        padding: 16px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .badge-card:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
+      }
+
+      .badge-card.locked {
+        opacity: 0.4;
+        filter: grayscale(1);
+      }
+
+      .badge-emoji {
+        font-size: 32px;
+        margin-bottom: 6px;
+      }
+
+      .badge-name {
+        font-size: 11px;
+        font-weight: 700;
+        margin-bottom: 2px;
+      }
+
+      .badge-desc {
+        font-size: 10px;
+        color: var(--text3);
+      }
+
+      .task-card {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-lg);
+        padding: 20px;
+        margin-bottom: 12px;
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .task-card:hover {
+        box-shadow: var(--shadow-md);
+      }
+
+      .task-priority {
+        width: 4px;
+        height: 100%;
+        border-radius: 2px;
+        flex-shrink: 0;
+        min-height: 80px;
+      }
+
+      .task-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: var(--r-sm);
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+      }
+
+      .task-info {
+        flex: 1;
+      }
+
+      .task-title {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+
+      .task-desc {
+        font-size: 12px;
+        color: var(--text2);
+        margin-bottom: 10px;
+        line-height: 1.5;
+      }
+
+      .task-meta {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .vol-leaderboard {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-lg);
+        padding: 24px;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .lb-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border2);
+      }
+
+      .lb-item:last-child {
+        border-bottom: none;
+      }
+
+      .lb-rank {
+        font-size: 18px;
+        font-weight: 700;
+        width: 32px;
+        text-align: center;
+        color: var(--text3);
+      }
+
+      .lb-rank.gold {
+        color: #f59e0b;
+      }
+
+      .lb-rank.silver {
+        color: #6b7280;
+      }
+
+      .lb-rank.bronze {
+        color: #92400e;
+      }
+
+      .lb-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .lb-name {
+        font-size: 13px;
+        font-weight: 600;
+        flex: 1;
+      }
+
+      .lb-district {
+        font-size: 11px;
+        color: var(--text3);
+      }
+
+      .lb-points {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--saffron);
+      }
+
+      .vol-layout {
+        display: grid;
+        grid-template-columns: 1fr 280px;
+        gap: 20px;
+        align-items: start;
+      }
+
+      .vol-tabs {
+        display: flex;
+        gap: 0;
+        border-bottom: 2px solid var(--border2);
+        margin-bottom: 20px;
+      }
+
+      .vtab2 {
+        padding: 10px 18px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text3);
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        margin-bottom: -2px;
+        transition: all 0.15s;
+      }
+
+      .vtab2.active {
+        color: var(--saffron);
+        border-bottom-color: var(--saffron);
+      }
+
+      @media (max-width: 900px) {
+        .vol-layout {
+          grid-template-columns: 1fr;
+        }
+        .badge-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page-wrap">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-mark">ಪ್ರ</div>
+          <div class="logo-text">
+            <div class="en">Prajakeeya</div>
+            <div class="kn">ಪ್ರಜಾಕೀಯ ಕರ್ನಾಟಕ</div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <a class="nav-item" href="dashboard.html"
+            ><span class="nav-icon">🏠</span> Dashboard</a
+          >
+          <a class="nav-item" href="report.html"
+            ><span class="nav-icon">🚧</span> Report issue</a
+          >
+          <a class="nav-item" href="voice.html"
+            ><span class="nav-icon">🗳️</span> People's voice</a
+          >
+          <a class="nav-item" href="circulars.html"
+            ><span class="nav-icon">📢</span> Circulars</a
+          >
+          <a class="nav-item" href="praja-sabha.html"
+            ><span class="nav-icon">🏛️</span> Praja Sabha</a
+          >
+          <a class="nav-item" href="heatmap.html"
+            ><span class="nav-icon">🗺️</span> Heatmap</a
+          >
+          <div class="nav-section-label">My account</div>
+          <a class="nav-item" href="membership.html"
+            ><span class="nav-icon">🆔</span> My membership</a
+          >
+          <a class="nav-item active" href="volunteer.html"
+            ><span class="nav-icon">🤝</span> Volunteer</a
+          >
+          <div class="nav-section-label">Governance</div>
+          <a class="nav-item" href="transparency.html"
+            ><span class="nav-icon">📊</span> Transparency</a
+          >
+          <a class="nav-item" href="mla-tracker.html"
+            ><span class="nav-icon">⭐</span> MLA tracker</a
+          >
+          <a class="nav-item" href="manifesto.html"
+            ><span class="nav-icon">📜</span> Manifesto builder</a
+          >
+          <a class="nav-item" href="emergency.html"
+            ><span class="nav-icon">🚨</span> Emergency alerts</a
+          >
+          <a class="nav-item" href="admin.html"
+            ><span class="nav-icon">⚙️</span> Admin panel</a
+          >
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="user-avatar">RK</div>
+            <div>
+              <div class="user-name">Rajesh Kumar</div>
+              <div class="user-role">Active member</div>
+            </div>
+            <button
+              onclick="PK.logout()"
+              style="
+                margin-left: auto;
+                background: none;
+                border: none;
+                color: rgba(255, 255, 255, 0.3);
+                cursor: pointer;
+                font-size: 18px;
+              "
+            >
+              ⏻
+            </button>
+          </div>
+        </div>
+      </aside>
+      <div class="main-content">
+        <div class="page-header">
+          <div>
+            <div class="topbar-title">Volunteer Management</div>
+            <div class="topbar-sub">
+              Tasks, achievements, rankings and campaign participation
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <div class="notif-btn">
+              🔔
+              <div class="notif-dot"></div>
+            </div>
+            <button
+              class="btn btn-success btn-sm"
+              onclick="toast('Volunteer profile activated!', 'success')"
+            >
+              🤝 Join as volunteer
+            </button>
+          </div>
+        </div>
+        <div class="page-body">
+          <div class="vol-hero">
+            <div
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px"
+            >
+              <div>
+                <div
+                  style="
+                    font-size: 12px;
+                    opacity: 0.6;
+                    margin-bottom: 4px;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                  "
+                >
+                  Your volunteer rank
+                </div>
+                <div
+                  style="font-size: 36px; font-weight: 700; margin-bottom: 4px"
+                >
+                  🥈 Silver Volunteer
+                </div>
+                <div style="font-size: 13px; opacity: 0.7; margin-bottom: 20px">
+                  1,240 points · Top 8% in Bengaluru Urban
+                </div>
+                <div style="display: flex; gap: 10px">
+                  <div
+                    style="
+                      text-align: center;
+                      background: rgba(255, 255, 255, 0.1);
+                      border-radius: var(--r-sm);
+                      padding: 12px 20px;
+                    "
+                  >
+                    <div style="font-size: 22px; font-weight: 700">12</div>
+                    <div style="font-size: 10px; opacity: 0.6">Tasks done</div>
+                  </div>
+                  <div
+                    style="
+                      text-align: center;
+                      background: rgba(255, 255, 255, 0.1);
+                      border-radius: var(--r-sm);
+                      padding: 12px 20px;
+                    "
+                  >
+                    <div style="font-size: 22px; font-weight: 700">3</div>
+                    <div style="font-size: 10px; opacity: 0.6">Events</div>
+                  </div>
+                  <div
+                    style="
+                      text-align: center;
+                      background: rgba(255, 255, 255, 0.1);
+                      border-radius: var(--r-sm);
+                      padding: 12px 20px;
+                    "
+                  >
+                    <div style="font-size: 22px; font-weight: 700">5</div>
+                    <div style="font-size: 10px; opacity: 0.6">Badges</div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div style="font-size: 12px; opacity: 0.6; margin-bottom: 8px">
+                  Progress to Gold rank
+                </div>
+                <div
+                  style="
+                    background: rgba(255, 255, 255, 0.15);
+                    border-radius: 10px;
+                    height: 10px;
+                    overflow: hidden;
+                    margin-bottom: 6px;
+                  "
+                >
+                  <div
+                    style="
+                      width: 62%;
+                      height: 100%;
+                      background: #f59e0b;
+                      border-radius: 10px;
+                    "
+                  ></div>
+                </div>
+                <div style="font-size: 12px; opacity: 0.7">
+                  1,240 / 2,000 points · 760 more to Gold 🥇
+                </div>
+                <div
+                  style="
+                    margin-top: 16px;
+                    font-size: 12px;
+                    opacity: 0.7;
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: var(--r-sm);
+                    padding: 10px;
+                  "
+                >
+                  Next milestone: Complete 5 more field tasks to unlock
+                  <strong>Field Champion</strong> badge
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="vol-tabs">
+            <div class="vtab2 active" onclick="switchVolTab(this, 'tasks')">
+              📋 My tasks
+            </div>
+            <div class="vtab2" onclick="switchVolTab(this, 'badges')">
+              🏅 Badges
+            </div>
+            <div class="vtab2" onclick="switchVolTab(this, 'rankings')">
+              🏆 Rankings
+            </div>
+            <div class="vtab2" onclick="switchVolTab(this, 'campaigns')">
+              📣 Campaigns
+            </div>
+          </div>
+
+          <div class="vol-layout">
+            <div>
+              <!-- Tasks -->
+              <div id="tab-tasks">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 16px;
+                  "
+                >
+                  <div style="font-size: 15px; font-weight: 700">
+                    Assigned tasks
+                  </div>
+                  <div style="display: flex; gap: 8px">
+                    <button
+                      class="filter-btn active btn btn-ghost btn-sm"
+                      onclick="filterTasks('all')"
+                    >
+                      All
+                    </button>
+                    <button
+                      class="filter-btn btn btn-ghost btn-sm"
+                      onclick="filterTasks('pending')"
+                    >
+                      Pending
+                    </button>
+                    <button
+                      class="filter-btn btn btn-ghost btn-sm"
+                      onclick="filterTasks('done')"
+                    >
+                      Done
+                    </button>
+                  </div>
+                </div>
+                <div id="tasks-list"></div>
+              </div>
+              <!-- Badges -->
+              <div id="tab-badges" style="display: none">
+                <div
+                  style="font-size: 15px; font-weight: 700; margin-bottom: 16px"
+                >
+                  Achievement badges
+                </div>
+                <div class="badge-grid" id="badge-grid"></div>
+              </div>
+              <!-- Rankings -->
+              <div id="tab-rankings" style="display: none">
+                <div class="vol-leaderboard">
+                  <div
+                    style="
+                      font-size: 15px;
+                      font-weight: 700;
+                      margin-bottom: 16px;
+                    "
+                  >
+                    🏆 District leaderboard — Bengaluru Urban
+                  </div>
+                  <div id="leaderboard"></div>
+                </div>
+              </div>
+              <!-- Campaigns -->
+              <div id="tab-campaigns" style="display: none">
+                <div id="campaigns-list"></div>
+              </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div>
+              <div class="card mb-12">
+                <div
+                  style="font-size: 13px; font-weight: 700; margin-bottom: 12px"
+                >
+                  📊 Your stats
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <div>
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: 12px;
+                        margin-bottom: 3px;
+                      "
+                    >
+                      <span>Issues documented</span
+                      ><span class="font-600">47</span>
+                    </div>
+                    <div class="progress-wrap">
+                      <div
+                        class="progress-fill saffron"
+                        style="width: 75%"
+                      ></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: 12px;
+                        margin-bottom: 3px;
+                      "
+                    >
+                      <span>Members recruited</span
+                      ><span class="font-600">23</span>
+                    </div>
+                    <div class="progress-wrap">
+                      <div class="progress-fill green" style="width: 46%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: 12px;
+                        margin-bottom: 3px;
+                      "
+                    >
+                      <span>Events attended</span
+                      ><span class="font-600">3</span>
+                    </div>
+                    <div class="progress-wrap">
+                      <div class="progress-fill gold" style="width: 30%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: 12px;
+                        margin-bottom: 3px;
+                      "
+                    >
+                      <span>Campaign tasks</span
+                      ><span class="font-600">12</span>
+                    </div>
+                    <div class="progress-wrap">
+                      <div class="progress-fill blue" style="width: 60%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card mb-12">
+                <div
+                  style="font-size: 13px; font-weight: 700; margin-bottom: 10px"
+                >
+                  🗓 Upcoming tasks
+                </div>
+                <div
+                  style="
+                    font-size: 12px;
+                    color: var(--text2);
+                    padding: 10px 0;
+                    border-bottom: 1px solid var(--border2);
+                  "
+                >
+                  📋 Register 20 new members · Due Jun 30
+                </div>
+                <div
+                  style="
+                    font-size: 12px;
+                    color: var(--text2);
+                    padding: 10px 0;
+                    border-bottom: 1px solid var(--border2);
+                  "
+                >
+                  📸 Document road issues in ward 56 · Due Jul 5
+                </div>
+                <div
+                  style="font-size: 12px; color: var(--text2); padding: 10px 0"
+                >
+                  🏛️ Attend Praja Sabha Jun 28 · Confirmed
+                </div>
+              </div>
+              <div class="card">
+                <div
+                  style="font-size: 13px; font-weight: 700; margin-bottom: 10px"
+                >
+                  📞 Your coordinator
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center">
+                  <div
+                    style="
+                      width: 40px;
+                      height: 40px;
+                      border-radius: 50%;
+                      background: var(--saffron);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      color: #fff;
+                      font-weight: 700;
+                    "
+                  >
+                    MG
+                  </div>
+                  <div>
+                    <div style="font-size: 13px; font-weight: 600">
+                      Mahesh Gowda
+                    </div>
+                    <div style="font-size: 11px; color: var(--text3)">
+                      Bengaluru Urban Coordinator
+                    </div>
+                  </div>
+                </div>
+                <button
+                  class="btn btn-ghost btn-sm w-full mt-12"
+                  onclick="toast('Opening WhatsApp…', 'info')"
+                >
+                  💬 Message coordinator
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="app.js"></script>
+    <script>
+      const tasks = [
+        {
+          id: 1,
+          title: "Member registration drive — BTM Layout",
+          desc: "Register 20 new members in BTM Layout ward. Provide membership cards and explain platform features.",
+          priority: "high",
+          icon: "👥",
+          bg: var_("--saffron-light"),
+          status: "pending",
+          due: "Jun 25",
+          points: 200,
+        },
+        {
+          id: 2,
+          title: "Document road issues in Ward 56",
+          desc: "Photograph and GPS-tag all major road issues in Ward 56 for the BBMP report submission.",
+          priority: "medium",
+          icon: "📸",
+          bg: var_("--gold-light"),
+          status: "pending",
+          due: "Jul 5",
+          points: 150,
+        },
+        {
+          id: 3,
+          title: "Attend Praja Sabha — June 28",
+          desc: "Attend the Bengaluru Urban Infrastructure Sabha and assist with citizen registration at the venue.",
+          priority: "high",
+          icon: "🏛️",
+          bg: var_("--green-light"),
+          status: "confirmed",
+          due: "Jun 28",
+          points: 300,
+        },
+        {
+          id: 4,
+          title: "Social media campaign — June week 3",
+          desc: "Post 5 awareness posts on WhatsApp and Instagram about the monsoon preparedness circular.",
+          priority: "low",
+          icon: "📱",
+          bg: "#E6F1FB",
+          status: "done",
+          due: "Jun 20",
+          points: 80,
+        },
+        {
+          id: 5,
+          title: "Flood relief coordination — Ramanagara",
+          desc: "Coordinate with district team to identify and report flood-affected households via the app.",
+          priority: "high",
+          icon: "🌊",
+          bg: var_("--saffron-light"),
+          status: "done",
+          due: "Jun 15",
+          points: 400,
+        },
+      ];
+
+      function var_(n) {
+        return (
+          getComputedStyle(document.documentElement)
+            .getPropertyValue(n)
+            .trim() || "#fff"
+        );
+      }
+
+      let taskFilter = "all";
+
+      function filterTasks(f) {
+        taskFilter = f;
+        renderTasks();
+      }
+
+      function renderTasks() {
+        const filtered =
+          taskFilter === "all"
+            ? tasks
+            : tasks.filter((t) =>
+                taskFilter === "done"
+                  ? t.status === "done"
+                  : t.status !== "done",
+              );
+        const prioColor = {
+          high: "#DC2626",
+          medium: "var(--gold)",
+          low: "var(--green-mid)",
+        };
+        document.getElementById("tasks-list").innerHTML = filtered
+          .map(
+            (t) => `
+    <div class="task-card">
+      <div class="task-priority" style="background:${prioColor[t.priority]}"></div>
+      <div class="task-icon" style="background:${t.bg}">${t.icon}</div>
+      <div class="task-info">
+        <div class="task-title">${t.title}</div>
+        <div class="task-desc">${t.desc}</div>
+        <div class="task-meta">
+          <span class="status ${t.status === "done" ? "resolved" : t.status === "confirmed" ? "progress" : "pending"}"><span class="status-dot"></span>${t.status.charAt(0).toUpperCase() + t.status.slice(1)}</span>
+          <span class="tag tag-gray">⏱ Due ${t.due}</span>
+          <span class="tag tag-gold">+${t.points} pts</span>
+          ${t.status !== "done" ? `<button class="btn btn-success btn-xs" onclick="markDone(${t.id})">Mark done</button>` : ""}
+        </div>
+      </div>
+    </div>`,
+          )
+          .join("");
+      }
+
+      function markDone(id) {
+        const t = tasks.find((x) => x.id === id);
+        if (t) {
+          t.status = "done";
+          renderTasks();
+          toast(`Task completed! +${t.points} points earned 🎉`, "success");
+        }
+      }
+
+      const badges = [
+        {
+          emoji: "🚀",
+          name: "Early bird",
+          desc: "Joined in first 30 days",
+          earned: true,
+        },
+        {
+          emoji: "📸",
+          name: "Documenter",
+          desc: "Filed 10+ issue reports",
+          earned: true,
+        },
+        {
+          emoji: "👥",
+          name: "Recruiter",
+          desc: "Recruited 10+ members",
+          earned: true,
+        },
+        {
+          emoji: "🏛️",
+          name: "Sabha goer",
+          desc: "Attended 3 Praja Sabhas",
+          earned: true,
+        },
+        {
+          emoji: "🗳️",
+          name: "Active voter",
+          desc: "Voted in 10+ polls",
+          earned: true,
+        },
+        {
+          emoji: "⭐",
+          name: "Top reporter",
+          desc: "Best district reporter",
+          earned: false,
+        },
+        {
+          emoji: "🔥",
+          name: "Field champion",
+          desc: "50+ field tasks done",
+          earned: false,
+        },
+        {
+          emoji: "🥇",
+          name: "Gold volunteer",
+          desc: "Reach Gold rank",
+          earned: false,
+        },
+        { emoji: "💎", name: "Diamond", desc: "10,000+ points", earned: false },
+        {
+          emoji: "🎖️",
+          name: "Leader",
+          desc: "District coordinator",
+          earned: false,
+        },
+        {
+          emoji: "🌟",
+          name: "Spotlight",
+          desc: "Featured volunteer",
+          earned: false,
+        },
+        {
+          emoji: "🏆",
+          name: "Legend",
+          desc: "State-level recognition",
+          earned: false,
+        },
+      ];
+
+      const leaderboard = [
+        {
+          rank: 1,
+          av: "MR",
+          bg: "#E8501A",
+          name: "Mahesh Reddy",
+          dist: "Jayanagar",
+          pts: 4820,
+        },
+        {
+          rank: 2,
+          av: "SK",
+          bg: "#1A6B3A",
+          name: "Surekha K.",
+          dist: "BTM Layout",
+          pts: 3940,
+        },
+        {
+          rank: 3,
+          av: "VP",
+          bg: "#C8962A",
+          name: "Vijay Patil",
+          dist: "Koramangala",
+          pts: 3210,
+        },
+        {
+          rank: 4,
+          av: "AN",
+          bg: "#534AB7",
+          name: "Anita Naik",
+          dist: "Indiranagar",
+          pts: 2840,
+        },
+        {
+          rank: 5,
+          av: "RK",
+          bg: "#185FA5",
+          name: "Rajesh Kumar ★",
+          dist: "BTM Layout",
+          pts: 1240,
+        },
+        {
+          rank: 6,
+          av: "PG",
+          bg: "#D97706",
+          name: "Priya Gowda",
+          dist: "Whitefield",
+          pts: 980,
+        },
+        {
+          rank: 7,
+          av: "HM",
+          bg: "#7C3AED",
+          name: "Harish M.",
+          dist: "Hebbal",
+          pts: 840,
+        },
+      ];
+
+      const campaigns = [
+        {
+          icon: "🌿",
+          title: "Green Karnataka — Tree plantation drive",
+          desc: "Plant trees across district offices and schools. Coordinate with NSS volunteers.",
+          status: "active",
+          target: "500 trees",
+          done: "342 trees",
+          pct: 68,
+        },
+        {
+          icon: "💧",
+          title: "Water conservation awareness drive",
+          desc: "Door-to-door campaign on rainwater harvesting in 20 wards.",
+          status: "active",
+          target: "2,000 households",
+          done: "1,240 households",
+          pct: 62,
+        },
+        {
+          icon: "📋",
+          title: "Voter ID verification camp",
+          desc: "Help citizens verify and update voter ID cards before the next election.",
+          status: "upcoming",
+          target: "5,000 verifications",
+          done: "0",
+          pct: 0,
+        },
+      ];
+
+      function switchVolTab(btn, tab) {
+        document
+          .querySelectorAll(".vtab2")
+          .forEach((t) => t.classList.remove("active"));
+        btn.classList.add("active");
+        ["tasks", "badges", "rankings", "campaigns"].forEach((t) => {
+          document.getElementById("tab-" + t).style.display =
+            t === tab ? "block" : "none";
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        renderTasks();
+        document.getElementById("badge-grid").innerHTML = badges
+          .map(
+            (b) => `
+    <div class="badge-card${b.earned ? "" : " locked"}" title="${b.name}: ${b.desc}">
+      <div class="badge-emoji">${b.emoji}</div>
+      <div class="badge-name">${b.name}</div>
+      <div class="badge-desc">${b.earned ? "✅ Earned" : "🔒 Locked"}</div>
+    </div>`,
+          )
+          .join("");
+
+        document.getElementById("leaderboard").innerHTML = leaderboard
+          .map(
+            (l) => `
+    <div class="lb-item">
+      <div class="lb-rank ${l.rank === 1 ? "gold" : l.rank === 2 ? "silver" : l.rank === 3 ? "bronze" : ""}">${l.rank === 1 ? "🥇" : l.rank === 2 ? "🥈" : l.rank === 3 ? "🥉" : l.rank}</div>
+      <div class="lb-avatar" style="background:${l.bg}">${l.av}</div>
+      <div style="flex:1"><div class="lb-name">${l.name}</div><div class="lb-district">${l.dist}</div></div>
+      <div class="lb-points">${l.pts.toLocaleString()} pts</div>
+    </div>`,
+          )
+          .join("");
+
+        document.getElementById("campaigns-list").innerHTML = campaigns
+          .map(
+            (c) => `
+    <div class="card mb-12">
+      <div style="display:flex;gap:14px;align-items:flex-start">
+        <div style="font-size:32px">${c.icon}</div>
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <div style="font-size:15px;font-weight:700">${c.title}</div>
+            <span class="tag ${c.status === "active" ? "tag-green" : "tag-gold"}">${c.status}</span>
+          </div>
+          <div style="font-size:13px;color:var(--text2);margin-bottom:12px">${c.desc}</div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:6px">Progress: ${c.done} / ${c.target}</div>
+          <div class="progress-wrap mb-12"><div class="progress-fill green" style="width:${c.pct}%"></div></div>
+          <button class="btn btn-${c.status === "active" ? "success" : "ghost"} btn-sm" onclick="toast('${c.status === "active" ? "Joined campaign!" : "Registering for campaign…"}','success')">
+            ${c.status === "active" ? "Join campaign →" : "Register interest"}
+          </button>
+        </div>
+      </div>
+    </div>`,
+          )
+          .join("");
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Membership — Prajakeeya Karnataka</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .membership-card {
+        background: linear-gradient(135deg, var(--saffron) 0%, #8b2500 100%);
+        border-radius: 20px;
+        padding: 32px;
+        color: #fff;
+        max-width: 420px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(232, 80, 26, 0.4);
+      }
+
+      .membership-card::before {
+        content: "";
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .membership-card::after {
+        content: "";
+        position: absolute;
+        bottom: -40px;
+        left: -40px;
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 24px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .card-logo-text {
+        font-family: "Noto Sans Kannada", sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+        opacity: 0.8;
+      }
+
+      .card-verified {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+      }
+
+      .card-chip {
+        width: 44px;
+        height: 34px;
+        background: rgba(255, 255, 255, 0.25);
+        border-radius: 6px;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .card-name {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 4px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .card-id {
+        font-family: monospace;
+        font-size: 12px;
+        opacity: 0.7;
+        letter-spacing: 2px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .card-district {
+        font-size: 12px;
+        opacity: 0.6;
+        margin-top: 16px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .card-qr {
+        position: absolute;
+        bottom: 24px;
+        right: 24px;
+        width: 64px;
+        height: 64px;
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        z-index: 1;
+      }
+
+      .card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 32px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+        position: relative;
+        z-index: 1;
+      }
+
+      .card-since {
+        font-size: 10px;
+        opacity: 0.5;
+      }
+
+      .card-status {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .card-status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #4aca7a;
+      }
+
+      .qr-grid {
+        display: grid;
+        grid-template-columns: 3px 3px 3px 3px 3px 3px 3px;
+        gap: 2px;
+        padding: 8px;
+      }
+
+      .qr-grid div {
+        width: 6px;
+        height: 6px;
+        border-radius: 1px;
+      }
+
+      .card-back {
+        background: linear-gradient(
+          135deg,
+          var(--midnight) 0%,
+          var(--slate) 100%
+        );
+        border-radius: 20px;
+        padding: 24px;
+        color: #fff;
+        max-width: 420px;
+        margin-top: 20px;
+        box-shadow: var(--shadow-lg);
+      }
+
+      .profile-section {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-lg);
+        padding: 24px;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .profile-avatar {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--saffron), var(--green));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 12px;
+      }
+
+      .edit-field {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border2);
+      }
+
+      .edit-field:last-child {
+        border-bottom: none;
+      }
+
+      .ef-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text3);
+        width: 100px;
+        flex-shrink: 0;
+      }
+
+      .ef-value {
+        font-size: 13px;
+        color: var(--text);
+        flex: 1;
+      }
+
+      .ef-edit {
+        font-size: 11px;
+        color: var(--saffron);
+        cursor: pointer;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page-wrap">
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-mark">ಪ್ರ</div>
+          <div class="logo-text">
+            <div class="en">Prajakeeya</div>
+            <div class="kn">ಪ್ರಜಾಕೀಯ ಕರ್ನಾಟಕ</div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <a class="nav-item" href="dashboard.html"
+            ><span class="nav-icon">🏠</span> Dashboard</a
+          >
+          <a class="nav-item" href="report.html"
+            ><span class="nav-icon">🚧</span> Report issue</a
+          >
+          <a class="nav-item" href="voice.html"
+            ><span class="nav-icon">🗳️</span> People's voice</a
+          >
+          <a class="nav-item" href="circulars.html"
+            ><span class="nav-icon">📢</span> Circulars</a
+          >
+          <a class="nav-item" href="praja-sabha.html"
+            ><span class="nav-icon">🏛️</span> Praja Sabha</a
+          >
+          <a class="nav-item" href="heatmap.html"
+            ><span class="nav-icon">🗺️</span> Heatmap</a
+          >
+          <div class="nav-section-label">My account</div>
+          <a class="nav-item active" href="membership.html"
+            ><span class="nav-icon">🆔</span> My membership</a
+          >
+          <a class="nav-item" href="volunteer.html"
+            ><span class="nav-icon">🤝</span> Volunteer</a
+          >
+          <div class="nav-section-label">Governance</div>
+          <a class="nav-item" href="transparency.html"
+            ><span class="nav-icon">📊</span> Transparency</a
+          >
+          <a class="nav-item" href="mla-tracker.html"
+            ><span class="nav-icon">⭐</span> MLA tracker</a
+          >
+          <a class="nav-item" href="manifesto.html"
+            ><span class="nav-icon">📜</span> Manifesto builder</a
+          >
+          <a class="nav-item" href="emergency.html"
+            ><span class="nav-icon">🚨</span> Emergency alerts</a
+          >
+          <a class="nav-item" href="admin.html"
+            ><span class="nav-icon">⚙️</span> Admin panel</a
+          >
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="user-avatar">RK</div>
+            <div>
+              <div class="user-name">Rajesh Kumar</div>
+              <div class="user-role">Active member</div>
+            </div>
+            <button
+              onclick="PK.logout()"
+              style="
+                margin-left: auto;
+                background: none;
+                border: none;
+                color: rgba(255, 255, 255, 0.3);
+                cursor: pointer;
+                font-size: 18px;
+              "
+            >
+              ⏻
+            </button>
+          </div>
+        </div>
+      </aside>
+      <div class="main-content">
+        <div class="page-header">
+          <div>
+            <div class="topbar-title">My Membership</div>
+            <div class="topbar-sub">
+              Digital membership card, profile and certificate
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <button class="btn btn-ghost btn-sm" onclick="downloadCert()">
+              ↓ Download certificate
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="shareCard()">
+              Share card
+            </button>
+          </div>
+        </div>
+        <div class="page-body">
+          <div class="grid-2">
+            <div>
+              <!-- Membership card front -->
+              <div class="membership-card" id="member-card">
+                <div class="card-top">
+                  <div>
+                    <div class="card-logo-text">ಪ್ರಜಾಕೀಯ ಕರ್ನಾಟಕ</div>
+                    <div style="font-size: 11px; opacity: 0.5; margin-top: 2px">
+                      People's Governance Platform
+                    </div>
+                  </div>
+                  <div class="card-verified">✓ Verified</div>
+                </div>
+                <div class="card-chip"></div>
+                <div class="card-name" id="mc-name">Sharan Malipatil</div>
+                <div class="card-id" id="mc-id">PK · KA · 2024 · 00247831</div>
+                <div class="card-district" id="mc-district">
+                  Raichur District · Active Member
+                </div>
+                <div class="card-footer">
+                  <div>
+                    <div class="card-since">MEMBER SINCE</div>
+                    <div
+                      style="font-size: 12px; font-weight: 600; margin-top: 2px"
+                      id="mc-since"
+                    >
+                      June 2024
+                    </div>
+                  </div>
+                  <div class="card-status">
+                    <div class="card-status-dot"></div>
+                    Active
+                  </div>
+                </div>
+                <div class="card-qr" id="mc-qr">
+                  <div style="font-size: 24px">▦</div>
+                </div>
+              </div>
+
+              <!-- Card back -->
+              <div class="card-back">
+                <div
+                  style="
+                    font-size: 12px;
+                    font-weight: 700;
+                    letter-spacing: 1px;
+                    text-transform: uppercase;
+                    color: rgba(255, 255, 255, 0.4);
+                    margin-bottom: 16px;
+                  "
+                >
+                  Membership details
+                </div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 12px;
+                  "
+                >
+                  <div
+                    style="
+                      background: rgba(255, 255, 255, 0.06);
+                      border-radius: var(--r-sm);
+                      padding: 12px;
+                    "
+                  >
+                    <div
+                      style="
+                        font-size: 10px;
+                        color: rgba(255, 255, 255, 0.4);
+                        margin-bottom: 4px;
+                      "
+                    >
+                      MEMBERSHIP TYPE
+                    </div>
+                    <div style="font-size: 13px; font-weight: 600">
+                      Standard Member
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      background: rgba(255, 255, 255, 0.06);
+                      border-radius: var(--r-sm);
+                      padding: 12px;
+                    "
+                  >
+                    <div
+                      style="
+                        font-size: 10px;
+                        color: rgba(255, 255, 255, 0.4);
+                        margin-bottom: 4px;
+                      "
+                    >
+                      VALID UNTIL
+                    </div>
+                    <div style="font-size: 13px; font-weight: 600">
+                      December 2024
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      background: rgba(255, 255, 255, 0.06);
+                      border-radius: var(--r-sm);
+                      padding: 12px;
+                    "
+                  >
+                    <div
+                      style="
+                        font-size: 10px;
+                        color: rgba(255, 255, 255, 0.4);
+                        margin-bottom: 4px;
+                      "
+                    >
+                      VOLUNTEER RANK
+                    </div>
+                    <div style="font-size: 13px; font-weight: 600">
+                      🥈 Silver
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      background: rgba(255, 255, 255, 0.06);
+                      border-radius: var(--r-sm);
+                      padding: 12px;
+                    "
+                  >
+                    <div
+                      style="
+                        font-size: 10px;
+                        color: rgba(255, 255, 255, 0.4);
+                        margin-bottom: 4px;
+                      "
+                    >
+                      PRAJAKEEYA SCORE
+                    </div>
+                    <div
+                      style="
+                        font-size: 13px;
+                        font-weight: 600;
+                        color: var(--saffron-mid);
+                      "
+                    >
+                      1,240 pts
+                    </div>
+                  </div>
+                </div>
+                <div
+                  style="
+                    margin-top: 16px;
+                    padding: 14px;
+                    background: rgba(74, 202, 122, 0.1);
+                    border: 1px solid rgba(74, 202, 122, 0.2);
+                    border-radius: var(--r-sm);
+                  "
+                >
+                  <div
+                    style="font-size: 11px; color: #4aca7a; font-weight: 700"
+                  >
+                    ✅ Verified Karnataka citizen
+                  </div>
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: rgba(255, 255, 255, 0.4);
+                      margin-top: 3px;
+                    "
+                  >
+                    Identity verified via mobile OTP · June 2024
+                  </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 16px">
+                  <button
+                    class="btn btn-primary btn-sm"
+                    style="flex: 1"
+                    onclick="downloadCert()"
+                  >
+                    ↓ Download PDF certificate
+                  </button>
+                  <button
+                    class="btn btn-ghost btn-sm"
+                    style="
+                      flex: 1;
+                      color: #fff;
+                      border-color: rgba(255, 255, 255, 0.2);
+                    "
+                    onclick="shareCard()"
+                  >
+                    ↗ Share card
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profile -->
+            <div>
+              <div class="profile-section mb-16">
+                <div style="text-align: center; margin-bottom: 20px">
+                  <div class="profile-avatar" style="margin: 0 auto">RK</div>
+                  <div style="font-size: 18px; font-weight: 700">
+                    Sharan Malipatil
+                  </div>
+                  <div style="font-size: 12px; color: var(--text3)">
+                    Member · Raichur District
+                  </div>
+                  <button
+                    class="btn btn-ghost btn-sm mt-8"
+                    onclick="toast('Photo upload opening…', 'info')"
+                  >
+                    📷 Change photo
+                  </button>
+                </div>
+                <div class="edit-field">
+                  <div class="ef-label">Full name</div>
+                  <div class="ef-value">Sharan Malipatil</div>
+                  <div class="ef-edit" onclick="editField('name')">Edit</div>
+                </div>
+                <div class="edit-field">
+                  <div class="ef-label">Mobile</div>
+                  <div class="ef-value">+91 98765 43210</div>
+                  <div
+                    class="ef-edit"
+                    onclick="
+                      toast(
+                        'OTP verification required to change mobile',
+                        'info',
+                      )
+                    "
+                  >
+                    Verify
+                  </div>
+                </div>
+                <div class="edit-field">
+                  <div class="ef-label">Email</div>
+                  <div class="ef-value">sharanmp@example.com</div>
+                  <div class="ef-edit" onclick="editField('email')">Edit</div>
+                </div>
+                <div class="edit-field">
+                  <div class="ef-label">District</div>
+                  <div class="ef-value">Raichur</div>
+                  <div class="ef-edit">Change</div>
+                </div>
+                <div class="edit-field">
+                  <div class="ef-label">Date of birth</div>
+                  <div class="ef-value">31 July 2004</div>
+                  <div class="ef-edit" onclick="editField('dob')">Edit</div>
+                </div>
+                <div class="edit-field">
+                  <div class="ef-label">Voter ID</div>
+                  <div class="ef-value">KA/01/024/123456</div>
+                  <div
+                    class="ef-edit"
+                    onclick="toast('Voter ID verified ✅', 'success')"
+                  >
+                    Verify
+                  </div>
+                </div>
+                <div class="edit-field">
+                  <div class="ef-label">Language</div>
+                  <div class="ef-value">Kannada · English</div>
+                  <div class="ef-edit" onclick="editField('lang')">Edit</div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div
+                  style="font-size: 13px; font-weight: 700; margin-bottom: 12px"
+                >
+                  🔔 Notification preferences
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 12px">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                    "
+                  >
+                    <span style="font-size: 13px">Complaint updates</span
+                    ><label class="toggle"
+                      ><input
+                        type="checkbox"
+                        checked
+                        onchange="
+                          toast('Preference saved', 'success')
+                        " /><span></span
+                    ></label>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                    "
+                  >
+                    <span style="font-size: 13px">New circulars</span
+                    ><label class="toggle"
+                      ><input
+                        type="checkbox"
+                        checked
+                        onchange="
+                          toast('Preference saved', 'success')
+                        " /><span></span
+                    ></label>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                    "
+                  >
+                    <span style="font-size: 13px">Poll reminders</span
+                    ><label class="toggle"
+                      ><input
+                        type="checkbox"
+                        checked
+                        onchange="
+                          toast('Preference saved', 'success')
+                        " /><span></span
+                    ></label>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                    "
+                  >
+                    <span style="font-size: 13px">Praja Sabha alerts</span
+                    ><label class="toggle"
+                      ><input
+                        type="checkbox"
+                        checked
+                        onchange="
+                          toast('Preference saved', 'success')
+                        " /><span></span
+                    ></label>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                    "
+                  >
+                    <span style="font-size: 13px">Emergency alerts</span
+                    ><label class="toggle"
+                      ><input
+                        type="checkbox"
+                        checked
+                        onchange="
+                          toast('Preference saved', 'success')
+                        " /><span></span
+                    ></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <style>
+      .toggle {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 22px;
+      }
+
+      .toggle input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .toggle span {
+        position: absolute;
+        inset: 0;
+        background: #cbd5e0;
+        border-radius: 22px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .toggle span::before {
+        content: "";
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #fff;
+        left: 3px;
+        bottom: 3px;
+        transition: 0.3s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      }
+
+      .toggle input:checked + span {
+        background: var(--green-mid);
+      }
+
+      .toggle input:checked + span::before {
+        transform: translateX(18px);
+      }
+    </style>
+    <script src="app.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const user = PK.user;
+        if (user) {
+          document.getElementById("mc-name").textContent = user.name;
+          document.getElementById("mc-id").textContent =
+            user.memberId || "PK · KA · 2024 · 00247831";
+          document.getElementById("mc-district").textContent =
+            (user.district || "Karnataka") + " · Active Member";
+        }
+      });
+
+      function downloadCert() {
+        toast("Generating membership certificate PDF…", "info");
+      }
+
+      function shareCard() {
+        toast("Share link copied to clipboard!", "success");
+      }
+
+      function editField(f) {
+        const val = prompt(`Edit ${f}:`);
+        if (val)
+          toast(
+            `${f.charAt(0).toUpperCase() + f.slice(1)} updated!`,
+            "success",
+          );
+      }
+    </script>
+  </body>
+</html>

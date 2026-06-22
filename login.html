@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login — Prajakeeya Karnataka</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body{background:var(--midnight);display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.login-wrap{display:grid;grid-template-columns:1fr 1fr;max-width:900px;width:100%;background:#fff;border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow-lg)}
+.login-left{background:linear-gradient(160deg,var(--saffron) 0%,#8B2500 100%);padding:48px;color:#fff;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.login-left::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.06)}
+.login-left::after{content:'';position:absolute;bottom:-40px;left:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.04)}
+.ll-brand{display:flex;align-items:center;gap:12px;z-index:1;position:relative}
+.ll-mark{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;font-family:'Noto Sans Kannada',sans-serif}
+.ll-name{font-size:16px;font-weight:700}
+.ll-kn{font-size:11px;opacity:.6;font-family:'Noto Sans Kannada',sans-serif}
+.ll-hero{z-index:1;position:relative}
+.ll-hero h2{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;line-height:1.2;margin-bottom:12px}
+.ll-hero p{font-size:14px;opacity:.75;line-height:1.7}
+.ll-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;z-index:1;position:relative}
+.ll-stat{background:rgba(255,255,255,.12);border-radius:var(--r-md);padding:16px;text-align:center}
+.ll-stat-num{font-size:24px;font-weight:700}
+.ll-stat-label{font-size:10px;opacity:.7;margin-top:2px}
+.login-right{padding:48px;display:flex;flex-direction:column;justify-content:center}
+.login-tabs{display:flex;gap:0;border-bottom:2px solid var(--border2);margin-bottom:32px}
+.login-tab{padding:10px 20px;font-size:14px;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
+.login-tab.active{color:var(--saffron);border-bottom-color:var(--saffron)}
+.tab-panel{display:none}.tab-panel.active{display:block}
+.otp-inputs{display:flex;gap:10px;margin:16px 0}
+.otp-box{width:48px;height:52px;border:2px solid var(--border);border-radius:var(--r-sm);font-size:20px;font-weight:700;text-align:center;outline:none;transition:border-color .15s;font-family:'Inter',sans-serif}
+.otp-box:focus{border-color:var(--saffron);background:var(--saffron-light)}
+.phone-row{display:flex;gap:0}
+.phone-cc{background:var(--mist);border:1.5px solid var(--border);border-right:none;border-radius:var(--r-sm) 0 0 var(--r-sm);padding:11px 14px;font-size:14px;color:var(--text3);font-family:'Inter',sans-serif}
+.phone-row .form-control{border-radius:0 var(--r-sm) var(--r-sm) 0}
+.step{display:none}.step.active{display:block}
+.step-indicator{display:flex;align-items:center;gap:0;margin-bottom:28px}
+.step-dot{width:28px;height:28px;border-radius:50%;background:var(--mist);color:var(--text3);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .3s}
+.step-dot.done{background:var(--green);color:#fff}
+.step-dot.active{background:var(--saffron);color:#fff}
+.step-line{height:2px;flex:1;background:var(--border2);transition:background .3s}
+.step-line.done{background:var(--green)}
+.resend-timer{font-size:12px;color:var(--text3);margin-top:8px}
+.terms{font-size:11px;color:var(--text3);margin-top:16px;line-height:1.5}
+.terms a{color:var(--saffron)}
+@media(max-width:700px){.login-wrap{grid-template-columns:1fr}.login-left{display:none}}
+</style>
+</head>
+<body>
+<div class="login-wrap">
+  <!-- Left panel -->
+  <div class="login-left">
+    <div class="ll-brand">
+      <div class="ll-mark">ಪ್ರ</div>
+      <div><div class="ll-name">Prajakeeya</div><div class="ll-kn">ಪ್ರಜಾಕೀಯ ಕರ್ನಾಟಕ</div></div>
+    </div>
+    <div class="ll-hero">
+      <h2>People-first governance starts here</h2>
+      <p>Join 2.4 lakh Karnataka citizens who are directly shaping their communities through digital participation.</p>
+    </div>
+    <div class="ll-stats">
+      <div class="ll-stat"><div class="ll-stat-num">2.4L+</div><div class="ll-stat-label">Members</div></div>
+      <div class="ll-stat"><div class="ll-stat-num">30</div><div class="ll-stat-label">Districts</div></div>
+      <div class="ll-stat"><div class="ll-stat-num">18K+</div><div class="ll-stat-label">Issues resolved</div></div>
+      <div class="ll-stat"><div class="ll-stat-num">42K+</div><div class="ll-stat-label">Volunteers</div></div>
+    </div>
+  </div>
+  <!-- Right panel -->
+  <div class="login-right">
+    <h2 style="font-size:24px;font-weight:700;margin-bottom:4px">Welcome back</h2>
+    <p style="color:var(--text3);font-size:14px;margin-bottom:28px">Login or register with your mobile number</p>
+    <div class="login-tabs">
+      <div class="login-tab active" onclick="switchTab('login')">Login</div>
+      <div class="login-tab" onclick="switchTab('register')">New member</div>
+    </div>
+
+    <!-- LOGIN PANEL -->
+    <div class="tab-panel active" id="panel-login">
+      <div id="step-phone-login" class="step active">
+        <div class="form-group">
+          <label class="form-label">Mobile number</label>
+          <div class="phone-row">
+            <div class="phone-cc">🇮🇳 +91</div>
+            <input type="tel" class="form-control" id="login-phone" placeholder="98765 43210" maxlength="10" inputmode="numeric">
+          </div>
+        </div>
+        <button class="btn btn-primary w-full" onclick="sendLoginOTP()" id="send-otp-btn">Send OTP →</button>
+        <p class="terms">By continuing you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
+      </div>
+      <div id="step-otp-login" class="step">
+        <p style="font-size:13px;color:var(--text2);margin-bottom:16px">OTP sent to <strong id="login-phone-display"></strong></p>
+        <div class="otp-inputs" id="otp-inputs-login">
+          <input class="otp-box" maxlength="1" inputmode="numeric" oninput="moveOTP(this,1,'login')">
+          <input class="otp-box" maxlength="1" inputmode="numeric" oninput="moveOTP(this,2,'login')">
+          <input class="otp-box" maxlength="1" inputmode="numeric" oninput="moveOTP(this,3,'login')">
+          <input class="otp-box" maxlength="1" inputmode="numeric" oninput="moveOTP(this,4,'login')">
+          <input class="otp-box" maxlength="1" inputmode="numeric" oninput="moveOTP(this,5,'login')">
+          <input class="otp-box" maxlength="1" inputmode="numeric" oninput="moveOTP(this,6,'login')">
+        </div>
+        <button class="btn btn-primary w-full" onclick="verifyLoginOTP()">Verify & Login</button>
+        <div class="resend-timer" id="resend-timer-login">Resend OTP in <span id="timer-login">30</span>s</div>
+        <div style="display:none" id="resend-btn-login"><a href="#" onclick="sendLoginOTP();return false" style="font-size:12px;color:var(--saffron);font-weight:600">Resend OTP</a></div>
+        <button class="btn btn-ghost w-full mt-12" onclick="backToPhone('login')">← Change number</button>
+      </div>
+    </div>
+
+    <!-- REGISTER PANEL -->
+    <div class="tab-panel" id="panel-register">
+      <div class="step-indicator mb-20">
+        <div class="step-dot active" id="rdot1">1</div>
+        <div class="step-line" id="rline1"></div>
+        <div class="step-dot" id="rdot2">2</div>
+        <div class="step-line" id="rline2"></div>
+        <div class="step-dot" id="rdot3">3</div>
+      </div>
+
+      <div id="reg-step1" class="step active">
+        <div class="form-group">
+          <label class="form-label">Mobile number</label>
+          <div class="phone-row">
+            <div class="phone-cc">🇮🇳 +91</div>
+            <input type="tel" class="form-control" id="reg-phone" placeholder="98765 43210" maxlength="10" inputmode="numeric">
+          </div>
+        </div>
+        <button class="btn btn-primary w-full" onclick="sendRegOTP()">Get OTP →</button>
+      </div>
+
+      <div id="reg-step2" class="step">
+        <p style="font-size:13px;color:var(--text2);margin-bottom:16px">OTP sent to +91 <strong id="reg-phone-display"></strong></p>
+        <div class="otp-inputs" id="otp-inputs-reg">
+          <input class="otp-box" maxlength="1" inputmode="numeric" oninput="moveOTP(this,1,'reg')">
+          <input class="otp-box" maxlength="1" inputmode="numeric" oninput="moveOTP(this,2,'reg')">
+          <input class="otp-box" maxlength="1" inputmode="numeric" oninput="moveOTP(this,3,'reg')">
+          <input class="otp-box" maxlength="1" inputmode="numeric" oninput="moveOTP(this,4,'reg')">
+          <input class="otp-box" maxlength="1" inputmode="numeric" oninput="moveOTP(this,5,'reg')">
+          <input class="otp-box" maxlength="1" inputmode="numeric" oninput="moveOTP(this,6,'reg')">
+        </div>
+        <button class="btn btn-primary w-full" onclick="verifyRegOTP()">Verify OTP</button>
+        <button class="btn btn-ghost w-full mt-12" onclick="goRegStep(1)">← Back</button>
+      </div>
+
+      <div id="reg-step3" class="step">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">First name *</label>
+            <input type="text" class="form-control" id="reg-fname" placeholder="Rajesh">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last name *</label>
+            <input type="text" class="form-control" id="reg-lname" placeholder="Kumar">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">District *</label>
+          <select class="form-control form-select district-select" id="reg-district"></select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Date of birth</label>
+            <input type="date" class="form-control" id="reg-dob">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Gender</label>
+            <select class="form-control form-select" id="reg-gender">
+              <option value="">Select</option>
+              <option>Male</option><option>Female</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Voter ID / Aadhaar (optional)</label>
+          <input type="text" class="form-control" id="reg-vid" placeholder="For faster verification">
+        </div>
+        <button class="btn btn-primary w-full" onclick="completeRegistration()">Complete registration →</button>
+        <p class="terms">Your data is encrypted and never sold. <a href="#">Privacy policy</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.login-tab').forEach((t,i)=>t.classList.toggle('active',['login','register'][i]===tab));
+  document.querySelectorAll('.tab-panel').forEach((p,i)=>p.classList.toggle('active',['panel-login','panel-register'][i]==='panel-'+tab));
+}
+
+function moveOTP(el, pos, prefix) {
+  if (el.value && el.nextElementSibling) el.nextElementSibling.focus();
+  if (pos === 6) checkOTPComplete(prefix);
+}
+
+function checkOTPComplete(prefix) {
+  const inputs = document.querySelectorAll(`#otp-inputs-${prefix} .otp-box`);
+  const otp = [...inputs].map(i=>i.value).join('');
+  if (otp.length === 6) {
+    inputs.forEach(i=>i.style.borderColor='var(--green)');
+  }
+}
+
+let loginTimer;
+function startTimer(prefix) {
+  let t = 30;
+  const timerEl = document.getElementById(`timer-${prefix}`);
+  const resendDiv = document.getElementById(`resend-btn-${prefix}`);
+  const timerDiv = document.getElementById(`resend-timer-${prefix}`);
+  clearInterval(loginTimer);
+  loginTimer = setInterval(() => {
+    t--;
+    if (timerEl) timerEl.textContent = t;
+    if (t <= 0) {
+      clearInterval(loginTimer);
+      if (timerDiv) timerDiv.style.display = 'none';
+      if (resendDiv) resendDiv.style.display = 'block';
+    }
+  }, 1000);
+}
+
+async function sendLoginOTP() {
+  const phone = document.getElementById('login-phone').value;
+  if (phone.length < 10) { toast('Enter a valid 10-digit mobile number','error'); return; }
+  const btn = document.getElementById('send-otp-btn');
+  btn.textContent = 'Sending…'; btn.disabled = true;
+  await sendOTP(phone);
+  btn.textContent = 'Send OTP →'; btn.disabled = false;
+  document.getElementById('login-phone-display').textContent = '+91 '+phone;
+  document.getElementById('step-phone-login').classList.remove('active');
+  document.getElementById('step-otp-login').classList.add('active');
+  startTimer('login');
+  toast('OTP sent! Use 1 2 3 4 5 6 for demo','info');
+}
+
+function backToPhone(prefix) {
+  document.getElementById(`step-phone-${prefix}`).classList.add('active');
+  document.getElementById(`step-otp-${prefix}`).classList.remove('active');
+}
+
+function getOTP(prefix) {
+  return [...document.querySelectorAll(`#otp-inputs-${prefix} .otp-box`)].map(i=>i.value).join('');
+}
+
+function verifyLoginOTP() {
+  const otp = getOTP('login');
+  if (!verifyOTP(otp)) { toast('Invalid OTP. Use 123456 for demo','error'); return; }
+  PK.login({ name:'Rajesh Kumar', phone:'9876543210', district:'Bengaluru Urban', memberId:'PK-KA-2024-00247831', role:'citizen', avatar:'RK' });
+  toast('Login successful! Redirecting…','success');
+  setTimeout(() => window.location.href = 'dashboard.html', 1200);
+}
+
+async function sendRegOTP() {
+  const phone = document.getElementById('reg-phone').value;
+  if (phone.length < 10) { toast('Enter a valid 10-digit mobile number','error'); return; }
+  await sendOTP(phone);
+  document.getElementById('reg-phone-display').textContent = phone;
+  goRegStep(2);
+  startTimer('reg');
+  toast('OTP sent! Use 1 2 3 4 5 6 for demo','info');
+}
+
+function verifyRegOTP() {
+  const otp = getOTP('reg');
+  if (!verifyOTP(otp)) { toast('Invalid OTP. Use 123456 for demo','error'); return; }
+  goRegStep(3);
+}
+
+function goRegStep(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById(`reg-step${i}`).classList.toggle('active', i===n);
+    const dot = document.getElementById(`rdot${i}`);
+    dot.classList.toggle('active', i===n);
+    dot.classList.toggle('done', i<n);
+    if (i<3) document.getElementById(`rline${i}`).classList.toggle('done', i<n);
+  });
+}
+
+function completeRegistration() {
+  const fname = document.getElementById('reg-fname').value;
+  const lname = document.getElementById('reg-lname').value;
+  const district = document.getElementById('reg-district').value;
+  if (!fname || !lname || !district) { toast('Please fill all required fields','error'); return; }
+  const initials = (fname[0]+(lname[0]||'')).toUpperCase();
+  const memberId = 'PK-KA-2024-' + String(Math.floor(Math.random()*900000+100000));
+  PK.login({ name:`${fname} ${lname}`, phone:'new', district, memberId, role:'citizen', avatar:initials, isNew:true });
+  toast('Welcome to Prajakeeya Karnataka! 🎉','success');
+  setTimeout(() => window.location.href = 'membership.html', 1400);
+}
+
+document.addEventListener('DOMContentLoaded', populateDistrictSelects);
+</script>
+</body>
+</html>

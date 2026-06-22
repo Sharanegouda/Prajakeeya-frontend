@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Dashboard — Prajakeeya Karnataka</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .welcome-banner {
+        background: linear-gradient(135deg, var(--saffron) 0%, #c04010 100%);
+        border-radius: var(--r-lg);
+        padding: 28px 32px;
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 24px;
+      }
+
+      .welcome-banner::before {
+        content: "";
+        position: absolute;
+        right: -40px;
+        top: -40px;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.07);
+      }
+
+      .welcome-banner h2 {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+
+      .welcome-banner p {
+        font-size: 13px;
+        opacity: 0.8;
+      }
+
+      .wb-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+      }
+
+      .wb-btn {
+        padding: 9px 18px;
+        border-radius: var(--r-sm);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        font-family: "Inter", sans-serif;
+        transition: all 0.2s;
+      }
+
+      .wb-btn-primary {
+        background: #fff;
+        color: var(--saffron);
+      }
+
+      .wb-btn-ghost {
+        background: rgba(255, 255, 255, 0.15);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .wb-badge {
+        position: absolute;
+        right: 32px;
+        top: 50%;
+        transform: translateY(-50%);
+        text-align: center;
+      }
+
+      .wb-badge-num {
+        font-size: 48px;
+        font-weight: 700;
+        opacity: 0.15;
+        line-height: 1;
+      }
+
+      .activity-item {
+        display: flex;
+        gap: 14px;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--border2);
+      }
+
+      .activity-item:last-child {
+        border-bottom: none;
+      }
+
+      .activity-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: var(--r-sm);
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+      }
+
+      .activity-body {
+        flex: 1;
+      }
+
+      .activity-title {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+
+      .activity-meta {
+        font-size: 11px;
+        color: var(--text3);
+      }
+
+      .notification-item {
+        display: flex;
+        gap: 12px;
+        padding: 14px;
+        background: var(--mist);
+        border-radius: var(--r-md);
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+
+      .notification-item:hover {
+        background: #ebe9e4;
+      }
+
+      .notification-item.unread {
+        background: var(--saffron-light);
+        border-left: 3px solid var(--saffron);
+      }
+
+      .notif-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        flex-shrink: 0;
+      }
+
+      .notif-text {
+        flex: 1;
+      }
+
+      .notif-title {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+
+      .notif-time {
+        font-size: 11px;
+        color: var(--text3);
+      }
+
+      .quick-links {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .quick-link {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-md);
+        padding: 16px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: block;
+        text-decoration: none;
+        color: var(--text);
+      }
+
+      .quick-link:hover {
+        border-color: var(--saffron);
+        box-shadow: 0 4px 12px rgba(232, 80, 26, 0.12);
+        transform: translateY(-2px);
+      }
+
+      .ql-icon {
+        font-size: 28px;
+        margin-bottom: 8px;
+      }
+
+      .ql-label {
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .ql-sub {
+        font-size: 10px;
+        color: var(--text3);
+        margin-top: 2px;
+      }
+
+      .complaint-row td:first-child {
+        font-weight: 600;
+        color: var(--saffron);
+      }
+
+      .prajakeeya-score {
+        background: linear-gradient(
+          135deg,
+          var(--midnight) 0%,
+          var(--slate) 100%
+        );
+        border-radius: var(--r-lg);
+        padding: 24px;
+        color: #fff;
+        text-align: center;
+      }
+
+      .ps-num {
+        font-size: 56px;
+        font-weight: 700;
+        line-height: 1;
+        color: var(--saffron-mid);
+      }
+
+      .ps-grade {
+        font-size: 14px;
+        font-weight: 600;
+        color: #4aca7a;
+        margin: 4px 0;
+      }
+
+      .ps-label {
+        font-size: 12px;
+        opacity: 0.5;
+      }
+
+      @media (max-width: 700px) {
+        .quick-links {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .wb-badge {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page-wrap">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-mark">ಪ್ರ</div>
+          <div class="logo-text">
+            <div class="en">Prajakeeya</div>
+            <div class="kn">ಪ್ರಜಾಕೀಯ ಕರ್ನಾಟಕ</div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <a
+            class="nav-item active"
+            href="dashboard.html"
+            data-page="dashboard.html"
+            ><span class="nav-icon">🏠</span> Dashboard</a
+          >
+          <a class="nav-item" href="report.html" data-page="report.html"
+            ><span class="nav-icon">🚧</span> Report issue
+            <span class="nav-badge">+</span></a
+          >
+          <a class="nav-item" href="voice.html" data-page="voice.html"
+            ><span class="nav-icon">🗳️</span> People's voice</a
+          >
+          <a class="nav-item" href="circulars.html" data-page="circulars.html"
+            ><span class="nav-icon">📢</span> Circulars
+            <span class="nav-badge">3</span></a
+          >
+          <a
+            class="nav-item"
+            href="praja-sabha.html"
+            data-page="praja-sabha.html"
+            ><span class="nav-icon">🏛️</span> Praja Sabha</a
+          >
+          <a class="nav-item" href="heatmap.html" data-page="heatmap.html"
+            ><span class="nav-icon">🗺️</span> Heatmap</a
+          >
+          <div class="nav-section-label">My account</div>
+          <a class="nav-item" href="membership.html" data-page="membership.html"
+            ><span class="nav-icon">🆔</span> My membership</a
+          >
+          <a class="nav-item" href="volunteer.html" data-page="volunteer.html"
+            ><span class="nav-icon">🤝</span> Volunteer</a
+          >
+          <div class="nav-section-label">Governance</div>
+          <a
+            class="nav-item"
+            href="transparency.html"
+            data-page="transparency.html"
+            ><span class="nav-icon">📊</span> Transparency</a
+          >
+          <a
+            class="nav-item"
+            href="mla-tracker.html"
+            data-page="mla-tracker.html"
+            ><span class="nav-icon">⭐</span> MLA tracker</a
+          >
+          <a class="nav-item" href="manifesto.html" data-page="manifesto.html"
+            ><span class="nav-icon">📜</span> Manifesto builder</a
+          >
+          <a class="nav-item" href="emergency.html" data-page="emergency.html"
+            ><span class="nav-icon">🚨</span> Emergency alerts</a
+          >
+          <div class="nav-section-label">More</div>
+          <a class="nav-item" href="admin.html" data-page="admin.html"
+            ><span class="nav-icon">⚙️</span> Admin panel</a
+          >
+          <a class="nav-item" href="index.html"
+            ><span class="nav-icon">🌐</span> Public website</a
+          >
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="user-avatar" id="sb-avatar">RK</div>
+            <div>
+              <div class="user-name" id="sb-name">Rajesh Kumar</div>
+              <div class="user-role" id="sb-role">Active member</div>
+            </div>
+            <button
+              onclick="PK.logout()"
+              style="
+                margin-left: auto;
+                background: none;
+                border: none;
+                color: rgba(255, 255, 255, 0.3);
+                cursor: pointer;
+                font-size: 18px;
+              "
+              title="Logout"
+            >
+              ⏻
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main -->
+      <div class="main-content">
+        <div class="page-header">
+          <div>
+            <button
+              class="btn btn-ghost btn-sm"
+              onclick="toggleSidebar()"
+              style="display: none"
+              id="menu-toggle"
+              class="menu-toggle"
+            >
+              ☰
+            </button>
+            <div class="topbar-title" id="page-title">Dashboard</div>
+            <div class="topbar-sub" id="page-sub">
+              Good morning, Upendra! Here's your Prajakeeya overview.
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <div class="notif-btn" onclick="openModal('notif-modal')">
+              🔔
+              <div class="notif-dot"></div>
+            </div>
+            <a href="report.html" class="btn btn-primary btn-sm"
+              >+ Report issue</a
+            >
+          </div>
+        </div>
+
+        <div class="page-body">
+          <!-- Welcome banner -->
+          <div class="welcome-banner">
+            <div class="wb-badge">
+              <div class="wb-badge-num">🎖️</div>
+            </div>
+            <h2 id="welcome-name">Welcome back, Upendra! 👋</h2>
+            <p>
+              Bengaluru Urban · Member since June 2024 · ID: PK-KA-2024-00247831
+            </p>
+            <div class="wb-actions">
+              <button
+                class="wb-btn wb-btn-primary"
+                onclick="location.href = 'report.html'"
+              >
+                🚧 Report an issue
+              </button>
+              <button
+                class="wb-btn wb-btn-ghost"
+                onclick="location.href = 'membership.html'"
+              >
+                🆔 View membership card
+              </button>
+              <button
+                class="wb-btn wb-btn-ghost"
+                onclick="location.href = 'voice.html'"
+              >
+                🗳️ Vote in active poll
+              </button>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon" style="background: var(--saffron-light)">
+                🚧
+              </div>
+              <div class="stat-num" style="color: var(--saffron)">7</div>
+              <div class="stat-label">Issues reported</div>
+              <div class="stat-change up">↑ 2 this month</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background: var(--green-light)">
+                ✅
+              </div>
+              <div class="stat-num" style="color: var(--green)">5</div>
+              <div class="stat-label">Issues resolved</div>
+              <div class="stat-change up">71% resolution rate</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background: var(--gold-light)">
+                🗳️
+              </div>
+              <div class="stat-num" style="color: var(--gold)">14</div>
+              <div class="stat-label">Polls participated</div>
+              <div class="stat-change up">Active voter</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background: #e6f1fb">🤝</div>
+              <div class="stat-num" style="color: #185fa5">3</div>
+              <div class="stat-label">Events attended</div>
+              <div class="stat-change up">1 upcoming</div>
+            </div>
+          </div>
+
+          <!-- Quick links -->
+          <div class="quick-links">
+            <a class="quick-link" href="report.html">
+              <div class="ql-icon">🚧</div>
+              <div class="ql-label">Report issue</div>
+              <div class="ql-sub">Roads, water, power…</div>
+            </a>
+            <a class="quick-link" href="voice.html">
+              <div class="ql-icon">🗳️</div>
+              <div class="ql-label">Vote now</div>
+              <div class="ql-sub">2 active polls</div>
+            </a>
+            <a class="quick-link" href="circulars.html">
+              <div class="ql-icon">📢</div>
+              <div class="ql-label">Circulars</div>
+              <div class="ql-sub">3 new announcements</div>
+            </a>
+            <a class="quick-link" href="praja-sabha.html">
+              <div class="ql-icon">🏛️</div>
+              <div class="ql-label">Praja Sabha</div>
+              <div class="ql-sub">Next: Jun 28</div>
+            </a>
+            <a class="quick-link" href="transparency.html">
+              <div class="ql-icon">📊</div>
+              <div class="ql-label">Fund tracker</div>
+              <div class="ql-sub">₹4.82 Cr tracked</div>
+            </a>
+            <a class="quick-link" href="mla-tracker.html">
+              <div class="ql-icon">⭐</div>
+              <div class="ql-label">Rate your MLA</div>
+              <div class="ql-sub">224 rated so far</div>
+            </a>
+            <a class="quick-link" href="manifesto.html">
+              <div class="ql-icon">📜</div>
+              <div class="ql-label">Manifesto</div>
+              <div class="ql-sub">Suggest a policy</div>
+            </a>
+            <a class="quick-link" href="emergency.html">
+              <div class="ql-icon">🚨</div>
+              <div class="ql-label">Alerts</div>
+              <div class="ql-sub">0 active alerts</div>
+            </a>
+          </div>
+
+          <div class="grid-2">
+            <!-- My complaints -->
+            <div class="card">
+              <div class="flex-between mb-16">
+                <div style="font-size: 15px; font-weight: 700">
+                  My complaints
+                </div>
+                <a href="report.html" class="btn btn-ghost btn-xs">View all</a>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Issue</th>
+                      <th>Status</th>
+                      <th>Days</th>
+                    </tr>
+                  </thead>
+                  <tbody id="complaints-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Prajakeeya Score + Notifications -->
+            <div style="display: flex; flex-direction: column; gap: 16px">
+              <div class="prajakeeya-score">
+                <div
+                  style="
+                    font-size: 11px;
+                    font-weight: 600;
+                    letter-spacing: 1px;
+                    text-transform: uppercase;
+                    color: rgba(255, 255, 255, 0.4);
+                    margin-bottom: 8px;
+                  "
+                >
+                  Bengaluru Urban · Prajakeeya Score
+                </div>
+                <div class="ps-num">72</div>
+                <div class="ps-grade">★ Good Governance</div>
+                <div class="ps-label">
+                  Based on 14,832 citizen reports · Updated daily
+                </div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 8px;
+                    margin-top: 16px;
+                  "
+                >
+                  <div
+                    style="
+                      background: rgba(255, 255, 255, 0.08);
+                      border-radius: 8px;
+                      padding: 10px;
+                      text-align: center;
+                    "
+                  >
+                    <div
+                      style="
+                        font-size: 18px;
+                        font-weight: 700;
+                        color: var(--saffron-mid);
+                      "
+                    >
+                      82%
+                    </div>
+                    <div
+                      style="font-size: 9px; color: rgba(255, 255, 255, 0.4)"
+                    >
+                      Resolution
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      background: rgba(255, 255, 255, 0.08);
+                      border-radius: 8px;
+                      padding: 10px;
+                      text-align: center;
+                    "
+                  >
+                    <div
+                      style="font-size: 18px; font-weight: 700; color: #4aca7a"
+                    >
+                      38h
+                    </div>
+                    <div
+                      style="font-size: 9px; color: rgba(255, 255, 255, 0.4)"
+                    >
+                      Avg fix time
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      background: rgba(255, 255, 255, 0.08);
+                      border-radius: 8px;
+                      padding: 10px;
+                      text-align: center;
+                    "
+                  >
+                    <div
+                      style="
+                        font-size: 18px;
+                        font-weight: 700;
+                        color: var(--gold);
+                      "
+                    >
+                      4.1★
+                    </div>
+                    <div
+                      style="font-size: 9px; color: rgba(255, 255, 255, 0.4)"
+                    >
+                      Citizen rating
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card" style="flex: 1">
+                <div class="flex-between mb-12">
+                  <div style="font-size: 15px; font-weight: 700">
+                    Recent activity
+                  </div>
+                  <span class="tag tag-saffron">Live</span>
+                </div>
+                <div id="activity-list"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications Modal -->
+    <div class="modal-overlay" id="notif-modal">
+      <div class="modal" style="max-width: 400px">
+        <div class="modal-header">
+          <div class="modal-title">Notifications</div>
+          <button class="modal-close" onclick="closeModal('notif-modal')">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body" id="notif-list"></div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = PK.user || {
+                name: 'Rajesh Kumar',
+                district: 'Bengaluru Urban',
+                memberId: 'PK-KA-2024-00247831',
+                avatar: 'RK'
+            };
+            document.getElementById('welcome-name').textContent = `Welcome back, ${user.name.split(' ')[0]}! 👋`;
+            document.getElementById('sb-avatar').textContent = user.avatar || user.name.slice(0, 2).toUpperCase();
+            document.getElementById('sb-name').textContent = user.name;
+
+            // Complaints
+            const complaints = [{
+                id: 'KA-08432',
+                issue: 'Pothole on 80ft Road',
+                status: 'resolved',
+                days: 7
+            }, {
+                id: 'KA-09201',
+                issue: 'Water supply disruption',
+                status: 'progress',
+                days: 3
+            }, {
+                id: 'KA-09847',
+                issue: 'Street light outage',
+                status: 'pending',
+                days: 1
+            }, {
+                id: 'KA-10012',
+                issue: 'Garbage not collected',
+                status: 'pending',
+                days: 0
+            }, ];
+            const tbody = document.getElementById('complaints-tbody');
+            tbody.innerHTML = complaints.map(c => `
+      <tr class="complaint-row">
+        <td>${c.id}</td>
+        <td>${c.issue}</td>
+        <td><span class="status ${c.status}"><span class="status-dot"></span>${c.status.charAt(0).toUpperCase()+c.status.slice(1)}</span></td>
+        <td>${c.days === 0 ? 'Today' : c.days+'d ago'}</td>
+      </tr>`).join('');
+
+            // Activity
+            const activities = [{
+                icon: '✅',
+                bg: var ('--green-light'),
+                title: 'Complaint KA-08432 resolved',
+                meta: 'BBMP Roads · 2 hours ago'
+            }, {
+                icon: '🗳️',
+                bg: var ('--saffron-light'),
+                title: 'You voted in "Infrastructure Budget" poll',
+                meta: 'People\'s Voice · Yesterday'
+            }, {
+                icon: '📢',
+                bg: '#E6F1FB',
+                title: 'New circular: Monsoon preparedness',
+                meta: 'Bengaluru Urban · 2 days ago'
+            }, {
+                icon: '🏛️',
+                bg: var ('--gold-light'),
+                title: 'Praja Sabha reminder: June 28',
+                meta: 'Registration confirmed · 3 days ago'
+            }, ];
+
+            function var_(n) {
+                return getComputedStyle(document.documentElement).getPropertyValue(n).trim()
+            }
+            document.getElementById('activity-list').innerHTML = activities.map(a => `
+      <div class="activity-item">
+        <div class="activity-icon" style="background:${a.bg}">${a.icon}</div>
+        <div class="activity-body">
+          <div class="activity-title">${a.title}</div>
+          <div class="activity-meta">${a.meta}</div>
+        </div>
+      </div>`).join('');
+
+            // Notifications
+            const notifs = [{
+                icon: '✅',
+                title: 'Your road pothole complaint was resolved',
+                time: '2 hours ago',
+                unread: true
+            }, {
+                icon: '📢',
+                title: 'New district circular: Monsoon alert',
+                time: '5 hours ago',
+                unread: true
+            }, {
+                icon: '🗳️',
+                title: 'New poll: Water infrastructure budget',
+                time: '1 day ago',
+                unread: true
+            }, {
+                icon: '🏛️',
+                title: 'Praja Sabha on Jun 28 — join now',
+                time: '2 days ago',
+                unread: false
+            }, {
+                icon: '🆔',
+                title: 'Your membership card is ready to download',
+                time: '5 days ago',
+                unread: false
+            }, ];
+            document.getElementById('notif-list').innerHTML = notifs.map(n => `
+      <div class="notification-item ${n.unread?'unread':''}">
+        <div class="notif-icon" style="background:${n.unread?'var(--saffron-light)':'var(--mist)'}">${n.icon}</div>
+        <div class="notif-text">
+          <div class="notif-title">${n.title}</div>
+          <div class="notif-time">${n.time}</div>
+        </div>
+      </div>`).join('');
+        });
+    </script>
+  </body>
+</html>

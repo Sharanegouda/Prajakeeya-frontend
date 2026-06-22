@@ -1,0 +1,1002 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Praja Sabha — Prajakeeya Karnataka</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .live-banner {
+        background: linear-gradient(135deg, #0a1520, #1a2535);
+        border-radius: var(--r-xl);
+        overflow: hidden;
+        margin-bottom: 24px;
+        position: relative;
+      }
+
+      .lb-inner {
+        display: grid;
+        grid-template-columns: 1fr 420px;
+        gap: 0;
+      }
+
+      .lb-left {
+        padding: 32px;
+        color: #fff;
+      }
+
+      .lb-right {
+        position: relative;
+        background: #000;
+        min-height: 260px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .live-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(220, 38, 38, 0.2);
+        border: 1px solid rgba(220, 38, 38, 0.4);
+        color: #ff6b6b;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        margin-bottom: 16px;
+        text-transform: uppercase;
+      }
+
+      .live-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #ff4444;
+        animation: pulse 1.5s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(1.3);
+        }
+      }
+
+      .stream-box {
+        width: 100%;
+        height: 260px;
+        background: linear-gradient(160deg, #1a2535, #0a1018);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        cursor: pointer;
+      }
+
+      .stream-box:hover .play-ring {
+        transform: scale(1.1);
+      }
+
+      .play-ring {
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        background: rgba(232, 80, 26, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        transition: transform 0.2s;
+      }
+
+      .play-tri {
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 11px 0 11px 20px;
+        border-color: transparent transparent transparent #fff;
+        margin-left: 4px;
+      }
+
+      .stream-top {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 12px 16px;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .stream-bottom {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 12px 16px;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+      }
+
+      .viewers-badge {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.8);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .live-label {
+        background: #dc2626;
+        color: #fff;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 4px;
+        letter-spacing: 1px;
+      }
+
+      .upcoming-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .event-card {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-lg);
+        padding: 24px;
+        box-shadow: var(--shadow-sm);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .event-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: var(--saffron);
+      }
+
+      .event-date-block {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .edb-cal {
+        background: var(--saffron-light);
+        border: 1px solid rgba(232, 80, 26, 0.2);
+        border-radius: var(--r-md);
+        padding: 10px 14px;
+        text-align: center;
+        min-width: 56px;
+      }
+
+      .edb-day {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--saffron);
+        line-height: 1;
+      }
+
+      .edb-mon {
+        font-size: 9px;
+        color: var(--saffron);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .event-title {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 6px;
+        line-height: 1.3;
+      }
+
+      .event-details {
+        font-size: 12px;
+        color: var(--text3);
+        margin-bottom: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .qa-section {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-lg);
+        padding: 24px;
+        margin-bottom: 20px;
+      }
+
+      .qa-item {
+        display: flex;
+        gap: 14px;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--border2);
+      }
+
+      .qa-item:last-child {
+        border-bottom: none;
+      }
+
+      .qa-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .qa-body {
+        flex: 1;
+      }
+
+      .qa-name {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+
+      .qa-question {
+        font-size: 13px;
+        color: var(--text2);
+        line-height: 1.6;
+        margin-bottom: 8px;
+      }
+
+      .qa-answer {
+        font-size: 13px;
+        color: var(--text);
+        background: var(--green-light);
+        border-left: 3px solid var(--green);
+        padding: 10px 14px;
+        border-radius: 0 var(--r-sm) var(--r-sm) 0;
+        line-height: 1.6;
+      }
+
+      .qa-meta {
+        font-size: 11px;
+        color: var(--text3);
+        margin-top: 8px;
+        display: flex;
+        gap: 12px;
+      }
+
+      .upvote-btn {
+        background: none;
+        border: 1px solid var(--border);
+        border-radius: var(--r-sm);
+        padding: 4px 10px;
+        font-size: 11px;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        transition: all 0.15s;
+      }
+
+      .upvote-btn:hover {
+        background: var(--green-light);
+        border-color: var(--green);
+        color: var(--green);
+      }
+
+      .sabha-layout {
+        display: grid;
+        grid-template-columns: 1fr 280px;
+        gap: 20px;
+        align-items: start;
+      }
+
+      .past-sabhas {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .past-card {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-md);
+        padding: 16px;
+        display: flex;
+        gap: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .past-card:hover {
+        box-shadow: var(--shadow-md);
+      }
+
+      .past-thumb {
+        width: 80px;
+        height: 60px;
+        border-radius: var(--r-sm);
+        background: linear-gradient(135deg, var(--midnight), var(--slate));
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+      }
+
+      .past-info h5 {
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+
+      .past-info p {
+        font-size: 11px;
+        color: var(--text3);
+      }
+
+      .side-count {
+        background: var(--midnight);
+        border-radius: var(--r-md);
+        padding: 16px;
+        color: #fff;
+        text-align: center;
+        margin-bottom: 12px;
+      }
+
+      .sc-num {
+        font-size: 36px;
+        font-weight: 700;
+        color: var(--saffron-mid);
+      }
+
+      .sc-label {
+        font-size: 11px;
+        opacity: 0.5;
+        margin-top: 2px;
+      }
+
+      @media (max-width: 900px) {
+        .lb-inner {
+          grid-template-columns: 1fr;
+        }
+        .lb-right {
+          min-height: 200px;
+        }
+        .upcoming-grid {
+          grid-template-columns: 1fr;
+        }
+        .sabha-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page-wrap">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-mark">ಪ್ರ</div>
+          <div class="logo-text">
+            <div class="en">Prajakeeya</div>
+            <div class="kn">ಪ್ರಜಾಕೀಯ ಕರ್ನಾಟಕ</div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <a class="nav-item" href="dashboard.html"
+            ><span class="nav-icon">🏠</span> Dashboard</a
+          >
+          <a class="nav-item" href="report.html"
+            ><span class="nav-icon">🚧</span> Report issue</a
+          >
+          <a class="nav-item" href="voice.html"
+            ><span class="nav-icon">🗳️</span> People's voice</a
+          >
+          <a class="nav-item" href="circulars.html"
+            ><span class="nav-icon">📢</span> Circulars</a
+          >
+          <a class="nav-item active" href="praja-sabha.html"
+            ><span class="nav-icon">🏛️</span> Praja Sabha</a
+          >
+          <a class="nav-item" href="heatmap.html"
+            ><span class="nav-icon">🗺️</span> Heatmap</a
+          >
+          <div class="nav-section-label">My account</div>
+          <a class="nav-item" href="membership.html"
+            ><span class="nav-icon">🆔</span> My membership</a
+          >
+          <a class="nav-item" href="volunteer.html"
+            ><span class="nav-icon">🤝</span> Volunteer</a
+          >
+          <div class="nav-section-label">Governance</div>
+          <a class="nav-item" href="transparency.html"
+            ><span class="nav-icon">📊</span> Transparency</a
+          >
+          <a class="nav-item" href="mla-tracker.html"
+            ><span class="nav-icon">⭐</span> MLA tracker</a
+          >
+          <a class="nav-item" href="manifesto.html"
+            ><span class="nav-icon">📜</span> Manifesto builder</a
+          >
+          <a class="nav-item" href="emergency.html"
+            ><span class="nav-icon">🚨</span> Emergency alerts</a
+          >
+          <a class="nav-item" href="admin.html"
+            ><span class="nav-icon">⚙️</span> Admin panel</a
+          >
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="user-avatar">RK</div>
+            <div>
+              <div class="user-name">Rajesh Kumar</div>
+              <div class="user-role">Active member</div>
+            </div>
+            <button
+              onclick="PK.logout()"
+              style="
+                margin-left: auto;
+                background: none;
+                border: none;
+                color: rgba(255, 255, 255, 0.3);
+                cursor: pointer;
+                font-size: 18px;
+              "
+            >
+              ⏻
+            </button>
+          </div>
+        </div>
+      </aside>
+      <div class="main-content">
+        <div class="page-header">
+          <div>
+            <div class="topbar-title">Praja Sabha — Digital Town Hall</div>
+            <div class="topbar-sub">
+              Live events, Q&A sessions and virtual meetings with leadership
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <div class="notif-btn">
+              🔔
+              <div class="notif-dot"></div>
+            </div>
+            <button
+              class="btn btn-primary btn-sm"
+              onclick="openModal('ask-modal')"
+            >
+              ✋ Ask a question
+            </button>
+          </div>
+        </div>
+        <div class="page-body">
+          <!-- Live banner -->
+          <div class="live-banner">
+            <div class="lb-inner">
+              <div class="lb-left">
+                <div class="live-badge">
+                  <span class="live-dot"></span>Live now
+                </div>
+                <h2
+                  style="
+                    font-size: 22px;
+                    font-weight: 700;
+                    margin-bottom: 8px;
+                    line-height: 1.3;
+                  "
+                >
+                  Water Crisis in Kalaburagi District — Citizens Q&A
+                </h2>
+                <p style="font-size: 13px; opacity: 0.65; margin-bottom: 20px">
+                  Hosted by Dr. Ravi Kumar · District Water Authority · Jun 21,
+                  2024 at 6:00 PM
+                </p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                  <button
+                    class="btn"
+                    style="background: var(--saffron); color: #fff"
+                    onclick="joinLive()"
+                  >
+                    ▶ Join live stream
+                  </button>
+                  <button
+                    class="btn"
+                    style="
+                      background: rgba(255, 255, 255, 0.1);
+                      color: #fff;
+                      border: 1px solid rgba(255, 255, 255, 0.2);
+                    "
+                    onclick="openModal('ask-modal')"
+                  >
+                    ✋ Submit question
+                  </button>
+                </div>
+                <div
+                  style="
+                    margin-top: 20px;
+                    display: flex;
+                    gap: 20px;
+                    flex-wrap: wrap;
+                  "
+                >
+                  <span style="font-size: 12px; color: rgba(255, 255, 255, 0.5)"
+                    >👁 8,432 watching</span
+                  >
+                  <span style="font-size: 12px; color: rgba(255, 255, 255, 0.5)"
+                    >💬 342 questions submitted</span
+                  >
+                  <span style="font-size: 12px; color: rgba(255, 255, 255, 0.5)"
+                    >📍 Kalaburagi + Online</span
+                  >
+                </div>
+              </div>
+              <div class="lb-right">
+                <div class="stream-box" onclick="joinLive()">
+                  <div class="stream-top">
+                    <span class="live-label">● LIVE</span>
+                    <span class="viewers-badge">👁 8,432 watching</span>
+                  </div>
+                  <div class="play-ring">
+                    <div class="play-tri"></div>
+                  </div>
+                  <div class="stream-bottom">
+                    <div style="font-size: 12px; font-weight: 600; color: #fff">
+                      Kalaburagi Water Crisis Sabha
+                    </div>
+                    <div
+                      style="
+                        font-size: 10px;
+                        color: rgba(255, 255, 255, 0.5);
+                        margin-top: 2px;
+                      "
+                    >
+                      Q&A begins at 7:30 PM
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sabha-layout">
+            <div>
+              <!-- Upcoming -->
+              <div
+                style="font-size: 16px; font-weight: 700; margin-bottom: 16px"
+              >
+                📅 Upcoming Praja Sabhas
+              </div>
+              <div class="upcoming-grid" id="upcoming-grid"></div>
+
+              <!-- Live Q&A -->
+              <div class="qa-section">
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-bottom: 16px;
+                  "
+                >
+                  <div style="font-size: 15px; font-weight: 700">
+                    💬 Live Q&A — Top questions
+                  </div>
+                  <button
+                    class="btn btn-primary btn-sm"
+                    onclick="openModal('ask-modal')"
+                  >
+                    + Ask
+                  </button>
+                </div>
+                <div id="qa-list"></div>
+              </div>
+
+              <!-- Past recordings -->
+              <div
+                style="font-size: 16px; font-weight: 700; margin-bottom: 16px"
+              >
+                🎥 Past Praja Sabha recordings
+              </div>
+              <div class="past-sabhas" id="past-list"></div>
+            </div>
+
+            <!-- Sidebar -->
+            <div>
+              <div class="side-count mb-12">
+                <div class="sc-num">47</div>
+                <div class="sc-label">Praja Sabhas held to date</div>
+              </div>
+              <div class="card mb-12">
+                <div
+                  style="font-size: 13px; font-weight: 700; margin-bottom: 12px"
+                >
+                  📊 Your participation
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px">
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      font-size: 12px;
+                    "
+                  >
+                    <span>Sabhas attended</span><span class="font-600">3</span>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      font-size: 12px;
+                    "
+                  >
+                    <span>Questions asked</span><span class="font-600">7</span>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      font-size: 12px;
+                    "
+                  >
+                    <span>Questions answered</span
+                    ><span
+                      class="font-600 text-success"
+                      style="color: var(--green)"
+                      >4</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="card mb-12">
+                <div
+                  style="font-size: 13px; font-weight: 700; margin-bottom: 12px"
+                >
+                  📌 Request a Praja Sabha
+                </div>
+                <p
+                  style="
+                    font-size: 12px;
+                    color: var(--text3);
+                    margin-bottom: 12px;
+                  "
+                >
+                  Think your district needs a town hall? Submit a request — if
+                  500+ citizens support it, we'll schedule one.
+                </p>
+                <div class="form-group">
+                  <select
+                    class="form-control form-select district-select"
+                  ></select>
+                </div>
+                <div class="form-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Topic for discussion"
+                  />
+                </div>
+                <button
+                  class="btn btn-secondary btn-sm w-full"
+                  onclick="requestSabha()"
+                >
+                  Submit request
+                </button>
+              </div>
+              <div class="card">
+                <div
+                  style="font-size: 13px; font-weight: 700; margin-bottom: 12px"
+                >
+                  🔔 Sabha alerts
+                </div>
+                <p
+                  style="
+                    font-size: 12px;
+                    color: var(--text3);
+                    margin-bottom: 12px;
+                  "
+                >
+                  Get notified before every Praja Sabha in your district.
+                </p>
+                <div style="display: flex; gap: 8px">
+                  <button
+                    class="btn btn-success btn-sm"
+                    onclick="
+                      toast('Alerts enabled for your district!', 'success')
+                    "
+                  >
+                    Enable alerts
+                  </button>
+                  <button
+                    class="btn btn-ghost btn-sm"
+                    onclick="toast('Unsubscribed from Sabha alerts', 'info')"
+                  >
+                    Unsubscribe
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ask question modal -->
+    <div class="modal-overlay" id="ask-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">Submit a question</div>
+          <button class="modal-close" onclick="closeModal('ask-modal')">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-info mb-16">
+            <span>ℹ️</span
+            ><span
+              >Top-voted questions will be answered live during the Sabha.
+              Submit early!</span
+            >
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your name</label
+            ><input type="text" class="form-control" value="Rajesh Kumar" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">District</label
+            ><select class="form-control form-select district-select"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your question *</label
+            ><textarea
+              class="form-control"
+              rows="4"
+              id="qa-input"
+              placeholder="Ask clearly and specifically — the more precise the better chance it gets answered…"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label
+            ><select class="form-control form-select">
+              <option>Water</option>
+              <option>Roads</option>
+              <option>Electricity</option>
+              <option>Healthcare</option>
+              <option>Agriculture</option>
+              <option>Employment</option>
+              <option>Education</option>
+              <option>General governance</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" onclick="closeModal('ask-modal')">
+            Cancel</button
+          ><button class="btn btn-primary" onclick="submitQuestion()">
+            Submit question
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+      const upcoming = [
+        {
+          day: "28",
+          mon: "Jun",
+          title: "Bengaluru Urban Infrastructure Sabha",
+          desc: "Potholes, metro, lakes, BBMP fund utilisation",
+          location: "MLA Hall, Jayanagar + Online",
+          seats: "500 seats · 312 registered",
+          status: "register",
+        },
+        {
+          day: "15",
+          mon: "Jul",
+          title: "North Karnataka Farmers' Praja Sabha",
+          desc: "Crop insurance, irrigation, MGNREGS reform",
+          location: "Dharwad District HQ + Online",
+          seats: "1,200 seats · 487 registered",
+          status: "open",
+        },
+        {
+          day: "02",
+          mon: "Aug",
+          title: "Youth Employment Roundtable",
+          desc: "Skill development, startup ecosystem, KSSM",
+          location: "Online only · Unlimited seats",
+          seats: "Registration open",
+          status: "open",
+        },
+        {
+          day: "20",
+          mon: "Aug",
+          title: "Prajakeeya Score — Quarterly Review",
+          desc: "Q2 district governance scores revealed live",
+          location: "All 30 districts simultaneously",
+          seats: "Public event",
+          status: "soon",
+        },
+      ];
+
+      const qas = [
+        {
+          avatar: "SK",
+          bg: "#C8962A",
+          name: "Suresh K.",
+          dist: "Kalaburagi",
+          q: "When will the Kalaburagi NWSC water tankers be deployed to Aland taluk? We have been without piped water for 23 days.",
+          ans: "The District Water Authority has confirmed 8 additional tankers will be deployed to Aland and Afzalpur taluks starting June 22. Permanent borewell repair is scheduled for June 28.",
+          votes: 342,
+          answered: true,
+        },
+        {
+          avatar: "PM",
+          bg: "#1A6B3A",
+          name: "Priya M.",
+          dist: "Kalaburagi Rural",
+          q: "Our ward's BWSSB pipeline project was sanctioned ₹2.4 crore in 2022 but construction has not started. What happened to these funds?",
+          ans: null,
+          votes: 218,
+          answered: false,
+        },
+        {
+          avatar: "AN",
+          bg: "#534AB7",
+          name: "Anitha N.",
+          dist: "Kalaburagi Urban",
+          q: "Can the water authority publish a district-wise water testing report? We suspect contamination in Chittapur area wells.",
+          ans: null,
+          votes: 187,
+          answered: false,
+        },
+        {
+          avatar: "RV",
+          bg: "#185FA5",
+          name: "Ravi V.",
+          dist: "Yadgir",
+          q: "Is there a plan to connect Yadgir district to the KUWS&DB drinking water grid? Currently 60% of villages depend on tankers year-round.",
+          ans: "This is under review in the state budget. The Chief Minister has approved a feasibility study for KUWS&DB expansion to Yadgir and Raichur. Expected implementation: 2025–26.",
+          votes: 156,
+          answered: true,
+        },
+      ];
+
+      const past = [
+        {
+          emoji: "💧",
+          title: "Kalaburagi Water Crisis Sabha — April 2024",
+          views: "6,400 views",
+          duration: "2h 14m",
+          date: "Apr 18, 2024",
+        },
+        {
+          emoji: "🏗️",
+          title: "Bengaluru Road Infrastructure Review — March 2024",
+          views: "11,200 views",
+          duration: "1h 52m",
+          date: "Mar 5, 2024",
+        },
+        {
+          emoji: "🌾",
+          title: "North Karnataka Farmers' Sabha — February 2024",
+          views: "8,900 views",
+          duration: "3h 10m",
+          date: "Feb 22, 2024",
+        },
+        {
+          emoji: "👩‍🎓",
+          title: "Education Policy Discussion — January 2024",
+          views: "4,100 views",
+          duration: "1h 38m",
+          date: "Jan 14, 2024",
+        },
+      ];
+
+      document.getElementById("upcoming-grid").innerHTML = upcoming
+        .map(
+          (e) => `
+  <div class="event-card">
+    <div class="event-date-block">
+      <div class="edb-cal"><div class="edb-day">${e.day}</div><div class="edb-mon">${e.mon}</div></div>
+      <div>
+        <div class="event-title">${e.title}</div>
+        <div style="font-size:11px;color:var(--text3)">${e.desc}</div>
+      </div>
+    </div>
+    <div class="event-details">
+      <span>📍 ${e.location}</span>
+      <span>👥 ${e.seats}</span>
+    </div>
+    <button class="btn btn-${e.status === "register" ? "primary" : e.status === "open" ? "success" : "ghost"} btn-sm"
+      onclick="${e.status !== "soon" ? `registerEvent('${e.title}')` : "toast('Registration opening soon!','info')"}">
+      ${e.status === "register" ? "Register now →" : e.status === "open" ? "Register free →" : "Coming soon"}
+    </button>
+  </div>`,
+        )
+        .join("");
+
+      document.getElementById("qa-list").innerHTML = qas
+        .map(
+          (q) => `
+  <div class="qa-item">
+    <div class="qa-avatar" style="background:${q.bg}">${q.avatar}</div>
+    <div class="qa-body">
+      <div class="qa-name">${q.name} · ${q.dist}</div>
+      <div class="qa-question">${q.q}</div>
+      ${q.ans ? `<div class="qa-answer"><strong>✅ Leadership response:</strong><br>${q.ans}</div>` : '<div style="font-size:11px;color:var(--text3);font-style:italic">Awaiting response…</div>'}
+      <div class="qa-meta">
+        <button class="upvote-btn" onclick="this.textContent='▲ '+(parseInt(this.textContent.replace(/\D/g,''))+1)+' upvotes'">▲ ${q.votes} upvotes</button>
+        <span>${q.answered ? "✅ Answered" : "⏳ Pending"}</span>
+      </div>
+    </div>
+  </div>`,
+        )
+        .join("");
+
+      document.getElementById("past-list").innerHTML = past
+        .map(
+          (p) => `
+  <div class="past-card" onclick="toast('Opening recording…','info')">
+    <div class="past-thumb">${p.emoji}</div>
+    <div class="past-info">
+      <h5>${p.title}</h5>
+      <p>📅 ${p.date} · ⏱ ${p.duration} · 👁 ${p.views}</p>
+      <button class="btn btn-ghost btn-xs mt-8">▶ Watch recording</button>
+    </div>
+  </div>`,
+        )
+        .join("");
+
+      function joinLive() {
+        toast("Joining live stream… (demo mode)", "info");
+      }
+      function registerEvent(title) {
+        toast(
+          `Registered for "${title.slice(0, 40)}…"! Check your SMS for confirmation.`,
+          "success",
+        );
+      }
+      function submitQuestion() {
+        const q = document.getElementById("qa-input").value;
+        if (!q.trim()) {
+          toast("Please enter your question", "error");
+          return;
+        }
+        toast(
+          "Question submitted! It will appear in the live Q&A queue.",
+          "success",
+        );
+        closeModal("ask-modal");
+      }
+      function requestSabha() {
+        toast(
+          "Praja Sabha request submitted! You need 500 supporters to get it scheduled.",
+          "info",
+        );
+      }
+      document.addEventListener("DOMContentLoaded", populateDistrictSelects);
+    </script>
+  </body>
+</html>

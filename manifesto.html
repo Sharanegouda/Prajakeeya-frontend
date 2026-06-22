@@ -1,0 +1,853 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Manifesto Builder — Prajakeeya Karnataka</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .manifesto-hero {
+        background: linear-gradient(135deg, #2d1b69 0%, #1a0e45 100%);
+        border-radius: var(--r-xl);
+        padding: 32px;
+        color: #fff;
+        margin-bottom: 24px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .manifesto-hero::before {
+        content: "";
+        position: absolute;
+        right: -60px;
+        top: -60px;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .policy-card {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-lg);
+        padding: 22px;
+        margin-bottom: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+      }
+
+      .policy-card:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
+      }
+
+      .policy-card.featured {
+        border-left: 4px solid var(--saffron);
+      }
+
+      .pc-rank {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--mist);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text3);
+      }
+
+      .pc-rank.gold {
+        background: #fef3c7;
+        color: #d97706;
+      }
+
+      .pc-rank.silver {
+        background: #f3f4f6;
+        color: #6b7280;
+      }
+
+      .pc-rank.bronze {
+        background: #fee2e2;
+        color: #92400e;
+      }
+
+      .pc-category {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--text3);
+        margin-bottom: 6px;
+      }
+
+      .pc-title {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        padding-right: 36px;
+      }
+
+      .pc-desc {
+        font-size: 13px;
+        color: var(--text2);
+        line-height: 1.6;
+        margin-bottom: 14px;
+      }
+
+      .pc-footer {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .vote-strip {
+        display: flex;
+        gap: 0;
+        border: 1px solid var(--border);
+        border-radius: var(--r-sm);
+        overflow: hidden;
+      }
+
+      .vote-up,
+      .vote-dn {
+        padding: 6px 14px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        border: none;
+        font-family: "Inter", sans-serif;
+        transition: all 0.15s;
+      }
+
+      .vote-up {
+        background: #fff;
+        color: var(--green);
+      }
+
+      .vote-up:hover,
+      .vote-up.active {
+        background: var(--green);
+        color: #fff;
+      }
+
+      .vote-dn {
+        background: #fff;
+        color: var(--saffron);
+        border-left: 1px solid var(--border);
+      }
+
+      .vote-dn:hover,
+      .vote-dn.active {
+        background: var(--saffron);
+        color: #fff;
+      }
+
+      .support-pct {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text2);
+      }
+
+      .category-filter {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+
+      .cf-btn {
+        padding: 7px 16px;
+        border-radius: 20px;
+        border: 1.5px solid var(--border);
+        background: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.15s;
+        color: var(--text2);
+        font-family: "Inter", sans-serif;
+      }
+
+      .cf-btn.active,
+      .cf-btn:hover {
+        background: var(--saffron);
+        color: #fff;
+        border-color: var(--saffron);
+      }
+
+      .manifesto-layout {
+        display: grid;
+        grid-template-columns: 1fr 280px;
+        gap: 20px;
+        align-items: start;
+      }
+
+      .approved-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .approved-item {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        padding: 10px 12px;
+        background: var(--green-light);
+        border-radius: var(--r-sm);
+      }
+
+      .approved-num {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--green);
+        width: 28px;
+        text-align: center;
+      }
+
+      .approved-text {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--green);
+        flex: 1;
+        line-height: 1.3;
+      }
+
+      @media (max-width: 900px) {
+        .manifesto-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page-wrap">
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-mark">ಪ್ರ</div>
+          <div class="logo-text">
+            <div class="en">Prajakeeya</div>
+            <div class="kn">ಪ್ರಜಾಕೀಯ ಕರ್ನಾಟಕ</div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <a class="nav-item" href="dashboard.html"
+            ><span class="nav-icon">🏠</span> Dashboard</a
+          >
+          <a class="nav-item" href="report.html"
+            ><span class="nav-icon">🚧</span> Report issue</a
+          >
+          <a class="nav-item" href="voice.html"
+            ><span class="nav-icon">🗳️</span> People's voice</a
+          >
+          <a class="nav-item" href="circulars.html"
+            ><span class="nav-icon">📢</span> Circulars</a
+          >
+          <a class="nav-item" href="praja-sabha.html"
+            ><span class="nav-icon">🏛️</span> Praja Sabha</a
+          >
+          <a class="nav-item" href="heatmap.html"
+            ><span class="nav-icon">🗺️</span> Heatmap</a
+          >
+          <div class="nav-section-label">My account</div>
+          <a class="nav-item" href="membership.html"
+            ><span class="nav-icon">🆔</span> My membership</a
+          >
+          <a class="nav-item" href="volunteer.html"
+            ><span class="nav-icon">🤝</span> Volunteer</a
+          >
+          <div class="nav-section-label">Governance</div>
+          <a class="nav-item" href="transparency.html"
+            ><span class="nav-icon">📊</span> Transparency</a
+          >
+          <a class="nav-item" href="mla-tracker.html"
+            ><span class="nav-icon">⭐</span> MLA tracker</a
+          >
+          <a class="nav-item active" href="manifesto.html"
+            ><span class="nav-icon">📜</span> Manifesto builder</a
+          >
+          <a class="nav-item" href="emergency.html"
+            ><span class="nav-icon">🚨</span> Emergency alerts</a
+          >
+          <a class="nav-item" href="admin.html"
+            ><span class="nav-icon">⚙️</span> Admin panel</a
+          >
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="user-avatar">SM</div>
+            <div>
+              <div class="user-name">Sharan Malipatil</div>
+              <div class="user-role">Active member</div>
+            </div>
+            <button
+              onclick="PK.logout()"
+              style="
+                margin-left: auto;
+                background: none;
+                border: none;
+                color: rgba(255, 255, 255, 0.3);
+                cursor: pointer;
+                font-size: 18px;
+              "
+            >
+              ⏻
+            </button>
+          </div>
+        </div>
+      </aside>
+      <div class="main-content">
+        <div class="page-header">
+          <div>
+            <div class="topbar-title">Digital Manifesto Builder</div>
+            <div class="topbar-sub">
+              Suggest policies · Vote on manifesto points · Shape Karnataka's
+              future
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <div class="notif-btn">
+              🔔
+              <div class="notif-dot"></div>
+            </div>
+            <button
+              class="btn btn-primary btn-sm"
+              onclick="openModal('propose-modal')"
+            >
+              + Propose a policy
+            </button>
+          </div>
+        </div>
+        <div class="page-body">
+          <div class="manifesto-hero">
+            <div style="position: relative; z-index: 1">
+              <div
+                style="
+                  font-size: 11px;
+                  font-weight: 700;
+                  letter-spacing: 1.5px;
+                  text-transform: uppercase;
+                  color: rgba(255, 255, 255, 0.4);
+                  margin-bottom: 8px;
+                "
+              >
+                Prajakeeya Karnataka · People's Manifesto 2024
+              </div>
+              <h2
+                style="
+                  font-family: &quot;Playfair Display&quot;, serif;
+                  font-size: 28px;
+                  font-weight: 700;
+                  margin-bottom: 8px;
+                  line-height: 1.3;
+                "
+              >
+                The manifesto written<br />by the people, for the people
+              </h2>
+              <p
+                style="
+                  font-size: 13px;
+                  opacity: 0.7;
+                  max-width: 520px;
+                  line-height: 1.7;
+                  margin-bottom: 20px;
+                "
+              >
+                Citizens submit policy ideas. The community votes. The
+                top-ranked policies become part of the official Prajakeeya
+                manifesto presented to government. Your idea could shape
+                Karnataka.
+              </p>
+              <div style="display: flex; gap: 24px; flex-wrap: wrap">
+                <div style="text-align: center">
+                  <div
+                    style="
+                      font-size: 28px;
+                      font-weight: 700;
+                      color: var(--saffron-mid);
+                    "
+                  >
+                    847
+                  </div>
+                  <div style="font-size: 11px; opacity: 0.5">
+                    Policies proposed
+                  </div>
+                </div>
+                <div style="text-align: center">
+                  <div
+                    style="font-size: 28px; font-weight: 700; color: #4aca7a"
+                  >
+                    2.1L+
+                  </div>
+                  <div style="font-size: 11px; opacity: 0.5">Votes cast</div>
+                </div>
+                <div style="text-align: center">
+                  <div
+                    style="
+                      font-size: 28px;
+                      font-weight: 700;
+                      color: var(--gold);
+                    "
+                  >
+                    24
+                  </div>
+                  <div style="font-size: 11px; opacity: 0.5">
+                    Policies approved
+                  </div>
+                </div>
+                <div style="text-align: center">
+                  <div
+                    style="font-size: 28px; font-weight: 700; color: #a78bfa"
+                  >
+                    6
+                  </div>
+                  <div style="font-size: 11px; opacity: 0.5">
+                    Adopted by govt
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="manifesto-layout">
+            <div>
+              <div class="category-filter">
+                <button
+                  class="cf-btn active"
+                  onclick="filterManifesto(this, 'all')"
+                >
+                  All categories
+                </button>
+                <button
+                  class="cf-btn"
+                  onclick="filterManifesto(this, 'education')"
+                >
+                  🎓 Education
+                </button>
+                <button
+                  class="cf-btn"
+                  onclick="filterManifesto(this, 'agriculture')"
+                >
+                  🌾 Agriculture
+                </button>
+                <button
+                  class="cf-btn"
+                  onclick="filterManifesto(this, 'employment')"
+                >
+                  💼 Employment
+                </button>
+                <button
+                  class="cf-btn"
+                  onclick="filterManifesto(this, 'infrastructure')"
+                >
+                  🏗️ Infrastructure
+                </button>
+                <button
+                  class="cf-btn"
+                  onclick="filterManifesto(this, 'healthcare')"
+                >
+                  🏥 Healthcare
+                </button>
+                <button
+                  class="cf-btn"
+                  onclick="filterManifesto(this, 'governance')"
+                >
+                  🏛️ Governance
+                </button>
+              </div>
+              <div id="policy-list"></div>
+            </div>
+
+            <!-- Sidebar -->
+            <div>
+              <div class="card mb-12">
+                <div
+                  style="font-size: 13px; font-weight: 700; margin-bottom: 12px"
+                >
+                  ✅ Approved manifesto points
+                </div>
+                <div class="approved-list" id="approved-list"></div>
+              </div>
+              <div class="card mb-12">
+                <div
+                  style="font-size: 13px; font-weight: 700; margin-bottom: 10px"
+                >
+                  📊 Your contributions
+                </div>
+                <div
+                  style="
+                    font-size: 12px;
+                    color: var(--text2);
+                    margin-bottom: 6px;
+                  "
+                >
+                  Policies proposed: <strong>3</strong>
+                </div>
+                <div
+                  style="
+                    font-size: 12px;
+                    color: var(--text2);
+                    margin-bottom: 6px;
+                  "
+                >
+                  Policies voted: <strong>24</strong>
+                </div>
+                <div style="font-size: 12px; color: var(--text2)">
+                  Your top proposal:
+                  <strong style="color: var(--saffron)">847 upvotes 🔥</strong>
+                </div>
+              </div>
+              <div class="card">
+                <div
+                  style="font-size: 13px; font-weight: 700; margin-bottom: 10px"
+                >
+                  🏛️ Government responses
+                </div>
+                <div
+                  style="
+                    font-size: 12px;
+                    color: var(--text2);
+                    margin-bottom: 8px;
+                    padding-bottom: 8px;
+                    border-bottom: 1px solid var(--border2);
+                  "
+                >
+                  <div class="font-600 mb-4">Free WiFi at govt hospitals</div>
+                  <span class="tag tag-green">Adopted ✓</span> — Budget
+                  allocated ₹12Cr
+                </div>
+                <div
+                  style="
+                    font-size: 12px;
+                    color: var(--text2);
+                    margin-bottom: 8px;
+                    padding-bottom: 8px;
+                    border-bottom: 1px solid var(--border2);
+                  "
+                >
+                  <div class="font-600 mb-4">Digital crop insurance</div>
+                  <span class="tag tag-gold">Under review</span> — Karnataka
+                  Agri Dept
+                </div>
+                <div style="font-size: 12px; color: var(--text2)">
+                  <div class="font-600 mb-4">Taluk skill centres</div>
+                  <span class="tag tag-saffron">Presented</span> — CM's office
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Propose modal -->
+    <div class="modal-overlay" id="propose-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">Propose a policy</div>
+          <button class="modal-close" onclick="closeModal('propose-modal')">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-info mb-12">
+            <span>💡</span
+            ><span
+              >Be specific, realistic and include potential impact. Policies
+              with 500+ votes are reviewed by the leadership team.</span
+            >
+          </div>
+          <div class="form-group">
+            <label class="form-label">Policy title *</label
+            ><input
+              type="text"
+              class="form-control"
+              id="pol-title"
+              placeholder="e.g. Free skill training in all 176 taluks"
+            />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Category *</label>
+              <select class="form-control form-select" id="pol-cat">
+                <option value="">Select category</option>
+                <option value="education">Education</option>
+                <option value="agriculture">Agriculture</option>
+                <option value="employment">Employment</option>
+                <option value="infrastructure">Infrastructure</option>
+                <option value="healthcare">Healthcare</option>
+                <option value="governance">Governance</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Target region</label>
+              <select class="form-control form-select">
+                <option>State-wide</option>
+                <option>Rural Karnataka</option>
+                <option>Urban Karnataka</option>
+                <option>North Karnataka</option>
+                <option>Coastal Karnataka</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Detailed description *</label
+            ><textarea
+              class="form-control"
+              rows="4"
+              id="pol-desc"
+              placeholder="Explain the policy, who it helps, how it would be implemented, and estimated cost/benefit…"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Expected beneficiaries</label
+            ><input
+              type="text"
+              class="form-control"
+              placeholder="e.g. 2 lakh students, 50,000 farmers…"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" onclick="closeModal('propose-modal')">
+            Cancel</button
+          ><button class="btn btn-primary" onclick="proposePolicy()">
+            Submit proposal →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+      const policies = [
+        {
+          id: 1,
+          cat: "employment",
+          emoji: "💼",
+          title: "Free vocational training centres in all 176 Karnataka taluks",
+          desc: "Establish government-funded skill development centres covering IT, construction, healthcare, and agriculture in every taluk HQ. Partner with ITIs and private companies for certification.",
+          up: 5810,
+          dn: 210,
+          rank: 1,
+          myVote: 0,
+          status: "proposed",
+        },
+        {
+          id: 2,
+          cat: "agriculture",
+          emoji: "🌾",
+          title: "Digital crop insurance claim filing via Prajakeeya app",
+          desc: "Allow farmers to file insurance claims using the app with photo evidence and GPS. Eliminate travel to taluk offices. Direct settlement within 15 working days.",
+          up: 4920,
+          dn: 180,
+          rank: 2,
+          myVote: 0,
+          status: "review",
+        },
+        {
+          id: 3,
+          cat: "healthcare",
+          emoji: "🏥",
+          title: "Free WiFi at all government hospital waiting areas",
+          desc: "Install free WiFi in all government hospitals across Karnataka. Help patients, relatives and doctors access health information and stay connected during long waits.",
+          up: 3240,
+          dn: 120,
+          rank: 3,
+          myVote: 0,
+          status: "adopted",
+        },
+        {
+          id: 4,
+          cat: "infrastructure",
+          emoji: "🏗️",
+          title: "Solar streetlights in every gram panchayat within 2 years",
+          desc: "Replace kerosene and broken sodium lamps with solar LED streetlights. Target: 5,926 gram panchayats. Fund via KUSUM scheme + Prajakeeya citizen budget voting.",
+          up: 2980,
+          dn: 95,
+          rank: 4,
+          myVote: 0,
+          status: "proposed",
+        },
+        {
+          id: 5,
+          cat: "education",
+          emoji: "🎓",
+          title: "Provide laptop + 6-month internet to every SSLC student",
+          desc: "Every student passing SSLC from government schools receives a refurbished laptop and 6 months of free internet to bridge the digital divide and enable higher education research.",
+          up: 2640,
+          dn: 140,
+          rank: 5,
+          myVote: 0,
+          status: "proposed",
+        },
+        {
+          id: 6,
+          cat: "governance",
+          emoji: "🏛️",
+          title: "Mandatory 48-hour response window for all civic complaints",
+          desc: "Pass a Karnataka Civic Grievance Act requiring all departments to acknowledge complaints within 24h and begin resolution within 48h. Penalties for non-compliance.",
+          up: 2180,
+          dn: 88,
+          rank: 6,
+          myVote: 0,
+          status: "review",
+        },
+        {
+          id: 7,
+          cat: "agriculture",
+          emoji: "🌿",
+          title:
+            "₹5,000 monthly income support for small farmers during off-season",
+          desc: "Provide ₹5,000/month direct bank transfer to all farmers with < 2 acres during non-crop months (May–June). Funded by a 0.5% cess on agricultural produce markets.",
+          up: 1940,
+          dn: 320,
+          rank: 7,
+          myVote: 0,
+          status: "proposed",
+        },
+        {
+          id: 8,
+          cat: "healthcare",
+          emoji: "🚑",
+          title:
+            "24/7 ambulance service in all 30 districts within 20-minute radius",
+          desc: "Ensure at least one ambulance can reach any address in each district within 20 minutes. Establish sub-stations in taluks with GPS-tracked fleet.",
+          up: 1720,
+          dn: 65,
+          rank: 8,
+          myVote: 0,
+          status: "proposed",
+        },
+      ];
+
+      const approved = [
+        "Free WiFi at all govt hospitals",
+        "Digital crop insurance via mobile",
+        "Solar streetlights in gram panchayats",
+        "Skill centres in all 176 taluks",
+        "48-hour civic complaint resolution",
+        "SSLC student laptop programme",
+      ];
+
+      let policyFilter = "all";
+
+      function filterManifesto(btn, cat) {
+        document
+          .querySelectorAll(".cf-btn")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        policyFilter = cat;
+        renderPolicies();
+      }
+
+      function renderPolicies() {
+        const list =
+          policyFilter === "all"
+            ? policies
+            : policies.filter((p) => p.cat === policyFilter);
+        const rankClass = {
+          1: "gold",
+          2: "silver",
+          3: "bronze",
+        };
+        const statusMap = {
+          proposed: {
+            cls: "tag-blue",
+            label: "Proposed",
+          },
+          review: {
+            cls: "tag-gold",
+            label: "Under review",
+          },
+          adopted: {
+            cls: "tag-green",
+            label: "✓ Adopted",
+          },
+        };
+        document.getElementById("policy-list").innerHTML = list
+          .map((p) => {
+            const total = p.up + p.dn;
+            const pct = Math.round((p.up / total) * 100);
+            return `<div class="policy-card ${p.rank <= 3 ? "featured" : ""}">
+      <div class="pc-rank ${rankClass[p.rank] || ""}">${p.rank}</div>
+      <div class="pc-category">${p.cat.toUpperCase()}</div>
+      <div class="pc-title">${p.emoji} ${p.title}</div>
+      <div class="pc-desc">${p.desc}</div>
+      <div class="pc-footer">
+        <div class="vote-strip">
+          <button class="vote-up ${p.myVote === 1 ? "active" : ""}" onclick="votePolicy(${p.id},1)">▲ ${p.up.toLocaleString()}</button>
+          <button class="vote-dn ${p.myVote === -1 ? "active" : ""}" onclick="votePolicy(${p.id},-1)">▼ ${p.dn}</button>
+        </div>
+        <span class="support-pct">${pct}% support</span>
+        <span class="tag ${statusMap[p.status].cls}">${statusMap[p.status].label}</span>
+        <button class="btn btn-ghost btn-xs" onclick="openModal('propose-modal')">💬 Discuss</button>
+      </div>
+    </div>`;
+          })
+          .join("");
+      }
+
+      function votePolicy(id, dir) {
+        const p = policies.find((x) => x.id === id);
+        if (!p) return;
+        if (p.myVote === dir) return;
+        if (p.myVote === 1) p.up--;
+        if (p.myVote === -1) p.dn--;
+        p.myVote = dir;
+        if (dir === 1) p.up++;
+        else p.dn++;
+        renderPolicies();
+        toast(dir === 1 ? "Policy upvoted! 👍" : "Policy downvoted.", "info");
+      }
+
+      function proposePolicy() {
+        const title = document.getElementById("pol-title").value;
+        const cat = document.getElementById("pol-cat").value;
+        const desc = document.getElementById("pol-desc").value;
+        if (!title || !cat || !desc) {
+          toast("Please fill all required fields", "error");
+          return;
+        }
+        policies.unshift({
+          id: Date.now(),
+          cat,
+          emoji: "💡",
+          title,
+          desc,
+          up: 1,
+          dn: 0,
+          rank: policies.length + 1,
+          myVote: 1,
+          status: "proposed",
+        });
+        renderPolicies();
+        closeModal("propose-modal");
+        toast("Policy submitted! Community voting is now open. 🎉", "success");
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        renderPolicies();
+        document.getElementById("approved-list").innerHTML = approved
+          .map(
+            (a, i) => `
+    <div class="approved-item">
+      <div class="approved-num">${i + 1}</div>
+      <div class="approved-text">${a}</div>
+    </div>`,
+          )
+          .join("");
+      });
+    </script>
+  </body>
+</html>

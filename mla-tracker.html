@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>MLA Tracker — Prajakeeya Karnataka</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .mla-card {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-lg);
+        padding: 24px;
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 16px;
+      }
+
+      .mla-header {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        margin-bottom: 16px;
+      }
+
+      .mla-avatar {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--saffron), var(--midnight));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: #fff;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .mla-score {
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .score-bar {
+        height: 8px;
+        border-radius: 4px;
+        background: var(--mist);
+        overflow: hidden;
+        margin-top: 6px;
+      }
+
+      .score-fill {
+        height: 100%;
+        border-radius: 4px;
+      }
+
+      .rating-stars {
+        display: flex;
+        gap: 4px;
+        margin: 8px 0;
+      }
+
+      .star-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 24px;
+        transition: transform 0.1s;
+      }
+
+      .star-btn:hover {
+        transform: scale(1.2);
+      }
+
+      .metric-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+      }
+
+      .metric-label {
+        font-size: 12px;
+        color: var(--text2);
+        width: 160px;
+        flex-shrink: 0;
+      }
+
+      .metric-val {
+        font-size: 12px;
+        font-weight: 600;
+        width: 36px;
+        text-align: right;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page-wrap">
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-mark">ಪ್ರ</div>
+          <div class="logo-text">
+            <div class="en">Prajakeeya</div>
+            <div class="kn">ಪ್ರಜಾಕೀಯ ಕರ್ನಾಟಕ</div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <a class="nav-item" href="dashboard.html"
+            ><span class="nav-icon">🏠</span> Dashboard</a
+          >
+          <a class="nav-item" href="report.html"
+            ><span class="nav-icon">🚧</span> Report issue</a
+          >
+          <a class="nav-item" href="voice.html"
+            ><span class="nav-icon">🗳️</span> People's voice</a
+          >
+          <a class="nav-item" href="circulars.html"
+            ><span class="nav-icon">📢</span> Circulars</a
+          >
+          <a class="nav-item" href="praja-sabha.html"
+            ><span class="nav-icon">🏛️</span> Praja Sabha</a
+          >
+          <a class="nav-item" href="heatmap.html"
+            ><span class="nav-icon">🗺️</span> Heatmap</a
+          >
+          <div class="nav-section-label">My account</div>
+          <a class="nav-item" href="membership.html"
+            ><span class="nav-icon">🆔</span> My membership</a
+          >
+          <a class="nav-item" href="volunteer.html"
+            ><span class="nav-icon">🤝</span> Volunteer</a
+          >
+          <div class="nav-section-label">Governance</div>
+          <a class="nav-item" href="transparency.html"
+            ><span class="nav-icon">📊</span> Transparency</a
+          >
+          <a class="nav-item active" href="mla-tracker.html"
+            ><span class="nav-icon">⭐</span> MLA tracker</a
+          >
+          <a class="nav-item" href="manifesto.html"
+            ><span class="nav-icon">📜</span> Manifesto builder</a
+          >
+          <a class="nav-item" href="emergency.html"
+            ><span class="nav-icon">🚨</span> Emergency alerts</a
+          >
+          <a class="nav-item" href="admin.html"
+            ><span class="nav-icon">⚙️</span> Admin panel</a
+          >
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="user-avatar">RK</div>
+            <div>
+              <div class="user-name">Rajesh Kumar</div>
+              <div class="user-role">Active member</div>
+            </div>
+            <button
+              onclick="PK.logout()"
+              style="
+                margin-left: auto;
+                background: none;
+                border: none;
+                color: rgba(255, 255, 255, 0.3);
+                cursor: pointer;
+                font-size: 18px;
+              "
+            >
+              ⏻
+            </button>
+          </div>
+        </div>
+      </aside>
+      <div class="main-content">
+        <div class="page-header">
+          <div>
+            <div class="topbar-title">MLA / MP Performance Tracker</div>
+            <div class="topbar-sub">
+              Rate your elected representatives based on actual work done
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <select
+              class="form-control form-select district-select"
+              style="width: 200px"
+            ></select>
+          </div>
+        </div>
+        <div class="page-body">
+          <div class="alert alert-info mb-20">
+            <span>ℹ️</span
+            ><span
+              >Ratings are based on citizen feedback collected every month. 224
+              representatives tracked across Karnataka.</span
+            >
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon" style="background: var(--saffron-light)">
+                ⭐
+              </div>
+              <div class="stat-num" style="color: var(--saffron)">224</div>
+              <div class="stat-label">Representatives tracked</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background: var(--green-light)">
+                ✅
+              </div>
+              <div class="stat-num" style="color: var(--green)">3.8</div>
+              <div class="stat-label">Avg rating (out of 5)</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background: var(--gold-light)">
+                🗳️
+              </div>
+              <div class="stat-num" style="color: var(--gold)">1.2L+</div>
+              <div class="stat-label">Ratings submitted</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background: #e6f1fb">📅</div>
+              <div class="stat-num" style="color: #185fa5">Jun 2024</div>
+              <div class="stat-label">Last updated</div>
+            </div>
+          </div>
+          <div id="mla-list"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-overlay" id="rate-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title" id="rate-modal-title">Rate MLA</div>
+          <button class="modal-close" onclick="closeModal('rate-modal')">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Infrastructure development</label>
+            <div class="rating-stars" id="stars-infra"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Citizen accessibility</label>
+            <div class="rating-stars" id="stars-access"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Problem resolution</label>
+            <div class="rating-stars" id="stars-res"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Transparency</label>
+            <div class="rating-stars" id="stars-trans"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your feedback (optional)</label
+            ><textarea
+              class="form-control"
+              rows="3"
+              placeholder="Share specific observations…"
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" onclick="closeModal('rate-modal')">
+            Cancel</button
+          ><button class="btn btn-primary" onclick="submitRating()">
+            Submit rating
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="app.js"></script>
+    <script>
+      const mlas = [
+        {
+          init: "RN",
+          name: "Ramesh Naidu",
+          constituency: "BTM Layout, Bengaluru South",
+          party: "INC",
+          score: 82,
+          rating: 4.1,
+          raters: 4820,
+          infra: 85,
+          access: 78,
+          res: 80,
+          trans: 75,
+        },
+        {
+          init: "PK",
+          name: "Priya Kumari",
+          constituency: "Jayanagar, Bengaluru South",
+          party: "BJP",
+          score: 74,
+          rating: 3.7,
+          raters: 3940,
+          infra: 72,
+          access: 80,
+          res: 70,
+          trans: 68,
+        },
+        {
+          init: "MS",
+          name: "Mahesh Shetty",
+          constituency: "Mangaluru North",
+          party: "INC",
+          score: 68,
+          rating: 3.4,
+          raters: 2210,
+          infra: 65,
+          access: 70,
+          res: 62,
+          trans: 72,
+        },
+        {
+          init: "VR",
+          name: "Vijay Raj",
+          constituency: "Dharwad East",
+          party: "BJP",
+          score: 91,
+          rating: 4.6,
+          raters: 5600,
+          infra: 94,
+          access: 92,
+          res: 88,
+          trans: 90,
+        },
+        {
+          init: "SK",
+          name: "Sunita Kamath",
+          constituency: "Mysuru North",
+          party: "JDS",
+          score: 61,
+          rating: 3.1,
+          raters: 1890,
+          infra: 58,
+          access: 65,
+          res: 55,
+          trans: 60,
+        },
+      ];
+      const colors = ["#E8501A", "#1A6B3A", "#C8962A", "#534AB7", "#185FA5"];
+
+      document.getElementById("mla-list").innerHTML = mlas
+        .map(
+          (m, i) => `
+  <div class="mla-card">
+    <div class="mla-header">
+      <div class="mla-avatar" style="background:${colors[i]}">${m.init}</div>
+      <div style="flex:1">
+        <div style="font-size:17px;font-weight:700;margin-bottom:2px">${m.name}</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:4px">📍 ${m.constituency}</div>
+        <span class="tag tag-blue">${m.party}</span>
+      </div>
+      <div style="text-align:center">
+        <div class="mla-score" style="color:${m.score >= 80 ? "var(--green)" : m.score >= 65 ? "var(--gold)" : "var(--saffron)"}">${m.score}</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px">Prajakeeya score</div>
+        <div class="score-bar mt-4"><div class="score-fill" style="width:${m.score}%;background:${m.score >= 80 ? "var(--green-mid)" : m.score >= 65 ? "var(--gold)" : "var(--saffron)"}"></div></div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="metric-row"><div class="metric-label">Infrastructure</div><div class="progress-wrap" style="flex:1"><div class="progress-fill saffron" style="width:${m.infra}%"></div></div><div class="metric-val">${m.infra}%</div></div>
+        <div class="metric-row"><div class="metric-label">Citizen access</div><div class="progress-wrap" style="flex:1"><div class="progress-fill green" style="width:${m.access}%"></div></div><div class="metric-val">${m.access}%</div></div>
+        <div class="metric-row"><div class="metric-label">Problem resolution</div><div class="progress-wrap" style="flex:1"><div class="progress-fill gold" style="width:${m.res}%"></div></div><div class="metric-val">${m.res}%</div></div>
+        <div class="metric-row"><div class="metric-label">Transparency</div><div class="progress-wrap" style="flex:1"><div class="progress-fill blue" style="width:${m.trans}%"></div></div><div class="metric-val">${m.trans}%</div></div>
+      </div>
+      <div style="text-align:center;padding:16px;background:var(--mist);border-radius:var(--r-md)">
+        <div style="font-size:32px;font-weight:700;color:var(--saffron)">${m.rating}★</div>
+        <div style="font-size:12px;color:var(--text3);margin:4px 0">Based on ${m.raters.toLocaleString()} ratings</div>
+        <button class="btn btn-primary btn-sm mt-8" onclick="openRating('${m.name}')">Rate this MLA</button>
+      </div>
+    </div>
+  </div>`,
+        )
+        .join("");
+
+      function openRating(name) {
+        document.getElementById("rate-modal-title").textContent =
+          "Rate " + name;
+        ["infra", "access", "res", "trans"].forEach((k) => {
+          const div = document.getElementById("stars-" + k);
+          div.innerHTML = "";
+          for (let i = 1; i <= 5; i++) {
+            const btn = document.createElement("button");
+            btn.className = "star-btn";
+            btn.textContent = "☆";
+            btn.onclick = () => {
+              [...div.children].forEach(
+                (s, j) => (s.textContent = j < i ? "⭐" : "☆"),
+              );
+            };
+            div.appendChild(btn);
+          }
+        });
+        openModal("rate-modal");
+      }
+
+      function submitRating() {
+        toast("Rating submitted! Thank you for your feedback.", "success");
+        closeModal("rate-modal");
+      }
+      document.addEventListener("DOMContentLoaded", populateDistrictSelects);
+    </script>
+  </body>
+</html>

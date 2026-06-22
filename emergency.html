@@ -1,0 +1,964 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Emergency Alerts — Prajakeeya Karnataka</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .alert-banner {
+        border-radius: var(--r-lg);
+        padding: 18px 22px;
+        margin-bottom: 12px;
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .alert-banner:hover {
+        transform: translateX(4px);
+      }
+
+      .alert-banner.critical {
+        background: linear-gradient(135deg, #7f1d1d, #991b1b);
+        color: #fff;
+      }
+
+      .alert-banner.high {
+        background: linear-gradient(135deg, #92400e, #b45309);
+        color: #fff;
+      }
+
+      .alert-banner.medium {
+        background: linear-gradient(135deg, #1e40af, #2563eb);
+        color: #fff;
+      }
+
+      .alert-banner.info {
+        background: var(--mist);
+        color: var(--text);
+      }
+
+      .alert-banner.resolved {
+        background: var(--green-light);
+        color: var(--green);
+      }
+
+      .ab-icon {
+        font-size: 28px;
+        flex-shrink: 0;
+      }
+
+      .ab-body {
+        flex: 1;
+      }
+
+      .ab-title {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+
+      .ab-meta {
+        font-size: 12px;
+        opacity: 0.75;
+        margin-bottom: 6px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .ab-desc {
+        font-size: 13px;
+        opacity: 0.85;
+        line-height: 1.6;
+      }
+
+      .ab-badge {
+        flex-shrink: 0;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        background: rgba(255, 255, 255, 0.2);
+        align-self: flex-start;
+      }
+
+      .ab-badge.resolved {
+        background: var(--green);
+        color: #fff;
+      }
+
+      .emergency-layout {
+        display: grid;
+        grid-template-columns: 1fr 280px;
+        gap: 20px;
+        align-items: start;
+      }
+
+      .alert-pulse {
+        animation: apulse 2s ease-in-out infinite;
+      }
+
+      @keyframes apulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4);
+        }
+        50% {
+          box-shadow: 0 0 0 12px rgba(220, 38, 38, 0);
+        }
+      }
+
+      .helpline-card {
+        background: var(--midnight);
+        border-radius: var(--r-lg);
+        padding: 20px;
+        color: #fff;
+      }
+
+      .helpline-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .helpline-item:last-child {
+        border-bottom: none;
+      }
+
+      .hl-icon {
+        font-size: 22px;
+        width: 36px;
+        text-align: center;
+      }
+
+      .hl-name {
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+
+      .hl-num {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--saffron-mid);
+        font-family: monospace;
+      }
+
+      .sos-btn {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #dc2626, #991b1b);
+        color: #fff;
+        border: none;
+        border-radius: var(--r-md);
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        margin-top: 16px;
+        letter-spacing: 0.5px;
+        transition: all 0.2s;
+      }
+
+      .sos-btn:hover {
+        transform: scale(1.02);
+        box-shadow: 0 8px 24px rgba(220, 38, 38, 0.4);
+      }
+
+      .report-emergency-form {
+        background: #fff;
+        border: 1px solid var(--border2);
+        border-radius: var(--r-lg);
+        padding: 24px;
+        box-shadow: var(--shadow-sm);
+        margin-top: 20px;
+      }
+
+      .emergency-type-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin: 12px 0;
+      }
+
+      .et-btn {
+        border: 2px solid var(--border);
+        border-radius: var(--r-md);
+        padding: 14px 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.15s;
+        background: #fff;
+      }
+
+      .et-btn:hover,
+      .et-btn.sel {
+        border-color: var(--saffron);
+        background: var(--saffron-light);
+      }
+
+      .et-emoji {
+        font-size: 24px;
+        margin-bottom: 4px;
+      }
+
+      .et-label {
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      .status-timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .st-item {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        padding-bottom: 16px;
+        position: relative;
+      }
+
+      .st-item:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        left: 12px;
+        top: 26px;
+        width: 2px;
+        bottom: 0;
+        background: var(--border2);
+      }
+
+      .st-dot {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        z-index: 1;
+      }
+
+      .st-dot.active {
+        background: var(--saffron);
+        color: #fff;
+      }
+
+      .st-dot.done {
+        background: var(--green);
+        color: #fff;
+      }
+
+      .st-dot.pending {
+        background: var(--mist);
+        color: var(--text3);
+        border: 2px solid var(--border);
+      }
+
+      .st-text h5 {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+
+      .st-text p {
+        font-size: 11px;
+        color: var(--text3);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page-wrap">
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-mark">ಪ್ರ</div>
+          <div class="logo-text">
+            <div class="en">Prajakeeya</div>
+            <div class="kn">ಪ್ರಜಾಕೀಯ ಕರ್ನಾಟಕ</div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <a class="nav-item" href="dashboard.html"
+            ><span class="nav-icon">🏠</span> Dashboard</a
+          >
+          <a class="nav-item" href="report.html"
+            ><span class="nav-icon">🚧</span> Report issue</a
+          >
+          <a class="nav-item" href="voice.html"
+            ><span class="nav-icon">🗳️</span> People's voice</a
+          >
+          <a class="nav-item" href="circulars.html"
+            ><span class="nav-icon">📢</span> Circulars</a
+          >
+          <a class="nav-item" href="praja-sabha.html"
+            ><span class="nav-icon">🏛️</span> Praja Sabha</a
+          >
+          <a class="nav-item" href="heatmap.html"
+            ><span class="nav-icon">🗺️</span> Heatmap</a
+          >
+          <div class="nav-section-label">My account</div>
+          <a class="nav-item" href="membership.html"
+            ><span class="nav-icon">🆔</span> My membership</a
+          >
+          <a class="nav-item" href="volunteer.html"
+            ><span class="nav-icon">🤝</span> Volunteer</a
+          >
+          <div class="nav-section-label">Governance</div>
+          <a class="nav-item" href="transparency.html"
+            ><span class="nav-icon">📊</span> Transparency</a
+          >
+          <a class="nav-item" href="mla-tracker.html"
+            ><span class="nav-icon">⭐</span> MLA tracker</a
+          >
+          <a class="nav-item" href="manifesto.html"
+            ><span class="nav-icon">📜</span> Manifesto builder</a
+          >
+          <a class="nav-item active" href="emergency.html"
+            ><span class="nav-icon">🚨</span> Emergency alerts</a
+          >
+          <a class="nav-item" href="admin.html"
+            ><span class="nav-icon">⚙️</span> Admin panel</a
+          >
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="user-avatar">RK</div>
+            <div>
+              <div class="user-name">Rajesh Kumar</div>
+              <div class="user-role">Active member</div>
+            </div>
+            <button
+              onclick="PK.logout()"
+              style="
+                margin-left: auto;
+                background: none;
+                border: none;
+                color: rgba(255, 255, 255, 0.3);
+                cursor: pointer;
+                font-size: 18px;
+              "
+            >
+              ⏻
+            </button>
+          </div>
+        </div>
+      </aside>
+      <div class="main-content">
+        <div class="page-header">
+          <div>
+            <div class="topbar-title">Emergency Alert System</div>
+            <div class="topbar-sub">
+              Live alerts for floods, drought, disaster and public emergencies
+              across Karnataka
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <div class="notif-btn">
+              🔔
+              <div class="notif-dot"></div>
+            </div>
+            <button
+              class="btn btn-danger btn-sm alert-pulse"
+              onclick="openModal('sos-modal')"
+            >
+              🆘 Report emergency
+            </button>
+          </div>
+        </div>
+        <div class="page-body">
+          <!-- Active alert -->
+          <div
+            class="alert-banner critical alert-pulse mb-20"
+            onclick="openModal('alert-detail-modal')"
+          >
+            <div class="ab-icon">🌧️</div>
+            <div class="ab-body">
+              <div class="ab-title">
+                ⚠️ RED ALERT: Heavy rainfall & flood warning — Dakshina Kannada,
+                Udupi, Kodagu
+              </div>
+              <div class="ab-meta">
+                <span>🕐 Issued: Jun 21, 2024 at 6:00 AM</span>
+                <span>📍 3 districts affected</span>
+                <span>⏱ Valid until: Jun 23</span>
+              </div>
+              <div class="ab-desc">
+                IMD has issued Red Alert for extreme rainfall. Residents in
+                low-lying areas advised to evacuate. NDRF teams deployed. All
+                schools and colleges closed Jun 21–22.
+              </div>
+            </div>
+            <div class="ab-badge">🔴 ACTIVE</div>
+          </div>
+
+          <div class="emergency-layout">
+            <div>
+              <div
+                style="font-size: 15px; font-weight: 700; margin-bottom: 16px"
+              >
+                All alerts — Karnataka
+              </div>
+
+              <div id="alerts-list"></div>
+
+              <!-- Report emergency form -->
+              <div class="report-emergency-form">
+                <div
+                  style="font-size: 15px; font-weight: 700; margin-bottom: 4px"
+                >
+                  🚨 Report an emergency situation
+                </div>
+                <div
+                  style="
+                    font-size: 12px;
+                    color: var(--text3);
+                    margin-bottom: 16px;
+                  "
+                >
+                  Report floods, fires, accidents, missing persons, or any
+                  urgent public safety issue
+                </div>
+                <div class="emergency-type-grid" id="etype-grid">
+                  <div class="et-btn" onclick="selectType(this, 'Flood')">
+                    <div class="et-emoji">🌊</div>
+                    <div class="et-label">Flood</div>
+                  </div>
+                  <div class="et-btn" onclick="selectType(this, 'Fire')">
+                    <div class="et-emoji">🔥</div>
+                    <div class="et-label">Fire</div>
+                  </div>
+                  <div class="et-btn" onclick="selectType(this, 'Earthquake')">
+                    <div class="et-emoji">🌍</div>
+                    <div class="et-label">Earthquake</div>
+                  </div>
+                  <div class="et-btn" onclick="selectType(this, 'Landslide')">
+                    <div class="et-emoji">⛰️</div>
+                    <div class="et-label">Landslide</div>
+                  </div>
+                  <div class="et-btn" onclick="selectType(this, 'Medical')">
+                    <div class="et-emoji">🚑</div>
+                    <div class="et-label">Medical</div>
+                  </div>
+                  <div class="et-btn" onclick="selectType(this, 'Other')">
+                    <div class="et-emoji">⚠️</div>
+                    <div class="et-label">Other</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Location *</label
+                  ><input
+                    type="text"
+                    class="form-control"
+                    id="em-location"
+                    placeholder="Village, taluk, district"
+                  />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Describe the situation *</label
+                  ><textarea
+                    class="form-control"
+                    rows="3"
+                    id="em-desc"
+                    placeholder="What's happening, how many affected, what's needed…"
+                  ></textarea>
+                </div>
+                <div style="display: flex; gap: 10px">
+                  <button class="btn btn-ghost" onclick="detectGPSEmergency()">
+                    📡 Share my location
+                  </button>
+                  <button
+                    class="btn btn-danger"
+                    style="flex: 1"
+                    onclick="reportEmergency()"
+                  >
+                    🆘 Submit emergency report
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div>
+              <div class="helpline-card mb-12">
+                <div
+                  style="
+                    font-size: 12px;
+                    font-weight: 700;
+                    letter-spacing: 1px;
+                    text-transform: uppercase;
+                    color: rgba(255, 255, 255, 0.4);
+                    margin-bottom: 12px;
+                  "
+                >
+                  🆘 Emergency helplines
+                </div>
+                <div class="helpline-item">
+                  <div class="hl-icon">🚒</div>
+                  <div>
+                    <div class="hl-name">Fire & Rescue</div>
+                    <div class="hl-num">101</div>
+                  </div>
+                </div>
+                <div class="helpline-item">
+                  <div class="hl-icon">🚑</div>
+                  <div>
+                    <div class="hl-name">Ambulance</div>
+                    <div class="hl-num">108</div>
+                  </div>
+                </div>
+                <div class="helpline-item">
+                  <div class="hl-icon">👮</div>
+                  <div>
+                    <div class="hl-name">Police</div>
+                    <div class="hl-num">100</div>
+                  </div>
+                </div>
+                <div class="helpline-item">
+                  <div class="hl-icon">🌊</div>
+                  <div>
+                    <div class="hl-name">Flood Control</div>
+                    <div class="hl-num">1070</div>
+                  </div>
+                </div>
+                <div class="helpline-item">
+                  <div class="hl-icon">☎️</div>
+                  <div>
+                    <div class="hl-name">Prajakeeya Emergency</div>
+                    <div class="hl-num">1800-425-7252</div>
+                  </div>
+                </div>
+                <button class="sos-btn" onclick="activateSOS()">
+                  🆘 ACTIVATE SOS
+                </button>
+              </div>
+
+              <div class="card mb-12">
+                <div
+                  style="font-size: 13px; font-weight: 700; margin-bottom: 12px"
+                >
+                  📊 Alert statistics
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px">
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      font-size: 12px;
+                    "
+                  >
+                    <span>Active alerts</span
+                    ><span class="font-600 text-danger" style="color: #dc2626"
+                      >1</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      font-size: 12px;
+                    "
+                  >
+                    <span>Alerts this month</span
+                    ><span class="font-600">8</span>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      font-size: 12px;
+                    "
+                  >
+                    <span>Resolved</span
+                    ><span class="font-600" style="color: var(--green)">7</span>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      font-size: 12px;
+                    "
+                  >
+                    <span>People notified</span
+                    ><span class="font-600">1.2L+</span>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      font-size: 12px;
+                    "
+                  >
+                    <span>Avg response time</span
+                    ><span class="font-600">14 min</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div
+                  style="font-size: 13px; font-weight: 700; margin-bottom: 12px"
+                >
+                  🔔 Alert preferences
+                </div>
+                <p
+                  style="
+                    font-size: 12px;
+                    color: var(--text3);
+                    margin-bottom: 12px;
+                  "
+                >
+                  Choose which alert types you receive
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 8px">
+                  <label
+                    style="
+                      display: flex;
+                      gap: 8px;
+                      align-items: center;
+                      font-size: 12px;
+                      cursor: pointer;
+                    "
+                    ><input type="checkbox" checked /> Flood & heavy rain</label
+                  >
+                  <label
+                    style="
+                      display: flex;
+                      gap: 8px;
+                      align-items: center;
+                      font-size: 12px;
+                      cursor: pointer;
+                    "
+                    ><input type="checkbox" checked /> Drought & water
+                    scarcity</label
+                  >
+                  <label
+                    style="
+                      display: flex;
+                      gap: 8px;
+                      align-items: center;
+                      font-size: 12px;
+                      cursor: pointer;
+                    "
+                    ><input type="checkbox" checked /> Fire incidents</label
+                  >
+                  <label
+                    style="
+                      display: flex;
+                      gap: 8px;
+                      align-items: center;
+                      font-size: 12px;
+                      cursor: pointer;
+                    "
+                    ><input type="checkbox" checked /> Health outbreaks</label
+                  >
+                  <label
+                    style="
+                      display: flex;
+                      gap: 8px;
+                      align-items: center;
+                      font-size: 12px;
+                      cursor: pointer;
+                    "
+                    ><input type="checkbox" /> Power outages</label
+                  >
+                  <label
+                    style="
+                      display: flex;
+                      gap: 8px;
+                      align-items: center;
+                      font-size: 12px;
+                      cursor: pointer;
+                    "
+                    ><input type="checkbox" checked /> Landslides</label
+                  >
+                </div>
+                <button
+                  class="btn btn-primary btn-sm w-full mt-12"
+                  onclick="toast('Alert preferences saved!', 'success')"
+                >
+                  Save preferences
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alert detail modal -->
+    <div class="modal-overlay" id="alert-detail-modal">
+      <div class="modal" style="max-width: 640px">
+        <div class="modal-header">
+          <div class="modal-title">
+            🌧️ RED ALERT — Heavy rainfall, Dakshina Kannada
+          </div>
+          <button
+            class="modal-close"
+            onclick="closeModal('alert-detail-modal')"
+          >
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <div
+            style="
+              background: #7f1d1d;
+              color: #fff;
+              border-radius: var(--r-md);
+              padding: 16px;
+              margin-bottom: 16px;
+            "
+          >
+            <div style="font-size: 13px; font-weight: 700; margin-bottom: 4px">
+              🔴 RED ALERT — EXTREME RAINFALL
+            </div>
+            <div style="font-size: 12px; opacity: 0.8">
+              Issued by: Karnataka Disaster Management Authority + IMD Bengaluru
+              · Jun 21, 2024
+            </div>
+          </div>
+          <p
+            style="
+              font-size: 14px;
+              line-height: 1.75;
+              color: var(--text2);
+              margin-bottom: 16px;
+            "
+          >
+            The India Meteorological Department has issued a Red Alert for
+            extremely heavy rainfall in Dakshina Kannada, Udupi, and Kodagu
+            districts from June 21–23. Isolated rainfall of 20+ cm expected in
+            24 hours.
+          </p>
+          <div class="alert alert-danger mb-12">
+            <span>⚠️</span>
+            <div>
+              <strong>Immediate actions required:</strong>
+              <ul style="padding-left: 16px; margin-top: 4px">
+                <li>
+                  Residents in low-lying areas must evacuate to designated
+                  relief camps
+                </li>
+                <li>Avoid river banks, coastal areas and hilly slopes</li>
+                <li>
+                  All schools, colleges and non-essential offices closed June
+                  21–22
+                </li>
+                <li>Motorists advised against travel on ghat roads</li>
+              </ul>
+            </div>
+          </div>
+          <div style="font-size: 13px; font-weight: 700; margin-bottom: 12px">
+            Response status
+          </div>
+          <div class="status-timeline">
+            <div class="st-item">
+              <div class="st-dot done">✓</div>
+              <div class="st-text">
+                <h5>Alert issued</h5>
+                <p>Jun 21 at 6:00 AM — IMD + KSNDMC</p>
+              </div>
+            </div>
+            <div class="st-item">
+              <div class="st-dot done">✓</div>
+              <div class="st-text">
+                <h5>NDRF teams deployed</h5>
+                <p>Jun 21 at 8:30 AM — 4 teams in position</p>
+              </div>
+            </div>
+            <div class="st-item">
+              <div class="st-dot active">►</div>
+              <div class="st-text">
+                <h5>Evacuation in progress</h5>
+                <p>Jun 21 — 2,400 residents moved to 18 relief camps</p>
+              </div>
+            </div>
+            <div class="st-item">
+              <div class="st-dot pending">4</div>
+              <div class="st-text">
+                <h5>All-clear signal</h5>
+                <p>Expected Jun 23 — subject to rainfall data</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-ghost"
+            onclick="closeModal('alert-detail-modal')"
+          >
+            Close
+          </button>
+          <button
+            class="btn btn-danger"
+            onclick="toast('Sharing alert via WhatsApp…', 'info')"
+          >
+            📤 Share alert
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOS modal -->
+    <div class="modal-overlay" id="sos-modal">
+      <div class="modal" style="max-width: 400px">
+        <div class="modal-header">
+          <div class="modal-title" style="color: #dc2626">
+            🆘 SOS Activation
+          </div>
+          <button class="modal-close" onclick="closeModal('sos-modal')">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger">
+            <span>⚠️</span
+            ><span
+              >This will immediately alert your district coordinator and share
+              your GPS location with emergency services. Use only for genuine
+              emergencies.</span
+            >
+          </div>
+          <div style="text-align: center; padding: 20px">
+            <div style="font-size: 64px; margin-bottom: 12px">🆘</div>
+            <div style="font-size: 16px; font-weight: 700; margin-bottom: 6px">
+              Confirm SOS activation
+            </div>
+            <div style="font-size: 13px; color: var(--text3)">
+              Your location will be shared with Prajakeeya emergency
+              coordinators and district authorities.
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" onclick="closeModal('sos-modal')">
+            Cancel
+          </button>
+          <button class="btn btn-danger" onclick="activateConfirmedSOS()">
+            🆘 Confirm SOS
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+      const alerts = [
+        {
+          type: "critical",
+          icon: "🌧️",
+          title: "RED ALERT: Heavy rainfall — Dakshina Kannada, Udupi, Kodagu",
+          meta: ["Jun 21, 2024", "3 districts", "2,400 evacuated"],
+          desc: "IMD Red Alert for extreme rainfall. NDRF deployed. Schools closed.",
+          status: "active",
+        },
+        {
+          type: "high",
+          icon: "🌾",
+          title:
+            "DROUGHT WARNING: Water scarcity — Raichur, Yadgir, Kalaburagi",
+          meta: ["Jun 18, 2024", "3 districts", "1.2L affected"],
+          desc: "Severe water scarcity. Tanker allocation increased. Crop advisory issued.",
+          status: "active",
+        },
+        {
+          type: "medium",
+          icon: "🔥",
+          title: "FIRE ALERT: Forest fire — Bandipur wildlife sanctuary",
+          meta: ["Jun 17, 2024", "Mysuru", "Controlled"],
+          desc: "Forest fire in Bandipur. Fire department and Forest dept on site. Tourists evacuated.",
+          status: "resolved",
+        },
+        {
+          type: "info",
+          icon: "🌊",
+          title: "ADVISORY: Minor flooding — Belagavi urban areas",
+          meta: ["Jun 15, 2024", "Belagavi", "Monitoring"],
+          desc: "Low-lying areas flooded after heavy rain. BBMP dewatering pumps deployed.",
+          status: "resolved",
+        },
+        {
+          type: "resolved",
+          icon: "⚡",
+          title: "RESOLVED: Major power outage — Bengaluru South",
+          meta: ["Jun 14, 2024", "BESCOM", "Fixed in 4h"],
+          desc: "Transformer failure caused outage for 80,000 households. Restored at 11:30 PM.",
+          status: "resolved",
+        },
+      ];
+
+      let selectedEmergencyType = "";
+
+      document.getElementById("alerts-list").innerHTML = alerts
+        .map(
+          (a) => `
+  <div class="alert-banner ${a.type}" onclick="${a.type === "critical" ? "openModal('alert-detail-modal')" : "toast('Opening alert details…','info')"}">
+    <div class="ab-icon">${a.icon}</div>
+    <div class="ab-body">
+      <div class="ab-title">${a.title}</div>
+      <div class="ab-meta">${a.meta.map((m) => `<span>${m}</span>`).join("")}</div>
+      <div class="ab-desc">${a.desc}</div>
+    </div>
+    <div class="ab-badge ${a.status === "resolved" ? "resolved" : ""}">${a.status === "active" ? "🔴 ACTIVE" : "✅ RESOLVED"}</div>
+  </div>`,
+        )
+        .join("");
+
+      function selectType(el, type) {
+        document
+          .querySelectorAll(".et-btn")
+          .forEach((b) => b.classList.remove("sel"));
+        el.classList.add("sel");
+        selectedEmergencyType = type;
+      }
+
+      async function detectGPSEmergency() {
+        const loc = await getLocation();
+        document.getElementById("em-location").value =
+          `${loc.lat.toFixed(4)}°N, ${loc.lng.toFixed(4)}°E`;
+        toast("Location detected!", "success");
+      }
+
+      function reportEmergency() {
+        if (!selectedEmergencyType) {
+          toast("Please select emergency type", "error");
+          return;
+        }
+        if (!document.getElementById("em-desc").value.trim()) {
+          toast("Please describe the situation", "error");
+          return;
+        }
+        toast(
+          "🆘 Emergency reported! Coordinators and authorities have been notified. Help is on the way.",
+          "success",
+        );
+      }
+
+      function activateSOS() {
+        openModal("sos-modal");
+      }
+      function activateConfirmedSOS() {
+        closeModal("sos-modal");
+        toast(
+          "🆘 SOS activated! Your location has been shared with emergency coordinators. Stay safe.",
+          "success",
+        );
+      }
+    </script>
+  </body>
+</html>
